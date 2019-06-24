@@ -103,7 +103,13 @@ for k, v in df_e_s.iterrows():
 # %%
 # solve
 try:
+    print('-------- t_0 --------')
+    t_0 = time.process_time()
     m.solve(CPLEX_CMD(msg=1))
+    t_1 = time.process_time()
+    print('\n-------- t_1 --------')
+
+    print('\nt_1 - t_0 is ', t_1 - t_0, '\n')
 except PulpSolverError:
     print(CPLEX_CMD().path, 'is not installed')
 
