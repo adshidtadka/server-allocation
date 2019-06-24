@@ -102,11 +102,14 @@ for k, v in df_e_s.iterrows():
 
 # %%
 # solve
-m.solve()
+try:
+    m.solve(CPLEX_CMD())
+except PulpSolverError:
+    print(CPLEX_CMD().path, 'is not installed')
 
 
 # %%
 # result
 df_e_u.variable = df_e_u.variable.apply(value)
-df_e_u[df_e_u.variable >= 1]
+print(df_e_u[df_e_u.variable >= 1])
 # %%
