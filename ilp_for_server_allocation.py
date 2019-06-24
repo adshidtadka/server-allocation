@@ -1,17 +1,14 @@
 # ilp approach
 # transport optimization
 
-# %%
 import numpy as np
 import pandas as pd
 import time
 from itertools import product
 from pulp import *
 
-# %%
 np.random.seed(1)
 
-# %%
 # given parameter
 user_num = 800
 server_num = 8
@@ -26,26 +23,22 @@ v_s = list(range(0, server_num))
 m_s = np.random.randint(0, capacity_max, server_num)
 e_s
 
-# %%
 # dataframe for E_U
 df_e_u = pd.DataFrame([(i, j) for i, j in e_u], columns=['user', 'server'])
 df_e_u['delay'] = d_us.flatten()
 df_e_u
 
-# %%
 # dataframe for E_S
 df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
                       columns=['server_1', 'server_2'])
 df_e_s['delay'] = delay_serer
 df_e_s
 
-# %%
 # dataframe for V_S
 df_v_s = pd.DataFrame(v_s, columns=['server'])
 df_v_s['capacity'] = m_s
 df_v_s
 
-# %%
 # optimization problem
 m = LpProblem()
 
@@ -59,11 +52,9 @@ df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary)
 D_u = LpVariable('D_u', cat=LpInteger)
 D_s = LpVariable('D_s', cat=LpInteger)
 
-# %%
 # objective function
 m += 2 * D_u + D_s
 
-# %%
 # constraints
 # (1b)
 for k, v in df_e_u.groupby('user'):
@@ -100,7 +91,6 @@ for k, v in df_e_s.iterrows():
 for k, v in df_e_s.iterrows():
     m += v.variable <= df_v_s.iloc[v.server_2].variable
 
-# %%
 # solve
 try:
     print('-------- t_0 --------')
@@ -114,7 +104,6 @@ except PulpSolverError:
     print(CPLEX_CMD().path, 'is not installed')
 
 
-# %%
 # result
 if m.status == 1:
     print('objective function is = ', value(m.objective))
