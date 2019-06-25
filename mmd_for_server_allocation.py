@@ -8,101 +8,105 @@ import const
 from itertools import product
 from pulp import *
 
-np.random.seed(1)
 
-e_u = list(product(range(const.user_num), range(const.server_num)))
-e_s = list(itertools.combinations(list(range(0, const.server_num)), 2))
-d_us = np.random.randint(
-    0, const.delay_max, (const.user_num, const.server_num))
-v_s = list(range(0, const.server_num))
-m_s = np.random.randint(0, const.capacity_max, const.server_num)
-e_s
+def main():
+    np.random.seed(1)
 
-# dataframe for E_U
-df_e_u = pd.DataFrame([(i, j) for i, j in e_u], columns=['user', 'server'])
-df_e_u['delay'] = d_us.flatten()
-df_e_u
+    e_u = list(product(range(const.user_num), range(const.server_num)))
+    e_s = list(itertools.combinations(list(range(0, const.server_num)), 2))
+    d_us = np.random.randint(
+        0, const.delay_max, (const.user_num, const.server_num))
+    v_s = list(range(0, const.server_num))
+    m_s = np.random.randint(0, const.capacity_max, const.server_num)
+    e_s
 
-# dataframe for E_S
-df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
-                      columns=['server_1', 'server_2'])
-df_e_s['delay'] = const.delay_serer
-df_e_s
+    # dataframe for E_U
+    df_e_u = pd.DataFrame([(i, j) for i, j in e_u], columns=['user', 'server'])
+    df_e_u['delay'] = d_us.flatten()
+    df_e_u
 
-# dataframe for V_S
-df_v_s = pd.DataFrame(v_s, columns=['server'])
-df_v_s['capacity'] = m_s
-df_v_s
+    # dataframe for E_S
+    df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
+                          columns=['server_1', 'server_2'])
+    df_e_s['delay'] = const.delay_serer
+    df_e_s
 
-# optimization problem
-m = LpProblem()
+    # dataframe for V_S
+    df_v_s = pd.DataFrame(v_s, columns=['server'])
+    df_v_s['capacity'] = m_s
+    df_v_s
 
-# decision variables
-df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary)
-                      for i in df_e_u.index]
-df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary)
-                      for i in df_e_s.index]
-df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary)
-                      for i in df_v_s.index]
-D_u = LpVariable('D_u', cat=LpInteger)
-D_s = LpVariable('D_s', cat=LpInteger)
+    # optimization problem
+    m = LpProblem()
 
-# objective function
-m += 2 * D_u + D_s
+    # decision variables
+    df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary)
+                          for i in df_e_u.index]
+    df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary)
+                          for i in df_e_s.index]
+    df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary)
+                          for i in df_v_s.index]
+    D_u = LpVariable('D_u', cat=LpInteger)
+    D_s = LpVariable('D_s', cat=LpInteger)
 
-# constraints
-# (1b)
-for k, v in df_e_u.groupby('user'):
-    m += lpSum(v.variable) == 1
+    # objective function
+    m += 2 * D_u + D_s
+
+    # constraints
+    # (1b)
+    for k, v in df_e_u.groupby('user'):
+        m += lpSum(v.variable) == 1
+
+    # (1c)
+    for k, v in df_e_u.groupby('server'):
+        m += lpSum(v.variable) <= df_v_s['capacity'][k]
+
+    # (1d)
+    for k, v in df_e_u.iterrows():
+        m += v.variable * v.delay <= D_u
+
+    # (1e)
+    for k, v in df_e_s.iterrows():
+        m += v.variable * v.delay <= D_s
+
+    # (1f)
+    for k, v in df_e_u.groupby('user'):
+        for l, w in df_v_s.iterrows():
+            m += w.variable >= v.variable
+
+    # (1g)
+    for k, v in df_e_s.iterrows():
+        m += df_v_s.iloc[v.server_1].variable + \
+            df_v_s.iloc[v.server_2].variable - 1 <= v.variable
+
+    # (1h)
+    for k, v in df_e_s.iterrows():
+        m += v.variable <= df_v_s.iloc[v.server_1].variable
+
+    # (1i)
+    for k, v in df_e_s.iterrows():
+        m += v.variable <= df_v_s.iloc[v.server_2].variable
+
+    # solve
+    try:
+        print('-------- t_0 --------')
+        t_0 = time.process_time()
+        m.solve(CPLEX_CMD(msg=1))
+        t_1 = time.process_time()
+        print('\n-------- t_1 --------')
+
+        print('\nt_1 - t_0 is ', t_1 - t_0, '\n')
+    except PulpSolverError:
+        print(CPLEX_CMD().path, 'is not installed')
+
+    # result
+    if m.status == 1:
+        print('objective function is = ', value(m.objective))
+        df_e_u.variable = df_e_u.variable.apply(value)
+        print(df_e_u[df_e_u.variable >= 1])
+    else:
+        print('status code is = ', m.status)
 
 
-# (1c)
-for k, v in df_e_u.groupby('server'):
-    m += lpSum(v.variable) <= df_v_s['capacity'][k]
-
-# (1d)
-for k, v in df_e_u.iterrows():
-    m += v.variable * v.delay <= D_u
-
-# (1e)
-for k, v in df_e_s.iterrows():
-    m += v.variable * v.delay <= D_s
-
-# (1f)
-for k, v in df_e_u.groupby('user'):
-    for l, w in df_v_s.iterrows():
-        m += w.variable >= v.variable
-
-# (1g)
-for k, v in df_e_s.iterrows():
-    m += df_v_s.iloc[v.server_1].variable + \
-        df_v_s.iloc[v.server_2].variable - 1 <= v.variable
-
-# (1h)
-for k, v in df_e_s.iterrows():
-    m += v.variable <= df_v_s.iloc[v.server_1].variable
-
-# (1i)
-for k, v in df_e_s.iterrows():
-    m += v.variable <= df_v_s.iloc[v.server_2].variable
-
-# solve
-try:
-    print('-------- t_0 --------')
-    t_0 = time.process_time()
-    m.solve(CPLEX_CMD(msg=1))
-    t_1 = time.process_time()
-    print('\n-------- t_1 --------')
-
-    print('\nt_1 - t_0 is ', t_1 - t_0, '\n')
-except PulpSolverError:
-    print(CPLEX_CMD().path, 'is not installed')
-
-
-# result
-if m.status == 1:
-    print('objective function is = ', value(m.objective))
-    df_e_u.variable = df_e_u.variable.apply(value)
-    print(df_e_u[df_e_u.variable >= 1])
-else:
-    print('status code is = ', m.status)
+if __name__ == '__main__':
+    main()
