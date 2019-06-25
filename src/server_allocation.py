@@ -44,59 +44,63 @@ class Input:
         df_v_s['capacity'] = m_s
         self.df_v_s = df_v_s
 
+    def create_constraints(self, m):
+        # constraints
+        # (1b)
+        for k, v in self.df_e_u.groupby('user'):
+            m += lpSum(v.variable) == 1
 
-class Ilp:
-    def solveByIlp(input):
+        # (1c)
+        for k, v in self.df_e_u.groupby('server'):
+            m += lpSum(v.variable) <= self.df_v_s['capacity'][k]
+
+        # (1d)
+        for k, v in self.df_e_u.iterrows():
+            m += v.variable * v.delay <= self.D_u
+
+        # (1e)
+        for k, v in self.df_e_s.iterrows():
+            m += v.variable * v.delay <= self.D_s
+
+        # (1f)
+        for k, v in self.df_e_u.groupby('user'):
+            for l, w in self.df_v_s.iterrows():
+                m += w.variable >= v.variable
+
+        # (1g)
+        for k, v in self.df_e_s.iterrows():
+            m += self.df_v_s.iloc[v.server_1].variable + \
+                self.df_v_s.iloc[v.server_2].variable - 1 <= v.variable
+
+        # (1h)
+        for k, v in self.df_e_s.iterrows():
+            m += v.variable <= self.df_v_s.iloc[v.server_1].variable
+
+        # (1i)
+        for k, v in self.df_e_s.iterrows():
+            m += v.variable <= self.df_v_s.iloc[v.server_2].variable
+
+        return m
+
+    def solve_by_ilp(self):
         # optimization problem
         m = LpProblem()
 
         # decision variables
-        input.df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary)
-                                    for i in input.df_e_u.index]
-        input.df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary)
-                                    for i in input.df_e_s.index]
-        input.df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary)
-                                    for i in input.df_v_s.index]
-        D_u = LpVariable('D_u', cat=LpInteger)
-        D_s = LpVariable('D_s', cat=LpInteger)
+        self.df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary)
+                                   for i in self.df_e_u.index]
+        self.df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary)
+                                   for i in self.df_e_s.index]
+        self.df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary)
+                                   for i in self.df_v_s.index]
+        self.D_u = LpVariable('D_u', cat=LpInteger)
+        self.D_s = LpVariable('D_s', cat=LpInteger)
 
         # objective function
-        m += 2 * D_u + D_s
+        m += 2 * self.D_u + self.D_s
 
         # constraints
-        # (1b)
-        for k, v in input.df_e_u.groupby('user'):
-            m += lpSum(v.variable) == 1
-
-        # (1c)
-        for k, v in input.df_e_u.groupby('server'):
-            m += lpSum(v.variable) <= input.df_v_s['capacity'][k]
-
-        # (1d)
-        for k, v in input.df_e_u.iterrows():
-            m += v.variable * v.delay <= D_u
-
-        # (1e)
-        for k, v in input.df_e_s.iterrows():
-            m += v.variable * v.delay <= D_s
-
-        # (1f)
-        for k, v in input.df_e_u.groupby('user'):
-            for l, w in input.df_v_s.iterrows():
-                m += w.variable >= v.variable
-
-        # (1g)
-        for k, v in input.df_e_s.iterrows():
-            m += input.df_v_s.iloc[v.server_1].variable + \
-                input.df_v_s.iloc[v.server_2].variable - 1 <= v.variable
-
-        # (1h)
-        for k, v in input.df_e_s.iterrows():
-            m += v.variable <= input.df_v_s.iloc[v.server_1].variable
-
-        # (1i)
-        for k, v in input.df_e_s.iterrows():
-            m += v.variable <= input.df_v_s.iloc[v.server_2].variable
+        m = self.create_constraints(m)
 
         # solve
         try:
@@ -113,8 +117,8 @@ class Ilp:
         # result
         if m.status == 1:
             print('objective function is = ', value(m.objective))
-            input.df_e_u.variable = input.df_e_u.variable.apply(value)
-            # print(input.df_e_u[input.df_e_u.variable >= 1])
+            self.df_e_u.variable = self.df_e_u.variable.apply(value)
+            # print(self.df_e_u[self.df_e_u.variable >= 1])
         else:
             print('status code is = ', m.status)
 
@@ -125,7 +129,7 @@ def main():
     input = Input(1)
 
     # solve by ilp
-    Ilp.solveByIlp(input)
+    input.solve_by_ilp()
 
 
 if __name__ == '__main__':
