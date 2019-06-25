@@ -4,23 +4,18 @@
 import numpy as np
 import pandas as pd
 import time
+import const
 from itertools import product
 from pulp import *
 
 np.random.seed(1)
 
-# given parameter
-user_num = 800
-server_num = 8
-delay_max = 30
-delay_serer = 1
-capacity_max = 400
-
-e_u = list(product(range(user_num), range(server_num)))
-e_s = list(itertools.combinations(list(range(0, server_num)), 2))
-d_us = np.random.randint(0, delay_max, (user_num, server_num))
-v_s = list(range(0, server_num))
-m_s = np.random.randint(0, capacity_max, server_num)
+e_u = list(product(range(const.user_num), range(const.server_num)))
+e_s = list(itertools.combinations(list(range(0, const.server_num)), 2))
+d_us = np.random.randint(
+    0, const.delay_max, (const.user_num, const.server_num))
+v_s = list(range(0, const.server_num))
+m_s = np.random.randint(0, const.capacity_max, const.server_num)
 e_s
 
 # dataframe for E_U
@@ -31,7 +26,7 @@ df_e_u
 # dataframe for E_S
 df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
                       columns=['server_1', 'server_2'])
-df_e_s['delay'] = delay_serer
+df_e_s['delay'] = const.delay_serer
 df_e_s
 
 # dataframe for V_S
