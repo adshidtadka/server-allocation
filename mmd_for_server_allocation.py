@@ -4,36 +4,51 @@
 import numpy as np
 import pandas as pd
 import time
-import const
 from itertools import product
 from pulp import *
 
 
-def main():
-    np.random.seed(1)
+class Const:
+    user_num = 800
+    server_num = 8
+    delay_max = 30
+    delay_serer = 1
+    capacity_max = 400
 
-    e_u = list(product(range(const.user_num), range(const.server_num)))
-    e_s = list(itertools.combinations(list(range(0, const.server_num)), 2))
-    d_us = np.random.randint(
-        0, const.delay_max, (const.user_num, const.server_num))
-    v_s = list(range(0, const.server_num))
-    m_s = np.random.randint(0, const.capacity_max, const.server_num)
-    e_s
+
+class Input:
+    def __init__(self, seed):
+        np.random.seed(seed)
+
+        self.e_u = list(
+            product(range(Const.user_num), range(Const.server_num)))
+        self.e_s = list(itertools.combinations(
+            list(range(0, Const.server_num)), 2))
+        self.d_us = np.random.randint(
+            0, Const.delay_max, (Const.user_num, Const.server_num))
+        self.v_s = list(range(0, Const.server_num))
+        self.m_s = np.random.randint(0, Const.capacity_max, Const.server_num)
+
+
+def main():
+
+    input = Input(1)
 
     # dataframe for E_U
-    df_e_u = pd.DataFrame([(i, j) for i, j in e_u], columns=['user', 'server'])
-    df_e_u['delay'] = d_us.flatten()
+    df_e_u = pd.DataFrame([(i, j) for i, j in input.e_u],
+                          columns=['user', 'server'])
+    df_e_u['delay'] = input.d_us.flatten()
     df_e_u
 
     # dataframe for E_S
-    df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
+    df_e_s = pd.DataFrame([(i, j) for i, j in input.e_s],
                           columns=['server_1', 'server_2'])
-    df_e_s['delay'] = const.delay_serer
+    df_e_s['delay'] = Const.delay_serer
     df_e_s
 
     # dataframe for V_S
-    df_v_s = pd.DataFrame(v_s, columns=['server'])
-    df_v_s['capacity'] = m_s
+    df_v_s = pd.DataFrame(input.v_s, columns=['server'])
+    df_v_s['capacity'] = input.m_s
     df_v_s
 
     # optimization problem
