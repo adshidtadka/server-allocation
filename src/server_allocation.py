@@ -45,11 +45,7 @@ class Input:
         self.df_v_s = df_v_s
 
 
-def main():
-
-    # create input
-    input = Input(1)
-
+def solveByIlp(input):
     # optimization problem
     m = LpProblem()
 
@@ -120,6 +116,15 @@ def main():
         # print(input.df_e_u[input.df_e_u.variable >= 1])
     else:
         print('status code is = ', m.status)
+
+
+def main():
+
+    # create input
+    input = Input(1)
+
+    # solve by ilp
+    solveByIlp(input)
 
 
 if __name__ == '__main__':
