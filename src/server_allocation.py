@@ -19,7 +19,9 @@ class Const:
 class Input:
     def __init__(self, seed):
         np.random.seed(seed)
+        self.__CreateSet()
 
+    def __CreateSet(self):
         self.e_u = list(
             product(range(Const.user_num), range(Const.server_num)))
         self.e_s = list(itertools.combinations(
@@ -32,24 +34,22 @@ class Input:
 
 def main():
 
+    # create input
     input = Input(1)
 
     # dataframe for E_U
     df_e_u = pd.DataFrame([(i, j) for i, j in input.e_u],
                           columns=['user', 'server'])
     df_e_u['delay'] = input.d_us.flatten()
-    df_e_u
 
     # dataframe for E_S
     df_e_s = pd.DataFrame([(i, j) for i, j in input.e_s],
                           columns=['server_1', 'server_2'])
     df_e_s['delay'] = Const.delay_serer
-    df_e_s
 
     # dataframe for V_S
     df_v_s = pd.DataFrame(input.v_s, columns=['server'])
     df_v_s['capacity'] = input.m_s
-    df_v_s
 
     # optimization problem
     m = LpProblem()
