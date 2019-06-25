@@ -8,14 +8,6 @@ from itertools import product
 from pulp import *
 
 
-class Const:
-    user_num = 800
-    server_num = 8
-    delay_max = 30
-    delay_serer = 1
-    capacity_max = 400
-
-
 class Input:
 
     user_num = 800
@@ -27,13 +19,13 @@ class Input:
     def __init__(self, seed):
         np.random.seed(seed)
         e_u = list(
-            product(range(Const.user_num), range(Const.server_num)))
+            product(range(self.user_num), range(self.server_num)))
         e_s = list(itertools.combinations(
-            list(range(0, Const.server_num)), 2))
+            list(range(0, self.server_num)), 2))
         d_us = np.random.randint(
-            0, Const.delay_max, (Const.user_num, Const.server_num))
-        v_s = list(range(0, Const.server_num))
-        m_s = np.random.randint(0, Const.capacity_max, Const.server_num)
+            0, self.delay_max, (self.user_num, self.server_num))
+        v_s = list(range(0, self.server_num))
+        m_s = np.random.randint(0, self.capacity_max, self.server_num)
 
         # dataframe for E_U
         df_e_u = pd.DataFrame([(i, j) for i, j in e_u],
@@ -44,7 +36,7 @@ class Input:
         # dataframe for E_S
         df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
                               columns=['server_1', 'server_2'])
-        df_e_s['delay'] = Const.delay_serer
+        df_e_s['delay'] = self.delay_serer
         self.df_e_s = df_e_s
 
         # dataframe for V_S
