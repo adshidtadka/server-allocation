@@ -17,19 +17,40 @@ class Const:
 
 
 class Input:
+
+    user_num = 800
+    server_num = 8
+    delay_max = 30
+    delay_serer = 1
+    capacity_max = 400
+
     def __init__(self, seed):
         np.random.seed(seed)
-        self.__CreateSet()
-
-    def __CreateSet(self):
-        self.e_u = list(
+        e_u = list(
             product(range(Const.user_num), range(Const.server_num)))
-        self.e_s = list(itertools.combinations(
+        e_s = list(itertools.combinations(
             list(range(0, Const.server_num)), 2))
-        self.d_us = np.random.randint(
+        d_us = np.random.randint(
             0, Const.delay_max, (Const.user_num, Const.server_num))
-        self.v_s = list(range(0, Const.server_num))
-        self.m_s = np.random.randint(0, Const.capacity_max, Const.server_num)
+        v_s = list(range(0, Const.server_num))
+        m_s = np.random.randint(0, Const.capacity_max, Const.server_num)
+
+        # dataframe for E_U
+        df_e_u = pd.DataFrame([(i, j) for i, j in e_u],
+                              columns=['user', 'server'])
+        df_e_u['delay'] = d_us.flatten()
+        self.df_e_u = df_e_u
+
+        # dataframe for E_S
+        df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
+                              columns=['server_1', 'server_2'])
+        df_e_s['delay'] = Const.delay_serer
+        self.df_e_s = df_e_s
+
+        # dataframe for V_S
+        df_v_s = pd.DataFrame(v_s, columns=['server'])
+        df_v_s['capacity'] = m_s
+        self.df_v_s = df_v_s
 
 
 def main():
@@ -37,30 +58,16 @@ def main():
     # create input
     input = Input(1)
 
-    # dataframe for E_U
-    df_e_u = pd.DataFrame([(i, j) for i, j in input.e_u],
-                          columns=['user', 'server'])
-    df_e_u['delay'] = input.d_us.flatten()
-
-    # dataframe for E_S
-    df_e_s = pd.DataFrame([(i, j) for i, j in input.e_s],
-                          columns=['server_1', 'server_2'])
-    df_e_s['delay'] = Const.delay_serer
-
-    # dataframe for V_S
-    df_v_s = pd.DataFrame(input.v_s, columns=['server'])
-    df_v_s['capacity'] = input.m_s
-
     # optimization problem
     m = LpProblem()
 
     # decision variables
-    df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary)
-                          for i in df_e_u.index]
-    df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary)
-                          for i in df_e_s.index]
-    df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary)
-                          for i in df_v_s.index]
+    input.df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary)
+                                for i in input.df_e_u.index]
+    input.df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary)
+                                for i in input.df_e_s.index]
+    input.df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary)
+                                for i in input.df_v_s.index]
     D_u = LpVariable('D_u', cat=LpInteger)
     D_s = LpVariable('D_s', cat=LpInteger)
 
@@ -69,38 +76,38 @@ def main():
 
     # constraints
     # (1b)
-    for k, v in df_e_u.groupby('user'):
+    for k, v in input.df_e_u.groupby('user'):
         m += lpSum(v.variable) == 1
 
     # (1c)
-    for k, v in df_e_u.groupby('server'):
-        m += lpSum(v.variable) <= df_v_s['capacity'][k]
+    for k, v in input.df_e_u.groupby('server'):
+        m += lpSum(v.variable) <= input.df_v_s['capacity'][k]
 
     # (1d)
-    for k, v in df_e_u.iterrows():
+    for k, v in input.df_e_u.iterrows():
         m += v.variable * v.delay <= D_u
 
     # (1e)
-    for k, v in df_e_s.iterrows():
+    for k, v in input.df_e_s.iterrows():
         m += v.variable * v.delay <= D_s
 
     # (1f)
-    for k, v in df_e_u.groupby('user'):
-        for l, w in df_v_s.iterrows():
+    for k, v in input.df_e_u.groupby('user'):
+        for l, w in input.df_v_s.iterrows():
             m += w.variable >= v.variable
 
     # (1g)
-    for k, v in df_e_s.iterrows():
-        m += df_v_s.iloc[v.server_1].variable + \
-            df_v_s.iloc[v.server_2].variable - 1 <= v.variable
+    for k, v in input.df_e_s.iterrows():
+        m += input.df_v_s.iloc[v.server_1].variable + \
+            input.df_v_s.iloc[v.server_2].variable - 1 <= v.variable
 
     # (1h)
-    for k, v in df_e_s.iterrows():
-        m += v.variable <= df_v_s.iloc[v.server_1].variable
+    for k, v in input.df_e_s.iterrows():
+        m += v.variable <= input.df_v_s.iloc[v.server_1].variable
 
     # (1i)
-    for k, v in df_e_s.iterrows():
-        m += v.variable <= df_v_s.iloc[v.server_2].variable
+    for k, v in input.df_e_s.iterrows():
+        m += v.variable <= input.df_v_s.iloc[v.server_2].variable
 
     # solve
     try:
@@ -117,8 +124,8 @@ def main():
     # result
     if m.status == 1:
         print('objective function is = ', value(m.objective))
-        df_e_u.variable = df_e_u.variable.apply(value)
-        print(df_e_u[df_e_u.variable >= 1])
+        input.df_e_u.variable = input.df_e_u.variable.apply(value)
+        print(input.df_e_u[input.df_e_u.variable >= 1])
     else:
         print('status code is = ', m.status)
 
