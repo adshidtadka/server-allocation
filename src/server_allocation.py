@@ -8,7 +8,7 @@ from itertools import product
 from pulp import *
 
 
-class Input:
+class Problem:
 
     USER_NUM = 800
     SERVER_NUM = 8
@@ -126,10 +126,10 @@ class Input:
 def main():
 
     # create input
-    input = Input(1)
+    problem = Problem(1)
 
     # solve by ilp
-    input.solve_by_ilp()
+    problem .solve_by_ilp()
 
 
 if __name__ == '__main__':
