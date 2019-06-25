@@ -10,22 +10,22 @@ from pulp import *
 
 class Input:
 
-    user_num = 800
-    server_num = 8
-    delay_max = 30
-    delay_serer = 1
-    capacity_max = 400
+    USER_NUM = 800
+    SERVER_NUM = 8
+    DELAY_MAX = 30
+    DELAY_SERVER = 1
+    CAPACITY_MAX = 400
 
     def __init__(self, seed):
         np.random.seed(seed)
         e_u = list(
-            product(range(self.user_num), range(self.server_num)))
+            product(range(self.USER_NUM), range(self.SERVER_NUM)))
         e_s = list(itertools.combinations(
-            list(range(0, self.server_num)), 2))
+            list(range(0, self.SERVER_NUM)), 2))
         d_us = np.random.randint(
-            0, self.delay_max, (self.user_num, self.server_num))
-        v_s = list(range(0, self.server_num))
-        m_s = np.random.randint(0, self.capacity_max, self.server_num)
+            0, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
+        v_s = list(range(0, self.SERVER_NUM))
+        m_s = np.random.randint(0, self.CAPACITY_MAX, self.SERVER_NUM)
 
         # dataframe for E_U
         df_e_u = pd.DataFrame([(i, j) for i, j in e_u],
@@ -36,7 +36,7 @@ class Input:
         # dataframe for E_S
         df_e_s = pd.DataFrame([(i, j) for i, j in e_s],
                               columns=['server_1', 'server_2'])
-        df_e_s['delay'] = self.delay_serer
+        df_e_s['delay'] = self.DELAY_SERVER
         self.df_e_s = df_e_s
 
         # dataframe for V_S
