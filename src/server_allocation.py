@@ -125,7 +125,7 @@ def main():
     if m.status == 1:
         print('objective function is = ', value(m.objective))
         input.df_e_u.variable = input.df_e_u.variable.apply(value)
-        print(input.df_e_u[input.df_e_u.variable >= 1])
+        # print(input.df_e_u[input.df_e_u.variable >= 1])
     else:
         print('status code is = ', m.status)
 
