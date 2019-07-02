@@ -49,7 +49,10 @@ class Parameter:
 
 class Problem:
 
-    def set_input(param):
+    def __init__(self, param):
+        self.set_input(param)
+
+    def set_input(self, param):
         # optimization problem
         problem = LpProblem()
 
@@ -66,14 +69,14 @@ class Problem:
         # constraints
         problem = Problem.create_constraints(param, problem)
 
-        return problem
+        self.problem = problem
 
-    def solve_by_ilp(problem):
+    def solve_by_ilp(self):
         # solve
         try:
             print('-------- t_0 --------')
             t_0 = time.process_time()
-            problem.solve(CPLEX_CMD(msg=1))
+            self.problem.solve(CPLEX_CMD(msg=1))
             t_1 = time.process_time()
             print('\n-------- t_1 --------')
 
@@ -82,10 +85,10 @@ class Problem:
             print(CPLEX_CMD().path, 'is not installed')
 
         # result
-        if problem.status == 1:
-            print('objective function is = ', value(problem.objective))
+        if self.problem.status == 1:
+            print('objective function is = ', value(self.problem.objective))
         else:
-            print('status code is = ', problem.status)
+            print('status code is = ', self.problem.status)
 
     def create_constraints(param, m):
         # constraints
@@ -132,10 +135,10 @@ def main():
     param = Parameter(1)
 
     # set input to problem
-    problem = Problem.set_input(param)
+    problem = Problem(param)
 
     # solve by ilp
-    Problem.solve_by_ilp(problem)
+    problem.solve_by_ilp()
 
 
 if __name__ == '__main__':
