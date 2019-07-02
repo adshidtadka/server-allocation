@@ -47,9 +47,9 @@ class Problem:
         df_v_s['capacity'] = m_s
         self.df_v_s = df_v_s
 
-    def solve_by_ilp(self):
+    def set_input(self):
         # optimization problem
-        m = LpProblem()
+        self.problem = LpProblem()
 
         # decision variables
         self.df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary) for i in self.df_e_u.index]
@@ -59,16 +59,17 @@ class Problem:
         self.D_s = LpVariable('D_s', cat=LpInteger)
 
         # objective function
-        m += 2 * self.D_u + self.D_s
+        self.problem += 2 * self.D_u + self.D_s
 
         # constraints
-        m = self.create_constraints(m)
+        self.problem = self.create_constraints(self.problem)
 
+    def solve_by_ilp(self):
         # solve
         try:
             print('-------- t_0 --------')
             t_0 = time.process_time()
-            m.solve(CPLEX_CMD(msg=1))
+            self.problem.solve(CPLEX_CMD(msg=1))
             t_1 = time.process_time()
             print('\n-------- t_1 --------')
 
@@ -77,12 +78,12 @@ class Problem:
             print(CPLEX_CMD().path, 'is not installed')
 
         # result
-        if m.status == 1:
-            print('objective function is = ', value(m.objective))
+        if self.problem.status == 1:
+            print('objective function is = ', value(self.problem.objective))
             self.df_e_u.variable = self.df_e_u.variable.apply(value)
             # print(self.df_e_u[self.df_e_u.variable >= 1])
         else:
-            print('status code is = ', m.status)
+            print('status code is = ', self.problem.status)
 
     def create_constraints(self, m):
         # constraints
@@ -127,6 +128,9 @@ def main():
 
     # create input
     problem = Problem(1)
+
+    # set input to problem
+    problem.set_input()
 
     # solve by ilp
     problem.solve_by_ilp()
