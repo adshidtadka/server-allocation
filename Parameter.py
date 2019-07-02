@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from itertools import product
+import itertools
+import sys
 
 import Constant
 
@@ -12,7 +13,7 @@ class Parameter:
 
     def create_input(self):
         # inputs
-        e_u = list(product(range(Constant.USER_NUM), range(Constant.SERVER_NUM)))
+        e_u = list(itertools.product(range(Constant.USER_NUM), range(Constant.SERVER_NUM)))
         e_s = list(itertools.combinations(list(range(0, Constant.SERVER_NUM)), 2))
         d_us = np.random.randint(0, Constant.DELAY_MAX, (Constant.USER_NUM, Constant.SERVER_NUM))
         v_s = list(range(0, Constant.SERVER_NUM))

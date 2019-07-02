@@ -4,7 +4,7 @@ import time
 from pulp import *
 
 import Constant
-import Parameter
+from Parameter import Parameter
 
 
 class Ilp:
@@ -89,8 +89,11 @@ class Ilp:
 
 
 def main():
+
+    param = Parameter(Constant.SEED)
+
     # set input to problem
-    ilp = Ilp(Parameter(Constant.SEED))
+    ilp = Ilp(param)
 
     # solve by ilp
     ilp.solve_by_ilp()

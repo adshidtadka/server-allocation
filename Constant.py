@@ -1,3 +1,6 @@
+import sys
+
+
 class Constant:
 
     # constants
@@ -7,3 +10,6 @@ class Constant:
     DELAY_SERVER = 1
     CAPACITY_MAX = 400
     SEED = 1
+
+
+sys.modules[__name__] = Constant()
