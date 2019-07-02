@@ -74,14 +74,17 @@ class HopcroftKarp:
         return [cap for _, cap, _ in self.backwards]
 
 
-readline = sys.stdin.readline
-write = sys.stdout.write
+def main():
+    readline = sys.stdin.readline
+    write = sys.stdout.write
+    X, Y, E = map(int, readline().split())
+    hc = HopcroftKarp(X, Y)
+    for i in range(E):
+        x, y = map(int, readline().split())
+        hc.add_edge(x, y)
 
-X, Y, E = map(int, readline().split())
+    write("%d\n" % hc.flow())
 
-hc = HopcroftKarp(X, Y)
-for i in range(E):
-    x, y = map(int, readline().split())
-    hc.add_edge(x, y)
 
-write("%d\n" % hc.flow())
+if __name__ == '__main__':
+    main()
