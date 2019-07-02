@@ -22,7 +22,9 @@ class Problem:
 
     def __init__(self, seed):
         np.random.seed(seed)
+        self.create_input()
 
+    def create_input(self):
         # inputs
         e_u = list(product(range(Constant.USER_NUM), range(Constant.SERVER_NUM)))
         e_s = list(itertools.combinations(list(range(0, Constant.SERVER_NUM)), 2))
@@ -127,7 +129,7 @@ def main():
     problem = Problem(1)
 
     # solve by ilp
-    problem .solve_by_ilp()
+    problem.solve_by_ilp()
 
 
 if __name__ == '__main__':
