@@ -84,7 +84,7 @@ class Problem:
         except PulpSolverError:
             print(CPLEX_CMD().path, 'is not installed')
 
-        # result
+    def print_result(self):
         if self.problem.status == 1:
             print('objective function is = ', value(self.problem.objective))
         else:
@@ -139,6 +139,9 @@ def main():
 
     # solve by ilp
     problem.solve_by_ilp()
+
+    # print result
+    problem.print_result()
 
 
 if __name__ == '__main__':
