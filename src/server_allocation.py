@@ -48,7 +48,7 @@ class Parameter:
         self.df_v_s = df_v_s
 
 
-class Problem:
+class Ilp:
 
     def __init__(self, param):
         self.set_input(param)
@@ -68,7 +68,7 @@ class Problem:
         problem += 2 * param.D_u + param.D_s
 
         # constraints
-        problem = Problem.create_constraints(param, problem)
+        problem = Ilp.create_constraints(param, problem)
 
         self.problem = problem
 
@@ -87,9 +87,9 @@ class Problem:
 
     def print_result(self):
         if self.problem.status == 1:
-            print('objective function is = ', value(self.problem.objective))
+            print('objective function is ', value(self.problem.objective))
         else:
-            print('status code is = ', self.problem.status)
+            print('status code is ', self.problem.status)
 
     def create_constraints(param, m):
         # constraints
@@ -133,13 +133,13 @@ class Problem:
 def main():
 
     # set input to problem
-    problem = Problem(Parameter(Constant.SEED))
+    ilp = Ilp(Parameter(Constant.SEED))
 
     # solve by ilp
-    problem.solve_by_ilp()
+    ilp.solve_by_ilp()
 
     # print result
-    problem.print_result()
+    ilp.print_result()
 
 
 if __name__ == '__main__':
