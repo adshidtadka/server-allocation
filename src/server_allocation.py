@@ -132,11 +132,8 @@ class Problem:
 
 def main():
 
-    # create input
-    param = Parameter(Constant.SEED)
-
     # set input to problem
-    problem = Problem(param)
+    problem = Problem(Parameter(Constant.SEED))
 
     # solve by ilp
     problem.solve_by_ilp()
