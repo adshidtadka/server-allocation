@@ -16,6 +16,7 @@ class Constant:
     DELAY_MAX = 30
     DELAY_SERVER = 1
     CAPACITY_MAX = 400
+    SEED = 1
 
 
 class Parameter:
@@ -132,7 +133,7 @@ class Problem:
 def main():
 
     # create input
-    param = Parameter(1)
+    param = Parameter(Constant.SEED)
 
     # set input to problem
     problem = Problem(param)
