@@ -8,8 +8,8 @@ import Constant
 
 class Parameter:
 
-    USER_NUM = 30
-    SERVER_NUM = 8
+    USER_NUM = 100
+    SERVER_NUM = 100
     DELAY_MAX = 30
     DELAY_SERVER = 1
     CAPACITY_MAX = 10

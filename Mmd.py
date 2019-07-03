@@ -16,8 +16,12 @@ class Mmd:
 
         t_1 = time.process_time()
 
-        self.cpu_time = t_1 - t_0
-        self.objective_function = D_u*2 + param.DELAY_SERVER
+        if D_u > param.DELAY_MAX:
+            self.status = False
+        else:
+            self.status = True
+            self.cpu_time = t_1 - t_0
+            self.objective_function = D_u*2 + param.DELAY_SERVER
 
     def one_server_case(self, param):
         # step 1: consider one server case
@@ -63,8 +67,11 @@ class Mmd:
         return Constant.INF
 
     def print_result(self):
-        print('objective function is ', str(self.objective_function))
-        print('it takes ' + str(self.cpu_time) + ' sec')
+        if self.status:
+            print('objective function is ', str(self.objective_function))
+            print('it takes ' + str(self.cpu_time) + ' sec')
+        else:
+            print('Error')
 
 
 def main():
