@@ -51,7 +51,8 @@ class Ilp:
         # solve
         try:
             t_0 = time.process_time()
-            self.problem.solve(CPLEX_CMD())
+            self.problem.solve(GLPK_CMD(msg=0))
+            # self.problem.solve(CPLEX_CMD())
             t_1 = time.process_time()
             self.cpu_time = t_1 - t_0
         except PulpSolverError:
