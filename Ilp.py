@@ -19,17 +19,17 @@ class Ilp:
         problem = LpProblem()
 
         # decision variables
-        param.df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary) for i in param.df_e_u.index]
-        param.df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary) for i in param.df_e_s.index]
-        param.df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary) for i in param.df_v_s.index]
-        param.D_u = LpVariable('D_u', cat=LpInteger)
-        param.D_s = LpVariable('D_s', cat=LpInteger)
+        self.df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary) for i in self.df_e_u.index]
+        self.df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary) for i in self.df_e_s.index]
+        self.df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary) for i in self.df_v_s.index]
+        self.D_u = LpVariable('D_u', cat=LpInteger)
+        self.D_s = LpVariable('D_s', cat=LpInteger)
 
         # objective function
-        problem += 2 * param.D_u + param.D_s
+        problem += 2 * self.D_u + self.D_s
 
         # constraints
-        problem = Ilp.create_constraints(param, problem)
+        problem = self.create_constraints(problem)
 
         self.problem = problem
 
@@ -37,17 +37,17 @@ class Ilp:
         # dataframe for E_U
         df_e_u = pd.DataFrame([(i, j) for i, j in param.e_u], columns=['user', 'server'])
         df_e_u['delay'] = param.d_us.flatten()
-        param.df_e_u = df_e_u
+        self.df_e_u = df_e_u
 
         # dataframe for E_S
         df_e_s = pd.DataFrame([(i, j) for i, j in param.e_s], columns=['server_1', 'server_2'])
         df_e_s['delay'] = param.DELAY_SERVER
-        param.df_e_s = df_e_s
+        self.df_e_s = df_e_s
 
         # dataframe for V_S
         df_v_s = pd.DataFrame(list(range(0, param.SERVER_NUM)), columns=['server'])
         df_v_s['capacity'] = param.m_s
-        param.df_v_s = df_v_s
+        self.df_v_s = df_v_s
 
     def solve_by_ilp(self):
         # solve
@@ -66,41 +66,41 @@ class Ilp:
         else:
             print('status code is ', self.problem.status)
 
-    def create_constraints(param, m):
+    def create_constraints(self, m):
         # constraints
         # (1b)
-        for k, v in param.df_e_u.groupby('user'):
+        for k, v in self.df_e_u.groupby('user'):
             m += lpSum(v.variable) == 1
 
         # (1c)
-        for k, v in param.df_e_u.groupby('server'):
-            m += lpSum(v.variable) <= param.df_v_s['capacity'][k]
+        for k, v in self.df_e_u.groupby('server'):
+            m += lpSum(v.variable) <= self.df_v_s['capacity'][k]
 
         # (1d)
-        for k, v in param.df_e_u.iterrows():
-            m += v.variable * v.delay <= param.D_u
+        for k, v in self.df_e_u.iterrows():
+            m += v.variable * v.delay <= self.D_u
 
         # (1e)
-        for k, v in param.df_e_s.iterrows():
-            m += v.variable * v.delay <= param.D_s
+        for k, v in self.df_e_s.iterrows():
+            m += v.variable * v.delay <= self.D_s
 
         # (1f)
-        for k, v in param.df_e_u.groupby('user'):
-            for l, w in param.df_v_s.iterrows():
+        for k, v in self.df_e_u.groupby('user'):
+            for l, w in self.df_v_s.iterrows():
                 m += w.variable >= v.variable
 
         # (1g)
-        for k, v in param.df_e_s.iterrows():
-            m += param.df_v_s.iloc[v.server_1].variable + \
-                param.df_v_s.iloc[v.server_2].variable - 1 <= v.variable
+        for k, v in self.df_e_s.iterrows():
+            m += self.df_v_s.iloc[v.server_1].variable + \
+                self.df_v_s.iloc[v.server_2].variable - 1 <= v.variable
 
         # (1h)
-        for k, v in param.df_e_s.iterrows():
-            m += v.variable <= param.df_v_s.iloc[v.server_1].variable
+        for k, v in self.df_e_s.iterrows():
+            m += v.variable <= self.df_v_s.iloc[v.server_1].variable
 
         # (1i)
-        for k, v in param.df_e_s.iterrows():
-            m += v.variable <= param.df_v_s.iloc[v.server_2].variable
+        for k, v in self.df_e_s.iterrows():
+            m += v.variable <= self.df_v_s.iloc[v.server_2].variable
 
         return m
 
