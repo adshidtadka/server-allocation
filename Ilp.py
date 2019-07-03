@@ -52,19 +52,17 @@ class Ilp:
     def solve_by_ilp(self):
         # solve
         try:
-            print('-------- t_0 --------')
             t_0 = time.process_time()
-            self.problem.solve(CPLEX_CMD(msg=1))
+            self.problem.solve(CPLEX_CMD())
             t_1 = time.process_time()
-            print('\n-------- t_1 --------')
-
-            print('\nt_1 - t_0 is ', t_1 - t_0, '\n')
+            self.cpu_time = t_1 - t_0
         except PulpSolverError:
             print(CPLEX_CMD().path, 'is not installed')
 
     def print_result(self):
         if self.problem.status == 1:
             print('objective function is ', value(self.problem.objective))
+            print('it takes ' + str(self.cpu_time) + ' sec')
         else:
             print('status code is ', self.problem.status)
 

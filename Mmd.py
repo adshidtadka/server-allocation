@@ -8,22 +8,16 @@ from HopcroftKarp import HopcroftKarp
 
 class Mmd:
     def start_algorithm(self, param):
-        print('-------- t_0 --------\n')
         t_0 = time.process_time()
 
         L_1 = self.one_server_case(param)
-        print('L_1 = ' + str(L_1))
         L_2 = self.multiple_server_case(param)
-        print('L_2 = ' + str(L_2))
-
         D_u = min([L_1, L_2])
 
         t_1 = time.process_time()
-        print('\n-------- t_1 --------')
 
-        print('\nt_1 - t_0 is ', t_1 - t_0, '\n')
-
-        return D_u*2 + param.DELAY_SERVER
+        self.cpu_time = t_1 - t_0
+        self.objective_function = D_u*2 + param.DELAY_SERVER
 
     def one_server_case(self, param):
         # step 1: consider one server case
@@ -56,7 +50,7 @@ class Mmd:
         for k, v in enumerate(d_us_cp):
             for i, j in enumerate(v):
                 sorted_link = np.vstack((sorted_link, np.array([k, i, j])))
-        sorted_link = sorted_link[np.argsort(sorted_link[:, 2])]
+        # sorted_link = sorted_link[np.argsort(sorted_link[:, 2])]
 
         # search matching
         for i in range(1, param.DELAY_MAX):
@@ -68,13 +62,20 @@ class Mmd:
 
         return Constant.INF
 
+    def print_result(self):
+        print('objective function is ', str(self.objective_function))
+        print('it takes ' + str(self.cpu_time) + ' sec')
+
 
 def main():
     # set input to algorithm
     mmd = Mmd()
 
     # start algorithm
-    print(mmd.start_algorithm(Parameter(Constant.SEED)))
+    mmd.start_algorithm(Parameter(Constant.SEED))
+
+    # print result
+    mmd.print_result()
 
 
 if __name__ == '__main__':
