@@ -59,7 +59,12 @@ class Mmd:
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
+        # param.df_e_u['pseudo_server'] = param.df_e_u['server']
+        # for k, v in param.df_v_s.iterrows():
+        #     for i in range(v['capacity'] - 1):
+        #         for j in range(param.USER_NUM):
 
+        #         print(v)
         return None
 
 
