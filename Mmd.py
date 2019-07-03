@@ -55,14 +55,13 @@ class Mmd:
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
-        added_edges = np.empty(3, dtype=int)
         added_server = param.SERVER_NUM
         for k, v in enumerate(param.m_s):
             for j in range(param.USER_NUM):
+                delay = param.d_us[j][k]
                 for i in range(added_server, added_server + v - 1):
-                    added_edges = np.vstack((added_edges, np.array([j, i, param.d_us[j][k]])))
+                    self.edges = np.vstack((self.edges, np.array([j, i, delay])))
                 added_server += v - 1
-        self.edges = np.vstack((self.edges, added_edges))
         param.COPY_SERVER_NUM = added_server
 
         # search matching
