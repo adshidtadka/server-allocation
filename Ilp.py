@@ -45,7 +45,7 @@ class Ilp:
         param.df_e_s = df_e_s
 
         # dataframe for V_S
-        df_v_s = pd.DataFrame(param.v_s, columns=['server'])
+        df_v_s = pd.DataFrame(list(range(0, param.SERVER_NUM)), columns=['server'])
         df_v_s['capacity'] = param.m_s
         param.df_v_s = df_v_s
 

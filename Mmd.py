@@ -31,11 +31,9 @@ class Mmd:
 
         # search minimum D_u
         if bool(dic_l):
-            s = min(dic_l, key=dic_l.get)
+            return min(dic_l)
         else:
             return None
-
-        return dic_l[s]
 
     def multiple_server_case(self, param):
         # step 2: consider multiple server case

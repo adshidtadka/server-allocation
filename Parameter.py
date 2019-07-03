@@ -12,7 +12,7 @@ class Parameter:
     SERVER_NUM = 8
     DELAY_MAX = 30
     DELAY_SERVER = 1
-    CAPACITY_MAX = 400
+    CAPACITY_MAX = 1000
 
     def __init__(self, seed):
         np.random.seed(seed)
@@ -23,5 +23,4 @@ class Parameter:
         self.e_u = list(itertools.product(range(self.USER_NUM), range(self.SERVER_NUM)))
         self.e_s = list(itertools.combinations(list(range(0, self.SERVER_NUM)), 2))
         self.d_us = np.random.randint(0, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
-        self.v_s = list(range(0, self.SERVER_NUM))
         self.m_s = np.random.randint(0, self.CAPACITY_MAX, self.SERVER_NUM)
