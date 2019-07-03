@@ -45,8 +45,7 @@ class Mmd:
         # initialize the bipartite graph
         d_us_cp = param.d_us
         for k, v in enumerate(param.m_s):
-            for i in range(v - 1):
-                d_us_cp = np.hstack((d_us_cp, d_us_cp[:, k].reshape(len(d_us_cp[:, k]), 1)))
+            d_us_cp = np.hstack((d_us_cp, np.full((param.USER_NUM, v - 1), d_us_cp[:, k].reshape(len(d_us_cp[:, k]), 1))))
         param.COPY_SERVER_NUM = len(d_us_cp[0])
 
         # sort d_us_cp
