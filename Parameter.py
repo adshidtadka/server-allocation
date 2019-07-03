@@ -8,15 +8,13 @@ import Constant
 
 class Parameter:
 
-    USER_NUM = 100
-    SERVER_NUM = 100
-    DELAY_MAX = 30
-    DELAY_SERVER = 1
-    CAPACITY_MAX = 10
-
     def __init__(self, seed):
         np.random.seed(seed)
-        self.create_input()
+        self.USER_NUM = 100
+        self.SERVER_NUM = 100
+        self.DELAY_MAX = 30
+        self.DELAY_SERVER = 1
+        self.CAPACITY_MAX = 10
 
     def create_input(self):
         # inputs
@@ -24,3 +22,9 @@ class Parameter:
         self.e_s = list(itertools.combinations(list(range(0, self.SERVER_NUM)), 2))
         self.d_us = np.random.randint(1, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
         self.m_s = np.random.randint(1, self.CAPACITY_MAX, self.SERVER_NUM)
+
+    def set_user_num(self, v):
+        self.USER_NUM = v
+
+    def set_server_num(self, v):
+        self.SERVER_NUM = v

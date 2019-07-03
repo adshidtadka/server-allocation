@@ -75,11 +75,15 @@ class Mmd:
 
 
 def main():
+    # create param
+    param = Parameter(Constant.SEED)
+    param.create_input()
+
     # set input to algorithm
     mmd = Mmd()
 
     # start algorithm
-    mmd.start_algorithm(Parameter(Constant.SEED))
+    mmd.start_algorithm(param)
 
     # print result
     mmd.print_result()
