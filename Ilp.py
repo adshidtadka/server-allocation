@@ -9,12 +9,10 @@ from Parameter import Parameter
 
 class Ilp:
     def __init__(self, param):
-        self.set_input(param)
-
-    def set_input(self, param):
-
         self.create_dataframe(param)
+        self.set_input()
 
+    def set_input(self):
         # optimization problem
         problem = LpProblem()
 
