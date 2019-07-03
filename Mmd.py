@@ -60,9 +60,12 @@ class Mmd:
 
         # initialize the bipartite graph
         # param.df_e_u['pseudo_server'] = param.df_e_u['server']
+        # pseudo_server = param.SERVER_NUM
         # for k, v in param.df_v_s.iterrows():
-        #     for i in range(v['capacity'] - 1):
-        #         for j in range(param.USER_NUM):
+        #     for i in range(param.USER_NUM):
+        #         s = pd.Series([i, k, param.df_e_u.at[]])
+        #         for j in range(v['capacity'] - 1):
+        #             param.df_e_u.append()
 
         #         print(v)
         return None
