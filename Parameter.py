@@ -22,5 +22,5 @@ class Parameter:
         # inputs
         self.e_u = list(itertools.product(range(self.USER_NUM), range(self.SERVER_NUM)))
         self.e_s = list(itertools.combinations(list(range(0, self.SERVER_NUM)), 2))
-        self.d_us = np.random.randint(0, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
-        self.m_s = np.random.randint(0, self.CAPACITY_MAX, self.SERVER_NUM)
+        self.d_us = np.random.randint(1, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
+        self.m_s = np.random.randint(1, self.CAPACITY_MAX, self.SERVER_NUM)

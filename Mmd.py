@@ -45,11 +45,17 @@ class Mmd:
                 d_us_cp = np.hstack((d_us_cp, d_us_cp[:, k].reshape(len(d_us_cp[:, k]), 1)))
 
         # sort d_us_cp
-        link_arr = np.empty(3, dtype=int)
+        sorted_link = np.empty(3, dtype=int)
         for k, v in enumerate(param.d_us):
             for i, j in enumerate(v):
-                link_arr = np.vstack((link_arr, np.array([k, i, j])))
-        link_arr = link_arr[np.argsort(link_arr[:, 2])]
+                sorted_link = np.vstack((sorted_link, np.array([k, i, j])))
+        sorted_link = sorted_link[np.argsort(sorted_link[:, 2])]
+
+        # search matching
+        added_link = np.empty(2, dtype=int)
+        for i in range(1, param.DELAY_MAX):
+            for j in np.where(sorted_link[:, -1] == i)[0]:
+                added_link = np.vstack((added_link, sorted_link[j][0:2]))
 
         return None
 
