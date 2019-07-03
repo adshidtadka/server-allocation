@@ -39,9 +39,17 @@ class Mmd:
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
+        d_us_cp = param.d_us
         for k, v in enumerate(param.m_s):
             for i in range(v - 1):
-                param.d_us = np.hstack((param.d_us, param.d_us[:, k].reshape(len(param.d_us[:, k]), 1)))
+                d_us_cp = np.hstack((d_us_cp, d_us_cp[:, k].reshape(len(d_us_cp[:, k]), 1)))
+
+        # sort d_us_cp
+        link_arr = np.empty(3, dtype=int)
+        for k, v in enumerate(param.d_us):
+            for i, j in enumerate(v):
+                link_arr = np.vstack((link_arr, np.array([k, i, j])))
+        link_arr = link_arr[np.argsort(link_arr[:, 2])]
 
         return None
 
