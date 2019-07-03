@@ -12,7 +12,7 @@ class Mmd:
 
         L_1 = self.one_server_case(param)
         print(L_1)
-        # L_2 = self.multiple_server_case(self.param_2)
+        L_2 = self.multiple_server_case(param)
 
         t_1 = time.process_time()
         print('\n-------- t_1 --------')
@@ -39,15 +39,10 @@ class Mmd:
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
-        # param.df_e_u['pseudo_server'] = param.df_e_u['server']
-        # pseudo_server = param.SERVER_NUM
-        # for k, v in param.df_v_s.iterrows():
-        #     for i in range(param.USER_NUM):
-        #         s = pd.Series([i, k, param.df_e_u.at[]])
-        #         for j in range(v['capacity'] - 1):
-        #             param.df_e_u.append()
+        for k, v in enumerate(param.m_s):
+            for i in range(v - 1):
+                param.d_us = np.hstack((param.d_us, param.d_us[:, k].reshape(len(param.d_us[:, k]), 1)))
 
-        #         print(v)
         return None
 
 

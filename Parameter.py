@@ -8,11 +8,11 @@ import Constant
 
 class Parameter:
 
-    USER_NUM = 800
+    USER_NUM = 30
     SERVER_NUM = 8
     DELAY_MAX = 30
     DELAY_SERVER = 1
-    CAPACITY_MAX = 1000
+    CAPACITY_MAX = 10
 
     def __init__(self, seed):
         np.random.seed(seed)
