@@ -7,6 +7,18 @@ from HopcroftKarp import HopcroftKarp
 
 
 class Mmd:
+
+    def __init__(self, param):
+        self.set_input(param)
+
+    def set_input(self, param):
+        # edges list
+        edges = np.empty(3, dtype=int)
+        for k, v in enumerate(param.d_us):
+            for i, j in enumerate(v):
+                edges = np.vstack((edges, np.array([k, i, j])))
+        self.edges = edges
+
     def start_algorithm(self, param):
         t_0 = time.process_time()
 
@@ -43,23 +55,21 @@ class Mmd:
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
-        d_us_cp = param.d_us
+        added_edges = np.empty(3, dtype=int)
+        added_server = param.SERVER_NUM
         for k, v in enumerate(param.m_s):
-            d_us_cp = np.hstack((d_us_cp, np.full((param.USER_NUM, v - 1), d_us_cp[:, k].reshape(len(d_us_cp[:, k]), 1))))
-        param.COPY_SERVER_NUM = len(d_us_cp[0])
-
-        # sort d_us_cp
-        sorted_link = np.empty(3, dtype=int)
-        for k, v in enumerate(d_us_cp):
-            for i, j in enumerate(v):
-                sorted_link = np.vstack((sorted_link, np.array([k, i, j])))
-        # sorted_link = sorted_link[np.argsort(sorted_link[:, 2])]
+            for i in range(v - 1):
+                for j in range(param.USER_NUM):
+                    added_edges = np.vstack((added_edges, np.array([j, added_server, param.d_us[j][k]])))
+                added_server += 1
+        self.edges = np.vstack((self.edges, added_edges))
+        param.COPY_SERVER_NUM = added_server
 
         # search matching
         for i in range(1, param.DELAY_MAX):
             hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
-            for j in np.where(sorted_link[:, -1] <= i)[0]:
-                hc.add_edge(sorted_link[j][0], sorted_link[j][1])
+            for j in np.where(self.edges[:, -1] <= i)[0]:
+                hc.add_edge(self.edges[j][0], self.edges[j][1])
             if hc.flow() == param.USER_NUM:
                 return i
 
@@ -79,7 +89,7 @@ def main():
     param.create_input()
 
     # set input to algorithm
-    mmd = Mmd()
+    mmd = Mmd(param)
 
     # start algorithm
     mmd.start_algorithm(param)
