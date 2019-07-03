@@ -47,7 +47,7 @@ class Mmd:
 
         # search minimum D_u
         if bool(dic_l):
-            return min(dic_l)
+            return min(dic_l.values())
         else:
             return Constant.INF
 
@@ -58,10 +58,10 @@ class Mmd:
         added_edges = np.empty(3, dtype=int)
         added_server = param.SERVER_NUM
         for k, v in enumerate(param.m_s):
-            for i in range(v - 1):
-                for j in range(param.USER_NUM):
-                    added_edges = np.vstack((added_edges, np.array([j, added_server, param.d_us[j][k]])))
-                added_server += 1
+            for j in range(param.USER_NUM):
+                for i in range(added_server, added_server + v - 1):
+                    added_edges = np.vstack((added_edges, np.array([j, i, param.d_us[j][k]])))
+                added_server += v - 1
         self.edges = np.vstack((self.edges, added_edges))
         param.COPY_SERVER_NUM = added_server
 
