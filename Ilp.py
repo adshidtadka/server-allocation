@@ -12,6 +12,9 @@ class Ilp:
         self.set_input(param)
 
     def set_input(self, param):
+
+        self.create_dataframe(param)
+
         # optimization problem
         problem = LpProblem()
 
@@ -29,6 +32,22 @@ class Ilp:
         problem = Ilp.create_constraints(param, problem)
 
         self.problem = problem
+
+    def create_dataframe(self, param):
+        # dataframe for E_U
+        df_e_u = pd.DataFrame([(i, j) for i, j in param.e_u], columns=['user', 'server'])
+        df_e_u['delay'] = param.d_us.flatten()
+        param.df_e_u = df_e_u
+
+        # dataframe for E_S
+        df_e_s = pd.DataFrame([(i, j) for i, j in param.e_s], columns=['server_1', 'server_2'])
+        df_e_s['delay'] = param.DELAY_SERVER
+        param.df_e_s = df_e_s
+
+        # dataframe for V_S
+        df_v_s = pd.DataFrame(param.v_s, columns=['server'])
+        df_v_s['capacity'] = param.m_s
+        param.df_v_s = df_v_s
 
     def solve_by_ilp(self):
         # solve
