@@ -3,21 +3,27 @@ import time
 
 import Constant
 from Parameter import Parameter
+from HopcroftKarp import HopcroftKarp
 
 
 class Mmd:
     def start_algorithm(self, param):
-        print('-------- t_0 --------')
+        print('-------- t_0 --------\n')
         t_0 = time.process_time()
 
         L_1 = self.one_server_case(param)
-        print(L_1)
+        print('L_1 = ' + str(L_1))
         L_2 = self.multiple_server_case(param)
+        print('L_2 = ' + str(L_2))
+
+        D_u = min([L_1, L_2])
 
         t_1 = time.process_time()
         print('\n-------- t_1 --------')
 
         print('\nt_1 - t_0 is ', t_1 - t_0, '\n')
+
+        return D_u*2 + param.DELAY_SERVER
 
     def one_server_case(self, param):
         # step 1: consider one server case
@@ -33,7 +39,7 @@ class Mmd:
         if bool(dic_l):
             return min(dic_l)
         else:
-            return None
+            return Constant.INF
 
     def multiple_server_case(self, param):
         # step 2: consider multiple server case
@@ -43,21 +49,24 @@ class Mmd:
         for k, v in enumerate(param.m_s):
             for i in range(v - 1):
                 d_us_cp = np.hstack((d_us_cp, d_us_cp[:, k].reshape(len(d_us_cp[:, k]), 1)))
+        param.COPY_SERVER_NUM = len(d_us_cp[0])
 
         # sort d_us_cp
         sorted_link = np.empty(3, dtype=int)
-        for k, v in enumerate(param.d_us):
+        for k, v in enumerate(d_us_cp):
             for i, j in enumerate(v):
                 sorted_link = np.vstack((sorted_link, np.array([k, i, j])))
         sorted_link = sorted_link[np.argsort(sorted_link[:, 2])]
 
         # search matching
-        added_link = np.empty(2, dtype=int)
         for i in range(1, param.DELAY_MAX):
-            for j in np.where(sorted_link[:, -1] == i)[0]:
-                added_link = np.vstack((added_link, sorted_link[j][0:2]))
+            hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
+            for j in np.where(sorted_link[:, -1] <= i)[0]:
+                hc.add_edge(sorted_link[j][0], sorted_link[j][1])
+            if hc.flow() == param.USER_NUM:
+                return i
 
-        return None
+        return Constant.INF
 
 
 def main():
@@ -65,7 +74,7 @@ def main():
     mmd = Mmd()
 
     # start algorithm
-    mmd.start_algorithm(Parameter(Constant.SEED))
+    print(mmd.start_algorithm(Parameter(Constant.SEED)))
 
 
 if __name__ == '__main__':
