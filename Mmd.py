@@ -77,7 +77,7 @@ class Mmd:
     def print_result(self):
         if self.status:
             print('objective function is ', str(self.objective_function))
-            print('it takes ' + str(self.cpu_time) + ' sec')
+            print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
 

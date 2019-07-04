@@ -26,9 +26,6 @@ class Ilp:
         # objective function
         problem += 2 * self.D_u + self.D_s
 
-        # constraints
-        problem = self.create_constraints(problem)
-
         self.problem = problem
 
     def create_dataframe(self, param):
@@ -50,10 +47,15 @@ class Ilp:
     def solve_by_ilp(self):
         # solve
         try:
-            t_0 = time.process_time()
+            t_0 = time.perf_counter()
+
+            # constraints
+            self.problem = self.create_constraints(self.problem)
+
             self.problem.solve(GLPK_CMD(msg=0))
-            # self.problem.solve(CPLEX_CMD())
-            t_1 = time.process_time()
+            # self.problem.solve(CPLEX_CMD(msg=0))
+
+            t_1 = time.perf_counter()
             self.cpu_time = t_1 - t_0
         except PulpSolverError:
             print(CPLEX_CMD().path, 'is not installed')
@@ -61,7 +63,7 @@ class Ilp:
     def print_result(self):
         if self.problem.status == 1:
             print('objective function is ', value(self.problem.objective))
-            print('it takes ' + str(self.cpu_time) + ' sec')
+            print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('status code is ', self.problem.status)
 
