@@ -20,19 +20,14 @@ class Mmd:
         self.edges = edges
 
     def start_algorithm(self, param):
-        t_0 = time.process_time()
-
         L_1 = self.one_server_case(param)
         L_2 = self.multiple_server_case(param)
         D_u = min([L_1, L_2])
-
-        t_1 = time.process_time()
 
         if D_u > param.DELAY_MAX:
             self.status = False
         else:
             self.status = True
-            self.cpu_time = t_1 - t_0
             self.objective_function = D_u*2 + param.DELAY_SERVER
 
     def one_server_case(self, param):
@@ -91,7 +86,10 @@ def main():
     mmd = Mmd(param)
 
     # start algorithm
+    t_0 = time.perf_counter()
     mmd.start_algorithm(param)
+    t_1 = time.perf_counter()
+    mmd.cpu_time = t_1 - t_0
 
     # print result
     mmd.print_result()

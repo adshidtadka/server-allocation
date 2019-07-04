@@ -47,16 +47,12 @@ class Ilp:
     def solve_by_ilp(self):
         # solve
         try:
-            t_0 = time.perf_counter()
-
             # constraints
             self.problem = self.create_constraints(self.problem)
 
             self.problem.solve(GLPK_CMD(msg=0))
             # self.problem.solve(CPLEX_CMD(msg=0))
 
-            t_1 = time.perf_counter()
-            self.cpu_time = t_1 - t_0
         except PulpSolverError:
             print(CPLEX_CMD().path, 'is not installed')
 
@@ -115,7 +111,10 @@ def main():
     ilp = Ilp(param)
 
     # solve by ilp
+    t_0 = time.perf_counter()
     ilp.solve_by_ilp()
+    t_1 = time.perf_counter()
+    ilp.cpu_time = t_1 - t_0
 
     # print result
     ilp.print_result()
