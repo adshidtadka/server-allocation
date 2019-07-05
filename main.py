@@ -30,7 +30,7 @@ for i in range(100, 500, 50):
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_user.append([cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
+    result_user.append([i, cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
     print(result_user)
 f = open('result/user.csv', 'w')
 writer = csv.writer(f, lineterminator='\n')
@@ -55,7 +55,7 @@ for i in range(10, 20, 1):
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_server.append([cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
+    result_server.append([i, cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
     print(result_server)
 f = open('result/server.csv', 'w')
 writer = csv.writer(f, lineterminator='\n')
@@ -80,7 +80,7 @@ for i in range(50, 100, 10):
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_capacity.append([cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
+    result_capacity.append([i, cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
     print(result_capacity)
 f = open('result/capacity.csv', 'w')
 writer = csv.writer(f, lineterminator='\n')
