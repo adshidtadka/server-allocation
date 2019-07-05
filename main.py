@@ -22,11 +22,15 @@ for i in range(100, 500, 50):
     ilp = Ilp(param)
     cpu_time_ilp = ilp.solve_by_ilp()
 
+    # solve by ilp cplex
+    ilp_cplex = Ilp(param)
+    cpu_time_ilp_cplex = ilp_cplex.solve_by_ilp('cplex')
+
     # solve by algorithm
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_user.append([cpu_time_ilp, cpu_time_mmd])
+    result_user.append([cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
     print(result_user)
 f = open('result/user.csv', 'w')
 writer = csv.writer(f, lineterminator='\n')
@@ -43,11 +47,15 @@ for i in range(10, 20, 1):
     ilp = Ilp(param)
     cpu_time_ilp = ilp.solve_by_ilp()
 
+    # solve by ilp cplex
+    ilp_cplex = Ilp(param)
+    cpu_time_ilp_cplex = ilp_cplex.solve_by_ilp('cplex')
+
     # solve by algorithm
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_server.append([cpu_time_ilp, cpu_time_mmd])
+    result_server.append([cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
     print(result_server)
 f = open('result/server.csv', 'w')
 writer = csv.writer(f, lineterminator='\n')
@@ -64,11 +72,15 @@ for i in range(50, 100, 10):
     ilp = Ilp(param)
     cpu_time_ilp = ilp.solve_by_ilp()
 
+    # solve by ilp cplex
+    ilp_cplex = Ilp(param)
+    cpu_time_ilp_cplex = ilp_cplex.solve_by_ilp('cplex')
+
     # solve by algorithm
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_capacity.append([cpu_time_ilp, cpu_time_mmd])
+    result_capacity.append([cpu_time_ilp, cpu_time_mmd, cpu_time_ilp_cplex])
     print(result_capacity)
 f = open('result/capacity.csv', 'w')
 writer = csv.writer(f, lineterminator='\n')

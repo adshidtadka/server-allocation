@@ -44,15 +44,17 @@ class Ilp:
         df_v_s['capacity'] = param.m_s
         self.df_v_s = df_v_s
 
-    def solve_by_ilp(self):
+    def solve_by_ilp(self, solver):
         t_0 = time.perf_counter()
         # solve
         try:
             # constraints
             self.problem = self.create_constraints(self.problem)
 
-            # self.problem.solve(GLPK_CMD(msg=0))
-            self.problem.solve(CPLEX_CMD(msg=0))
+            if solver == 'cplex':
+                self.problem.solve(GLPK_CMD(msg=0))
+            else:
+                self.problem.solve(CPLEX_CMD(msg=0))
 
         except PulpSolverError:
             print(CPLEX_CMD().path, 'is not installed')
