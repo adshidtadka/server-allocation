@@ -45,16 +45,20 @@ class Ilp:
         self.df_v_s = df_v_s
 
     def solve_by_ilp(self):
+        t_0 = time.perf_counter()
         # solve
         try:
             # constraints
             self.problem = self.create_constraints(self.problem)
 
-            self.problem.solve(GLPK_CMD(msg=0))
-            # self.problem.solve(CPLEX_CMD(msg=0))
+            # self.problem.solve(GLPK_CMD(msg=0))
+            self.problem.solve(CPLEX_CMD(msg=0))
 
         except PulpSolverError:
             print(CPLEX_CMD().path, 'is not installed')
+
+        t_1 = time.perf_counter()
+        return t_1 - t_0
 
     def print_result(self):
         if self.problem.status == 1:

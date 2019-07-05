@@ -20,6 +20,7 @@ class Mmd:
         self.edges = edges
 
     def start_algorithm(self, param):
+        t_0 = time.perf_counter()
         L_1 = self.one_server_case(param)
         L_2 = self.multiple_server_case(param)
         D_u = min([L_1, L_2])
@@ -28,7 +29,9 @@ class Mmd:
             self.status = False
         else:
             self.status = True
-            self.objective_function = D_u*2 + param.DELAY_SERVER
+            self.objective_function = D_u * 2 + param.DELAY_SERVER
+        t_1 = time.perf_counter()
+        return t_1 - t_0
 
     def one_server_case(self, param):
         # step 1: consider one server case
