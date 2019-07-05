@@ -44,7 +44,7 @@ class Ilp:
         df_v_s['capacity'] = param.m_s
         self.df_v_s = df_v_s
 
-    def solve_by_ilp(self, solver):
+    def solve_by_ilp(self, solver=None):
         t_0 = time.perf_counter()
         # solve
         try:
