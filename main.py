@@ -1,5 +1,6 @@
 import time
 import csv
+import os
 
 import Constant
 from Parameter import Parameter
@@ -7,7 +8,10 @@ from HopcroftKarp import HopcroftKarp
 from Ilp import Ilp
 from Mmd import Mmd
 
-result_user_num = []
+if not os.path.exists('result'):
+    os.mkdir('result')
+
+result_user = []
 for i in range(100, 500, 50):
     # create param
     param = Parameter(Constant.SEED)
@@ -22,14 +26,14 @@ for i in range(100, 500, 50):
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_user_num.append([cpu_time_ilp, cpu_time_mmd])
-    print(result_user_num)
-f = open('result_user_num.csv', 'w')
+    result_user.append([cpu_time_ilp, cpu_time_mmd])
+    print(result_user)
+f = open('result/user.csv', 'w')
 writer = csv.writter(f, lineterminator='\n')
-writer.writerows(result_user_num)
+writer.writerows(result_user)
 f.close()
 
-result_server_num = []
+result_server = []
 for i in range(10, 100, 10):
     param = Parameter(Constant.SEED)
     param.set_server_num(i)
@@ -43,11 +47,11 @@ for i in range(10, 100, 10):
     mmd = Mmd(param)
     cpu_time_mmd = mmd.start_algorithm(param)
 
-    result_server_num.append([cpu_time_ilp, cpu_time_mmd])
-    print(result_server_num)
-f = open('result_server_num.csv', 'w')
+    result_server.append([cpu_time_ilp, cpu_time_mmd])
+    print(result_server)
+f = open('result/server.csv', 'w')
 writer = csv.writter(f, lineterminator='\n')
-writer.writerows(result_server_num)
+writer.writerows(result_server)
 f.close()
 
 result_capacity = []
@@ -66,7 +70,7 @@ for i in range(50, 100, 5):
 
     result_capacity.append([cpu_time_ilp, cpu_time_mmd])
     print(result_capacity)
-f = open('result_capacity.csv', 'w')
+f = open('result/capacity.csv', 'w')
 writer = csv.writter(f, lineterminator='\n')
 writer.writerows(result_capacity)
 f.close()
