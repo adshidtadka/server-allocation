@@ -34,7 +34,7 @@ writer.writerows(result_user)
 f.close()
 
 result_server = []
-for i in range(10, 100, 10):
+for i in range(10, 20, 1):
     param = Parameter(Constant.SEED)
     param.set_server_num(i)
     param.create_input()
@@ -55,7 +55,7 @@ writer.writerows(result_server)
 f.close()
 
 result_capacity = []
-for i in range(50, 100, 5):
+for i in range(50, 100, 10):
     param = Parameter(Constant.SEED)
     param.set_capacity(i)
     param.create_input()
