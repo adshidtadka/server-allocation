@@ -29,7 +29,7 @@ for i in range(100, 500, 50):
     result_user.append([cpu_time_ilp, cpu_time_mmd])
     print(result_user)
 f = open('result/user.csv', 'w')
-writer = csv.writter(f, lineterminator='\n')
+writer = csv.writer(f, lineterminator='\n')
 writer.writerows(result_user)
 f.close()
 
@@ -50,7 +50,7 @@ for i in range(10, 100, 10):
     result_server.append([cpu_time_ilp, cpu_time_mmd])
     print(result_server)
 f = open('result/server.csv', 'w')
-writer = csv.writter(f, lineterminator='\n')
+writer = csv.writer(f, lineterminator='\n')
 writer.writerows(result_server)
 f.close()
 
@@ -71,6 +71,6 @@ for i in range(50, 100, 5):
     result_capacity.append([cpu_time_ilp, cpu_time_mmd])
     print(result_capacity)
 f = open('result/capacity.csv', 'w')
-writer = csv.writter(f, lineterminator='\n')
+writer = csv.writer(f, lineterminator='\n')
 writer.writerows(result_capacity)
 f.close()
