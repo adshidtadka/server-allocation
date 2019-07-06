@@ -6,13 +6,16 @@ import Constant
 from Parameter import Parameter
 from Mmd import Mmd
 
-if not os.path.exists('result'):
-    os.mkdir('result')
-
 
 class GetResult:
-    def check_execution(sim_name):
-        print("Do you execute " + sim_name + " simulator? [y/N]", end=' > ')
+    def __init__(self, sim_name):
+        self.sim_name = sim_name
+        self.is_execute = self.check_execution()
+        if self.is_execute:
+            self.sim_range = GetResult.check_range(Constant.get_range(sim_name))
+
+    def check_execution(self):
+        print("Do you execute " + self.sim_name + " simulator? [y/N]", end=' > ')
         if input() == 'y':
             return True
         else:
@@ -22,26 +25,21 @@ class GetResult:
         print("Please set range [start stop step]", end=' > ')
         try:
             x, y, z = map(int, input().split())
+            print(str(range(x, y, z)) + ' set.')
             return range(x, y, z)
         except:
             print(str(sim_range) + ' set.')
             return sim_range
 
 
-# check execution and range
-is_user = GetResult.check_execution("user")
-if is_user:
-    user_range = GetResult.check_range(Constant.USER_RANGE)
+if not os.path.exists('result'):
+    os.mkdir('result')
 
-is_server = GetResult.check_execution("server")
-if is_server:
-    server_range = GetResult.check_range(Constant.SERVER_RANGE)
+sim_user = GetResult('user')
+sim_server = GetResult('server')
+sim_capacity = GetResult('capacity')
 
-is_capacity = GetResult.check_execution("capacity")
-if is_capacity:
-    capacity_range = GetResult.check_range(Constant.CAPACITY_RANGE)
-
-if is_user:
+if sim_user.is_execute:
     result_user = []
     for i in range(100, 500, 50):
         # create param
@@ -60,7 +58,7 @@ if is_user:
     writer.writerows(result_user)
     f.close()
 
-if is_server:
+if sim_server.is_execute:
     result_server = []
     for i in range(10, 20, 1):
         param = Parameter(Constant.SEED)
@@ -78,7 +76,7 @@ if is_server:
     writer.writerows(result_server)
     f.close()
 
-if is_capacity:
+if sim_capacity.is_execute:
     result_capacity = []
     for i in range(50, 100, 10):
         param = Parameter(Constant.SEED)
