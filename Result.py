@@ -7,12 +7,12 @@ from Parameter import Parameter
 from Mmd import Mmd
 
 
-class GetResult:
+class Result:
     def __init__(self, sim_name):
         self.sim_name = sim_name
         self.is_execute = self.check_execution()
         if self.is_execute:
-            self.sim_range = GetResult.check_range(Constant.get_range(sim_name))
+            self.sim_range = Result.check_range(Constant.get_range(sim_name))
 
     def check_execution(self):
         print("Do you execute " + self.sim_name + " simulator? [y/N]", end=' > ')
@@ -35,9 +35,9 @@ class GetResult:
 if not os.path.exists('result'):
     os.mkdir('result')
 
-sim_user = GetResult('user')
-sim_server = GetResult('server')
-sim_capacity = GetResult('capacity')
+sim_user = Result('user')
+sim_server = Result('server')
+sim_capacity = Result('capacity')
 
 if sim_user.is_execute:
     result_user = []
