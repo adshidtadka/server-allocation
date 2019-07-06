@@ -23,11 +23,10 @@ class Parameter:
         self.d_us = np.random.randint(1, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
         self.m_s = np.full(self.SERVER_NUM, self.CAPACITY)
 
-    def set_user_num(self, v):
-        self.USER_NUM = v
-
-    def set_server_num(self, v):
-        self.SERVER_NUM = v
-
-    def set_capacity(self, v):
-        self.CAPACITY = v
+    def set_param(self, sim_name, param):
+        if sim_name == 'user':
+            self.USER_NUM = param
+        elif sim_name == 'server':
+            self.SERVER_NUM = param
+        elif sim_name == 'capacity':
+            self.CAPACITY = param

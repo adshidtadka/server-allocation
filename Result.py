@@ -34,21 +34,27 @@ class Result:
     def get_result(self):
         result = []
         for i in self.sim_range:
-            # create param
-            param = Parameter(Constant.SEED)
-            param.set_user_num(i)
-            param.create_input()
-
-            # solve by algorithm
-            mmd = Mmd(param)
-            cpu_time_mmd = mmd.start_algorithm(param)
-
-            result.append([param.USER_NUM, param.SERVER_NUM, param.CAPACITY, cpu_time_mmd])
+            average_result = self.get_average(i)
+            result.append([i, average_result])
             print(result)
         f = open('result/' + self.sim_name + '.csv', 'w')
         writer = csv.writer(f, lineterminator='\n')
         writer.writerows(result)
         f.close()
+
+    def get_average(self, iterated_param):
+        iterated_result = []
+        for i in range(Constant.ITERATION_NUM):
+            # create param
+            param = Parameter(Constant.SEED + i)
+            param.set_param(self.sim_name, iterated_param)
+            param.create_input()
+
+            # solve by algorithm
+            mmd = Mmd(param)
+            cpu_time_mmd = mmd.start_algorithm(param)
+            iterated_result.append(cpu_time_mmd)
+        return sum(iterated_result) / len(iterated_result)
 
 
 if not os.path.exists('result'):

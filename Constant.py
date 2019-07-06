@@ -4,6 +4,7 @@ import sys
 class Constant:
     SEED = 1
     INF = 999999999
+    ITERATION_NUM = 50
 
     def get_range(self, sim_name):
         if sim_name == 'user':
