@@ -9,25 +9,37 @@ from Mmd import Mmd
 if not os.path.exists('result'):
     os.mkdir('result')
 
-# check whether execute 1: user, 2: server, 3: capacity
-print("Do you execute 1: user simulator? [y/n]:", end=' ')
-if input() == 'y':
-    is_user = True
-else:
-    is_user = False
 
-print("Do you execute 2: server simulator? [y/n]:", end=' ')
-if input() == 'y':
-    is_server = True
-else:
-    is_server = False
+class GetResult:
+    def check_execution(sim_name):
+        print("Do you execute " + sim_name + " simulator? [y/N]", end=' > ')
+        if input() == 'y':
+            return True
+        else:
+            return False
 
-print("Do you execute 3: capacity simulator? [y/n]:", end=' ')
-if input() == 'y':
-    is_capacity = True
-else:
-    is_capacity = False
+    def check_range(sim_range):
+        print("Please set range [start stop step]", end=' > ')
+        try:
+            x, y, z = map(int, input().split())
+            return range(x, y, z)
+        except:
+            print(str(sim_range) + ' set.')
+            return sim_range
 
+
+# check execution and range
+is_user = GetResult.check_execution("user")
+if is_user:
+    user_range = GetResult.check_range(Constant.USER_RANGE)
+
+is_server = GetResult.check_execution("server")
+if is_server:
+    server_range = GetResult.check_range(Constant.SERVER_RANGE)
+
+is_capacity = GetResult.check_execution("capacity")
+if is_capacity:
+    capacity_range = GetResult.check_range(Constant.CAPACITY_RANGE)
 
 if is_user:
     result_user = []
