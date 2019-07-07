@@ -48,14 +48,14 @@ class Result:
         return consts
 
     def get_result(self):
-        message = '\nGet result of ' + self.var_name + ' with ' + str(self.consts)
+        message = '\nGet result for {' + self.var_name + ': ' + str(self.var_range) + '} with ' + str(self.consts)
         Result.post_to_slack(message)
 
         results = []
-        for i in self.var_range:
-            average_result = [i, self.get_average(i)]
-            Result.post_to_slack(str(average_result))
-            results.append(average_result)
+        for var in self.var_range:
+            average_result = self.get_average(var)
+            Result.post_to_slack(str(average_result) + ' for {' + self.var_name + ': ' + str(var) + '} and ' + str(self.consts))
+            results.append([var, average_result])
         f = open('result/' + self.var_name + str(self.consts) + '.csv', 'w')
         writer = csv.writer(f, lineterminator='\n')
         writer.writerows(results)
