@@ -14,7 +14,7 @@ class Result:
         self.const_names = ['user', 'server', 'capacity']
         self.is_execute = self.is_execute()
         if self.is_execute:
-            self.sim_range = Result.set_range(Constant.get_range(var_name))
+            self.var_range = Result.set_range(Constant.get_range(var_name))
             self.consts = self.set_consts()
 
     def is_execute(self):
@@ -24,14 +24,14 @@ class Result:
         else:
             return False
 
-    def set_range(sim_range):
+    def set_range(var_range_def):
         print("Please set range [start stop step]", end=' > ')
         try:
             x, y, z = map(int, input().split())
             return range(x, y, z)
         except:
-            print(str(sim_range) + ' set.')
-            return sim_range
+            print(str(var_range_def) + ' set.')
+            return var_range_def
 
     def set_consts(self):
         self.const_names.remove(self.var_name)
@@ -48,7 +48,7 @@ class Result:
 
     def get_result(self):
         result = []
-        for i in self.sim_range:
+        for i in self.var_range:
             average_result = self.get_average(i)
             result.append([i, average_result])
             print(result)
