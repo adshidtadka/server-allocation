@@ -9,16 +9,16 @@ from Mmd import Mmd
 
 class Result:
 
-    def __init__(self, variable):
-        self.variable = variable
-        self.fixed_params = ['user', 'server', 'capacity']
+    def __init__(self, var_name):
+        self.var_name = var_name
+        self.const_names = ['user', 'server', 'capacity']
         self.is_execute = self.is_execute()
         if self.is_execute:
-            self.sim_range = Result.set_range(Constant.get_range(variable))
-            self.fixed_params = self.set_fixed_param()
+            self.sim_range = Result.set_range(Constant.get_range(var_name))
+            self.consts = self.set_consts()
 
     def is_execute(self):
-        print("Do you execute " + self.variable + " simulator? [y/N]", end=' > ')
+        print("Do you execute " + self.var_name + " simulator? [y/N]", end=' > ')
         if input() == 'y':
             return True
         else:
@@ -33,18 +33,18 @@ class Result:
             print(str(sim_range) + ' set.')
             return sim_range
 
-    def set_fixed_param(self):
-        self.fixed_params.remove(self.variable)
-        fixed_params = dict()
-        for fixed in self.fixed_params:
-            print("Please set " + fixed + ".", end=' > ')
+    def set_consts(self):
+        self.const_names.remove(self.var_name)
+        consts = dict()
+        for const_name in self.const_names:
+            print("Please set " + const_name + ".", end=' > ')
             try:
-                fixed_params[fixed] = int(input())
+                const_names[const_name] = int(input())
             except:
-                f = Parameter.get_fixed_param(fixed)
+                f = Parameter.get_const(const_name)
                 print(str(f) + ' set.')
-                fixed_params[fixed] = f
-        return fixed_params
+                consts[const_name] = f
+        return consts
 
     def get_result(self):
         result = []
@@ -52,7 +52,7 @@ class Result:
             average_result = self.get_average(i)
             result.append([i, average_result])
             print(result)
-        f = open('result/' + self.variable + '.csv', 'w')
+        f = open('result/' + self.var_name + '.csv', 'w')
         writer = csv.writer(f, lineterminator='\n')
         writer.writerows(result)
         f.close()
@@ -62,7 +62,7 @@ class Result:
         for i in range(Constant.ITERATION_NUM):
             # create param
             param = Parameter(Constant.SEED + i)
-            param.set_param(self.variable, iterated_param)
+            param.set_param(self.var_name, iterated_param)
             param.create_input()
 
             # solve by algorithm

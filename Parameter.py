@@ -35,7 +35,7 @@ class Parameter:
         elif fixed == 'capacity':
             self.CAPACITY = param
 
-    def get_fixed_param(fixed):
+    def get_const(fixed):
         if fixed == 'user':
             return Parameter.USER_NUM_FIXED
         elif fixed == 'server':
