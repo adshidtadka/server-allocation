@@ -27,18 +27,18 @@ class Parameter:
         self.d_us = np.random.randint(1, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
         self.m_s = np.full(self.SERVER_NUM, self.CAPACITY)
 
-    def set_param(self, sim_name, param):
-        if sim_name == 'user':
+    def set_param(self, fixed, param):
+        if fixed == 'user':
             self.USER_NUM = param
-        elif sim_name == 'server':
+        elif fixed == 'server':
             self.SERVER_NUM = param
-        elif sim_name == 'capacity':
+        elif fixed == 'capacity':
             self.CAPACITY = param
 
-    def get_fixed_param(sim_name):
-        if sim_name == 'user':
+    def get_fixed_param(fixed):
+        if fixed == 'user':
             return Parameter.USER_NUM_FIXED
-        elif sim_name == 'server':
+        elif fixed == 'server':
             return Parameter.SERVER_NUM_FIXED
-        elif sim_name == 'capacity':
+        elif fixed == 'capacity':
             return Parameter.CAPACITY_FIXED

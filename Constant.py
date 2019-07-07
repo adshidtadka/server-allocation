@@ -6,12 +6,12 @@ class Constant:
     INF = 999999999
     ITERATION_NUM = 50
 
-    def get_range(self, sim_name):
-        if sim_name == 'user':
+    def get_range(self, variable):
+        if variable == 'user':
             return range(100, 500, 50)
-        elif sim_name == 'server':
+        elif variable == 'server':
             return range(10, 20, 1)
-        elif sim_name == 'capacity':
+        elif variable == 'capacity':
             return range(50, 100, 10)
 
 

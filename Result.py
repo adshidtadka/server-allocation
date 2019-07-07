@@ -9,16 +9,16 @@ from Mmd import Mmd
 
 class Result:
 
-    def __init__(self, sim_name):
-        self.sim_name = sim_name
-        self.sim_names = ['user', 'server', 'capacity']
+    def __init__(self, variable):
+        self.variable = variable
+        self.fixed_params = ['user', 'server', 'capacity']
         self.is_execute = self.is_execute()
         if self.is_execute:
-            self.sim_range = Result.set_range(Constant.get_range(sim_name))
+            self.sim_range = Result.set_range(Constant.get_range(variable))
             self.fixed_params = self.set_fixed_param()
 
     def is_execute(self):
-        print("Do you execute " + self.sim_name + " simulator? [y/N]", end=' > ')
+        print("Do you execute " + self.variable + " simulator? [y/N]", end=' > ')
         if input() == 'y':
             return True
         else:
@@ -34,16 +34,16 @@ class Result:
             return sim_range
 
     def set_fixed_param(self):
-        self.sim_names.remove(self.sim_name)
+        self.fixed_params.remove(self.variable)
         fixed_params = dict()
-        for sim_name in self.sim_names:
-            print("Please set " + sim_name + ".", end=' > ')
+        for fixed in self.fixed_params:
+            print("Please set " + fixed + ".", end=' > ')
             try:
-                fixed_params[sim_name] = int(input())
+                fixed_params[fixed] = int(input())
             except:
-                f = Parameter.get_fixed_param(sim_name)
+                f = Parameter.get_fixed_param(fixed)
                 print(str(f) + ' set.')
-                fixed_params[sim_name] = f
+                fixed_params[fixed] = f
         return fixed_params
 
     def get_result(self):
@@ -52,7 +52,7 @@ class Result:
             average_result = self.get_average(i)
             result.append([i, average_result])
             print(result)
-        f = open('result/' + self.sim_name + '.csv', 'w')
+        f = open('result/' + self.variable + '.csv', 'w')
         writer = csv.writer(f, lineterminator='\n')
         writer.writerows(result)
         f.close()
@@ -62,7 +62,7 @@ class Result:
         for i in range(Constant.ITERATION_NUM):
             # create param
             param = Parameter(Constant.SEED + i)
-            param.set_param(self.sim_name, iterated_param)
+            param.set_param(self.variable, iterated_param)
             param.create_input()
 
             # solve by algorithm
