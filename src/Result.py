@@ -81,8 +81,8 @@ class Result:
         slack.notify(text=text)
 
 
-if not os.path.exists('result'):
-    os.mkdir('result')
+if not os.path.exists('../result'):
+    os.mkdir('../result')
 
 result_user = Result('user')
 result_server = Result('server')
