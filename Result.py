@@ -1,6 +1,7 @@
 import time
 import csv
 import os
+import slackweb
 
 import Constant
 from Parameter import Parameter
@@ -47,12 +48,14 @@ class Result:
         return consts
 
     def get_result(self):
-        print('\nGet result of ' + self.var_name + ' with ' + str(self.consts))
+        message = '\nGet result of ' + self.var_name + ' with ' + str(self.consts)
+        Result.post_to_slack(message)
+
         results = []
         for i in self.var_range:
-            average_result = self.get_average(i)
-            results.append([i, average_result])
-            print(results)
+            average_result = [i, self.get_average(i)]
+            Result.post_to_slack(str(average_result))
+            results.append(average_result)
         f = open('result/' + self.var_name + str(self.consts) + '.csv', 'w')
         writer = csv.writer(f, lineterminator='\n')
         writer.writerows(results)
@@ -71,6 +74,11 @@ class Result:
             cpu_time_mmd = mmd.start_algorithm(param)
             iterated_result.append(cpu_time_mmd)
         return sum(iterated_result) / len(iterated_result)
+
+    def post_to_slack(text):
+        print(text)
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack.notify(text=text)
 
 
 if not os.path.exists('result'):
