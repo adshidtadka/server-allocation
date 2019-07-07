@@ -56,7 +56,7 @@ class Result:
             average_result = self.get_average(var)
             Result.post_to_slack(str(average_result) + ' for {' + self.var_name + ': ' + str(var) + '} and ' + str(self.consts))
             results.append([var, average_result])
-        f = open('result/' + self.var_name + str(self.consts) + '.csv', 'w')
+        f = open('../result/' + self.var_name + str(self.consts) + '.csv', 'w')
         writer = csv.writer(f, lineterminator='\n')
         writer.writerows(results)
         f.close()
