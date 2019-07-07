@@ -8,9 +8,9 @@ import Constant
 
 class Parameter:
 
-    USER_NUM_FIXED = 500
-    SERVER_NUM_FIXED = 10
-    CAPACITY_FIXED = 50
+    USER_NUM_CONST = 500
+    SERVER_NUM_CONST = 10
+    CAPACITY_CONST = 50
 
     def __init__(self, seed):
         np.random.seed(seed)
@@ -27,18 +27,28 @@ class Parameter:
         self.d_us = np.random.randint(1, self.DELAY_MAX, (self.USER_NUM, self.SERVER_NUM))
         self.m_s = np.full(self.SERVER_NUM, self.CAPACITY)
 
-    def set_param(self, fixed, param):
-        if fixed == 'user':
-            self.USER_NUM = param
-        elif fixed == 'server':
-            self.SERVER_NUM = param
-        elif fixed == 'capacity':
-            self.CAPACITY = param
+    def set_param(self, var_name, consts, var):
+        if var_name == 'user':
+            self.USER_NUM = var
+            self.SERVER_NUM = consts['server']
+            self.CAPACITY = consts['capacity']
+        elif var_name == 'server':
+            self.USER_NUM = consts['user']
+            self.SERVER_NUM = var
+            self.CAPACITY = consts['capacity']
+        elif var_name == 'capacity':
+            self.USER_NUM = consts['user']
+            self.SERVER_NUM = consts['server']
+            self.CAPACITY = var
+        else:
+            sys.exit('invalid var_name = ' + str(var_name))
 
-    def get_const(fixed):
-        if fixed == 'user':
-            return Parameter.USER_NUM_FIXED
-        elif fixed == 'server':
-            return Parameter.SERVER_NUM_FIXED
-        elif fixed == 'capacity':
-            return Parameter.CAPACITY_FIXED
+    def get_const(var_name):
+        if var_name == 'user':
+            return Parameter.USER_NUM_CONST
+        elif var_name == 'server':
+            return Parameter.SERVER_NUM_CONST
+        elif var_name == 'capacity':
+            return Parameter.CAPACITY_CONST
+        else:
+            sys.exit('invalid var_name = ' + str(var_name))

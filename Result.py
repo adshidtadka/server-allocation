@@ -57,12 +57,12 @@ class Result:
         writer.writerows(result)
         f.close()
 
-    def get_average(self, iterated_param):
+    def get_average(self, var):
         iterated_result = []
         for i in range(Constant.ITERATION_NUM):
             # create param
             param = Parameter(Constant.SEED + i)
-            param.set_param(self.var_name, iterated_param)
+            param.set_param(self.var_name, self.consts, var)
             param.create_input()
 
             # solve by algorithm
