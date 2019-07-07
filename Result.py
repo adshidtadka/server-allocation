@@ -47,14 +47,15 @@ class Result:
         return consts
 
     def get_result(self):
-        result = []
+        print('\nGet result of ' + self.var_name + ' with ' + str(self.consts))
+        results = []
         for i in self.var_range:
             average_result = self.get_average(i)
-            result.append([i, average_result])
-            print(result)
-        f = open('result/' + self.var_name + '.csv', 'w')
+            results.append([i, average_result])
+            print(results)
+        f = open('result/' + self.var_name + str(self.consts) + '.csv', 'w')
         writer = csv.writer(f, lineterminator='\n')
-        writer.writerows(result)
+        writer.writerows(results)
         f.close()
 
     def get_average(self, var):
