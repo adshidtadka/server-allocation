@@ -40,7 +40,7 @@ class Result:
         for const_name in self.const_names:
             print("Please set " + const_name + ".", end=' > ')
             try:
-                const_names[const_name] = int(input())
+                consts[const_name] = int(input())
             except:
                 f = Parameter.get_const(const_name)
                 print(str(f) + ' set.')
