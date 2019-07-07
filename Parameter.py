@@ -8,6 +8,10 @@ import Constant
 
 class Parameter:
 
+    USER_NUM_FIXED = 500
+    SERVER_NUM_FIXED = 10
+    CAPACITY_FIXED = 50
+
     def __init__(self, seed):
         np.random.seed(seed)
         self.USER_NUM = 500
@@ -30,3 +34,11 @@ class Parameter:
             self.SERVER_NUM = param
         elif sim_name == 'capacity':
             self.CAPACITY = param
+
+    def get_fixed_param(sim_name):
+        if sim_name == 'user':
+            return Parameter.USER_NUM_FIXED
+        elif sim_name == 'server':
+            return Parameter.SERVER_NUM_FIXED
+        elif sim_name == 'capacity':
+            return Parameter.CAPACITY_FIXED
