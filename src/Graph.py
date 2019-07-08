@@ -22,56 +22,44 @@ class Graph:
         plt.rcParams['lines.linewidth'] = 3
         plt.rcParams['lines.marker'] = '.'
         plt.rcParams['lines.markersize'] = 8
-        plt.rcParams['legend.fontsize'] = 20
         plt.rcParams['legend.borderaxespad'] = 0
         plt.rcParams['legend.frameon'] = False
         plt.rcParams['legend.numpoints'] = 1
         plt.rcParams['legend.labelspacing'] = 0.1
         plt.rcParams['savefig.bbox'] = 'tight'
+        plt.rc('text', usetex=True)
 
 
 # %%
-ct = 'Cpu time'
+ct = 'Computation time'
 un = 'User number'
 sn = 'Server number'
 cp = 'Capacity'
 
 # %%
-df_user = pd.read_csv("result/user{'server': 10, 'capacity': 50}.csv", names=(un, ct))
-df_server = pd.read_csv("result/server{'user': 500, 'capacity': 50}.csv", names=(sn, ct))
-df_capacity = pd.read_csv("result/capacity{'user': 500, 'server': 10}.csv", names=(cp, ct))
+df_user_s_10 = pd.read_csv("result/user{'server': 10, 'capacity': 50}.csv", names=(un, ct))
+df_user_s_15 = pd.read_csv("result/user{'server': 15, 'capacity': 50}.csv", names=(un, ct))
+df_user_s_20 = pd.read_csv("result/user{'server': 20, 'capacity': 50}.csv", names=(un, ct))
 
 # %%
 Graph.initialize_rcparams()
 
 # %%
-plt.plot(df_user[un], df_user[ct], color='k')
+plt.plot(df_user_s_10[un], df_user_s_10[ct], label=(r'${\rm V_{\rm S}} = 10$'), color='k', marker='x', linestyle='-')
+plt.plot(df_user_s_15[un], df_user_s_15[ct], label=(r'${\rm V_{\rm S}} = 15$'), color='k', marker='^', linestyle='--')
+plt.plot(df_user_s_20[un], df_user_s_20[ct], label=(r'${\rm V_{\rm S}} = 20$'), color='k', marker='.', linestyle=':')
+
+plt.xticks([0, 100, 200, 300, 400, 500])
+plt.yticks([0, 10, 20, 30, 40, 50, 60, 70])
+plt.xlim((0, 500))
+plt.ylim((0, 70))
+
 plt.xlabel(un)
 plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
 plt.savefig('graph/user.pdf')
-plt.show()
-plt.close()
-
-# %%
-Graph.initialize_rcparams()
-
-# %%
-plt.plot(df_server[sn], df_server[ct], color='k')
-plt.xlabel(sn)
-plt.ylabel(ct + ' [s]')
-plt.savefig('graph/server.pdf')
-plt.show()
-plt.close()
-
-
-# %%
-Graph.initialize_rcparams()
-
-# %%
-plt.plot(df_capacity[cp], df_capacity[ct], color='k')
-plt.xlabel(cp)
-plt.ylabel(ct + ' [s]')
-plt.savefig('graph/capacity.pdf')
 plt.show()
 plt.close()
 
