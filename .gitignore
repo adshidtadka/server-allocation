@@ -1,5 +1,5 @@
 *.log
-__pycache__/*
+src/__pycache__/*
 result/*
 graph/*
 
@@ -159,3 +159,5 @@ Training
 Blog
 About
 
+# vscode
+.vscode
