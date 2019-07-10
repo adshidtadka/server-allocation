@@ -47,19 +47,23 @@ class Result:
                 consts[const_name] = f
         return consts
 
+    def rotate_file_name(file_name):
+        file_index = 1
+        while os.path.exists(file_name + '_' + str(file_index) + '.csv'):
+            file_index += 1
+        return file_name + '_' + str(file_index) + '.csv'
+
     def get_result(self):
         message = '\nGet result for {' + self.var_name + ': ' + str(self.var_range) + '} with ' + str(self.consts)
         Result.post_to_slack(message)
+        file_name = Result.rotate_file_name('../result/' + self.var_name + str(self.consts))
 
-        results = []
         for var in self.var_range:
             average_result = self.get_average(var)
             Result.post_to_slack(str(average_result) + ' for {' + self.var_name + ': ' + str(var) + '} and ' + str(self.consts))
-            results.append([var, average_result])
-        f = open('../result/' + self.var_name + str(self.consts) + '.csv', 'w')
-        writer = csv.writer(f, lineterminator='\n')
-        writer.writerows(results)
-        f.close()
+            f = open(file_name, 'a')
+            f.write(str(var) + ',' + str(average_result) + '\n')
+            f.close()
 
     def get_average(self, var):
         iterated_result = []
