@@ -6,6 +6,7 @@ import slackweb
 import Constant
 from Parameter import Parameter
 from Mmd import Mmd
+from Ilp import Ilp
 
 
 class Result:
@@ -59,25 +60,34 @@ class Result:
         file_name = Result.rotate_file_name('../result/' + self.var_name + str(self.consts))
 
         for var in self.var_range:
-            average_result = self.get_average(var)
-            Result.post_to_slack(str(average_result) + ' for {' + self.var_name + ': ' + str(var) + '} and ' + str(self.consts))
+            average_result_str = self.get_average(var)
+            Result.post_to_slack(average_result_str + ' for {' + self.var_name + ': ' + str(var) + '} and ' + str(self.consts))
             f = open(file_name, 'a')
-            f.write(str(var) + ',' + str(average_result) + '\n')
+            f.write(str(var) + ',' + average_result_str + '\n')
             f.close()
 
     def get_average(self, var):
-        iterated_result = []
+        iterated_result_mmd = []
+        iterated_result_ilp = []
         for i in range(Constant.ITERATION_NUM):
             # create param
             param = Parameter(Constant.SEED + i)
             param.set_param(self.var_name, self.consts, var)
             param.create_input()
 
+            # solve by ilp
+            ilp = Ilp(param)
+            cpu_time_ilp = ilp.solve_by_ilp()
+            iterated_result_ilp.append(cpu_time_ilp)
+
             # solve by algorithm
             mmd = Mmd(param)
             cpu_time_mmd = mmd.start_algorithm(param)
-            iterated_result.append(cpu_time_mmd)
-        return sum(iterated_result) / len(iterated_result)
+            iterated_result_mmd.append(cpu_time_mmd)
+        result = []
+        result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
+        result.append(sum(iterated_result_mmd) / len(iterated_result_mmd))
+        return ",".join(map(str, result))
 
     def post_to_slack(text):
         print(text)
