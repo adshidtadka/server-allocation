@@ -16,11 +16,19 @@ class Result:
         self.const_names = ['user', 'server', 'capacity']
         self.is_execute = self.is_execute()
         if self.is_execute:
+            self.is_cplex = self.is_cplex()
             self.var_range = Result.set_range(Constant.get_range(var_name))
             self.consts = self.set_consts()
 
     def is_execute(self):
         print("Do you execute " + self.var_name + " simulator? [y/N]", end=' > ')
+        if input() == 'y':
+            return True
+        else:
+            return False
+
+    def is_cplex(self):
+        print("Do you use cplex? [y/N]", end=' > ')
         if input() == 'y':
             return True
         else:
@@ -77,7 +85,7 @@ class Result:
 
             # solve by ilp
             ilp = Ilp(param)
-            cpu_time_ilp = ilp.solve_by_ilp()
+            cpu_time_ilp = ilp.solve_by_ilp(self.is_cplex)
             iterated_result_ilp.append(cpu_time_ilp)
 
             # solve by algorithm
