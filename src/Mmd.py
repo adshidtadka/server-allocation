@@ -25,7 +25,7 @@ class Mmd:
         L_2 = self.multiple_server_case(param)
         D_u = min([L_1, L_2])
 
-        if D_u > param.DELAY_MAX:
+        if D_u > param.DELAY_USER_MAX:
             self.status = False
         else:
             self.status = True
@@ -63,7 +63,7 @@ class Mmd:
         param.COPY_SERVER_NUM = added_server
 
         # search matching
-        for i in range(1, param.DELAY_MAX):
+        for i in range(1, param.DELAY_USER_MAX):
             hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
             for j in np.where(self.edges[:, -1] <= i)[0]:
                 hc.add_edge(self.edges[j][0], self.edges[j][1])
