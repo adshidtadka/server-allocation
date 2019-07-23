@@ -53,9 +53,9 @@ class Ilp:
             self.problem = self.create_constraints(self.problem)
 
             if solver:
-                self.problem.solve(GLPK_CMD(msg=0))
-            else:
                 self.problem.solve(CPLEX_CMD(msg=0))
+            else:
+                self.problem.solve(GLPK_CMD(msg=0))
 
         except PulpSolverError:
             print(CPLEX_CMD().path, 'is not installed')
