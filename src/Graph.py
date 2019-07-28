@@ -32,6 +32,9 @@ class Graph:
 
 # %%
 ct = 'Computation time'
+ctm = 'Computation time with MMD'
+ctc = 'Computation time with CPLEX'
+ctg = 'Computation time with GLPK'
 un = 'User number'
 sn = 'Server number'
 cp = 'Capacity'
@@ -45,6 +48,10 @@ df_user_s_20 = pd.read_csv("result/user{'server': 20, 'capacity': 50}.csv", name
 df_capacity_s_10 = pd.read_csv("result/capacity{'user': 300, 'server': 10}.csv", names=(cp, ct))
 df_capacity_s_15 = pd.read_csv("result/capacity{'user': 300, 'server': 15}.csv", names=(cp, ct))
 df_capacity_s_20 = pd.read_csv("result/capacity{'user': 300, 'server': 20}.csv", names=(cp, ct))
+
+# %%
+df_user_s_10_cplex = pd.read_csv("result/user_server_10_capacity_50_cplex.csv", names=(un, ctc, ctm))
+df_user_s_10_glpk = pd.read_csv("result/user_server_10_capacity_50_glpk.csv", names=(un, ctg, ctm))
 
 # %%
 Graph.initialize_rcparams()
@@ -86,3 +93,20 @@ plt.legend(loc="upper left")
 plt.savefig('graph/capacity.pdf')
 plt.show()
 plt.close()
+
+# %%
+plt.plot(df_user_s_10_cplex[un], df_user_s_10_cplex[ctm], label=('MMD'), color='k', marker='x', linestyle='-')
+plt.plot(df_user_s_10_cplex[un], df_user_s_10_cplex[ctc], label=('CPLEX'), color='k', marker='^', linestyle='--')
+plt.plot(df_user_s_10_glpk[un], df_user_s_10_glpk[ctg], label=('GLPK'), color='k', marker='.', linestyle=':')
+
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('graph/user_solver.pdf')
+plt.show()
+plt.close()
+
+
+# %%
