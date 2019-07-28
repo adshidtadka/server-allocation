@@ -16,7 +16,6 @@ class Result:
         self.const_names = ['user', 'server', 'capacity']
         self.is_execute = self.is_execute()
         if self.is_execute:
-            self.is_cplex = self.is_cplex()
             self.var_range = Result.set_range(Constant.get_range(var_name))
             self.consts = self.set_consts()
 
