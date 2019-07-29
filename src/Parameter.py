@@ -18,7 +18,7 @@ class Parameter:
         self.SERVER_NUM = 10
         self.DELAY_USER_MAX = 10
         self.DELAY_SERVER = 1
-        self.DELAY_SERVER_MAX = 4
+        self.DELAY_SERVER_MAX = 10
         self.CAPACITY = 50
 
     def create_input(self):
