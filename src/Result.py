@@ -16,8 +16,9 @@ class Result:
         self.const_names = ['user', 'server', 'capacity']
         self.is_execute = self.is_execute()
         if self.is_execute:
-            self.var_range = Result.set_range(Constant.get_range(var_name))
-            self.consts = self.set_consts()
+            self.var_range = Result.get_range(Constant.get_range(var_name))
+            self.consts = self.get_consts()
+            self.iter_num = self.get_iteration_num()
 
     def is_execute(self):
         print("Do you execute " + self.var_name + " simulator? [y/N]", end=' > ')
@@ -33,7 +34,7 @@ class Result:
         else:
             return False
 
-    def set_range(var_range_def):
+    def get_range(var_range_def):
         print("Please set range [start stop step]", end=' > ')
         try:
             x, y, z = map(int, input().split())
@@ -42,7 +43,7 @@ class Result:
             print(str(var_range_def) + ' set.')
             return var_range_def
 
-    def set_consts(self):
+    def get_consts(self):
         self.const_names.remove(self.var_name)
         consts = dict()
         for const_name in self.const_names:
@@ -54,6 +55,13 @@ class Result:
                 print(str(f) + ' set.')
                 consts[const_name] = f
         return consts
+
+    def get_iteration_num(self):
+        print("Please set iteration number.", end=' > ')
+        try:
+            return int(input())
+        except:
+            return Constant.ITERATION_NUM
 
     def rotate_file_name(file_name):
         file_index = 1
@@ -76,7 +84,7 @@ class Result:
     def get_average(self, var):
         iterated_result_mmd = []
         iterated_result_ilp = []
-        for i in range(Constant.ITERATION_NUM):
+        for i in range(self.iter_num):
             # create param
             param = Parameter(Constant.SEED + i)
             param.set_param(self.var_name, self.consts, var)
