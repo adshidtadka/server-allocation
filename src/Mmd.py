@@ -20,8 +20,8 @@ class Mmd:
         self.edges = edges
 
     def start_general(self, param):
-        L_1 = self.one_server_case(param)
-        L_2 = self.multiple_server_case(param)
+        L_1 = self.one_server(param)
+        L_2 = self.multiple_server_general(param)
         D_u = min([L_1, L_2])
 
         if D_u > param.DELAY_USER_MAX:
@@ -31,8 +31,8 @@ class Mmd:
             self.objective_function = D_u * 2 + param.DELAY_SERVER
 
     def start_special(self, param):
-        L_1 = self.one_server_case(param)
-        L_2 = self.multiple_server_case(param)
+        L_1 = self.one_server(param)
+        L_2 = self.multiple_server_special(param)
         D_u = min([L_1, L_2])
 
         if D_u > param.DELAY_USER_MAX:
@@ -41,7 +41,7 @@ class Mmd:
             self.status = True
             self.objective_function = D_u * 2 + param.DELAY_SERVER
 
-    def one_server_case(self, param):
+    def one_server(self, param):
         # step 1: consider one server case
 
         # allocate all user and get L_1
@@ -57,7 +57,7 @@ class Mmd:
         else:
             return Constant.INF
 
-    def multiple_server_case(self, param):
+    def multiple_server_special(self, param):
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
@@ -79,6 +79,9 @@ class Mmd:
                 return i
 
         return Constant.INF
+
+    def multiple_server_general(self, param):
+        return True
 
     def print_result(self):
         if self.status:
