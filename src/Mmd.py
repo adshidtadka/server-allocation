@@ -19,8 +19,7 @@ class Mmd:
                 edges = np.vstack((edges, np.array([k, i, j])))
         self.edges = edges
 
-    def start_algorithm(self, param):
-        t_0 = time.perf_counter()
+    def start_general(self, param):
         L_1 = self.one_server_case(param)
         L_2 = self.multiple_server_case(param)
         D_u = min([L_1, L_2])
@@ -30,8 +29,17 @@ class Mmd:
         else:
             self.status = True
             self.objective_function = D_u * 2 + param.DELAY_SERVER
-        t_1 = time.perf_counter()
-        return t_1 - t_0
+
+    def start_special(self, param):
+        L_1 = self.one_server_case(param)
+        L_2 = self.multiple_server_case(param)
+        D_u = min([L_1, L_2])
+
+        if D_u > param.DELAY_USER_MAX:
+            self.status = False
+        else:
+            self.status = True
+            self.objective_function = D_u * 2 + param.DELAY_SERVER
 
     def one_server_case(self, param):
         # step 1: consider one server case
@@ -90,7 +98,7 @@ def main():
 
     # start algorithm
     t_0 = time.perf_counter()
-    mmd.start_algorithm(param)
+    mmd.start_special(param)
     t_1 = time.perf_counter()
     mmd.cpu_time = t_1 - t_0
 

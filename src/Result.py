@@ -2,6 +2,7 @@ import time
 import csv
 import os
 import slackweb
+import configparser
 
 import Constant
 from Parameter import Parameter
@@ -97,7 +98,7 @@ class Result:
 
             # solve by algorithm
             mmd = Mmd(param)
-            cpu_time_mmd = mmd.start_algorithm(param)
+            cpu_time_mmd = mmd.start_special(param)
             iterated_result_mmd.append(cpu_time_mmd)
         result = []
         result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
@@ -106,7 +107,10 @@ class Result:
 
     def post_to_slack(text):
         print(text)
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+
+        config = configparser.ConfigParser()
+        config.read("../config.ini")
+        slack = slackweb.Slack(url=config.get("general", "slack_webhook"))
         slack.notify(text=text)
 
 
