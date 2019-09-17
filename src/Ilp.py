@@ -37,7 +37,6 @@ class Ilp:
         # dataframe for E_S
         df_e_s = pd.DataFrame([(i, j) for i, j in param.e_s], columns=['server_1', 'server_2'])
         df_e_s['delay'] = param.d_st.flatten()
-        # df_e_s['delay'] = param.DELAY_SERVER
         self.df_e_s = df_e_s
 
         # dataframe for V_S
