@@ -4,6 +4,7 @@ import time
 import Constant
 from Parameter import Parameter
 from HopcroftKarp import HopcroftKarp
+from BronKerbosch import BronKerbosch
 
 
 class Mmd:
@@ -12,12 +13,20 @@ class Mmd:
         self.set_input(param)
 
     def set_input(self, param):
-        # edges list
-        edges = np.empty(3, dtype=int)
+        # edges_user list
+        edges_user = np.empty(3, dtype=int)
         for k, v in enumerate(param.d_us):
             for i, j in enumerate(v):
-                edges = np.vstack((edges, np.array([k, i, j])))
-        self.edges = edges
+                edges_user = np.vstack((edges_user, np.array([k, i, j])))
+        self.edges_user = edges_user
+
+        # edges_server list
+        edges_server = np.empty(3, dtype=int)
+        for i, j in param.e_s:
+            for v in param.d_st:
+                edges_server = np.vstack((edges_server, np.array([i, j, v])))
+        self.edges_server = edges_server
+        print(self.edges_server)
 
     def start_general(self, param):
         L_1 = self.one_server(param)
@@ -32,7 +41,7 @@ class Mmd:
 
     def start_special(self, param):
         L_1 = self.one_server(param)
-        L_2 = self.multiple_server_special(param)
+        L_2 = self.start_general(param)
         D_u = min([L_1, L_2])
 
         if D_u > param.DELAY_USER_MAX:
@@ -57,7 +66,7 @@ class Mmd:
         else:
             return Constant.INF
 
-    def multiple_server_special(self, param):
+    def start_general(self, param):
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
@@ -66,15 +75,15 @@ class Mmd:
             for j in range(param.USER_NUM):
                 delay = param.d_us[j][k]
                 for i in range(added_server, added_server + v - 1):
-                    self.edges = np.vstack((self.edges, np.array([j, i, delay])))
+                    self.edges_user = np.vstack((self.edges_user, np.array([j, i, delay])))
                 added_server += v - 1
         param.COPY_SERVER_NUM = added_server
 
         # search matching
         for i in range(1, param.DELAY_USER_MAX):
             hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
-            for j in np.where(self.edges[:, -1] <= i)[0]:
-                hc.add_edge(self.edges[j][0], self.edges[j][1])
+            for j in np.where(self.edges_user[:, -1] <= i)[0]:
+                hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
             if hc.flow() == param.USER_NUM:
                 return i
 
@@ -85,7 +94,9 @@ class Mmd:
 
         # initialize the graph
         graph = dict()
-        print(param.d_st)
+        for i in range(1, param.DELAY_SERVER_MAX):
+            for j in np.where(self.edges_server[:, -1] == i)[0]:
+                print(j)
 
     def print_result(self):
         if self.status:
