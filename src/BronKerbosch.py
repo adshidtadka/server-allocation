@@ -5,74 +5,76 @@
 from collections import defaultdict
 
 
-def find_cliques(graph):
-    p = set(graph.keys())
-    r = set()
-    x = set()
-    cliques = []
-    for v in degeneracy_ordering(graph):
-        neighs = graph[v]
-        find_cliques_pivot(graph, r.union([v]), p.intersection(neighs), x.intersection(neighs), cliques)
-        p.remove(v)
-        x.add(v)
-    return sorted(cliques, key=lambda x: len(x))
+class BronKerbosch():
 
+    def __init__(self):
+        self.graph = {
+            1: [2, 5],
+            2: [1, 3, 5],
+            3: [2, 4],
+            4: [3, 5, 6],
+            5: [1, 2, 4],
+            6: [4]
+        }
 
-def find_cliques_pivot(graph, r, p, x, cliques):
-    if len(p) == 0 and len(x) == 0:
-        cliques.append(r)
-    else:
-        u = iter(p.union(x)).__next__()
-        for v in p.difference(graph[u]):
-            neighs = graph[v]
-            find_cliques_pivot(graph, r.union([v]), p.intersection(neighs), x.intersection(neighs), cliques)
+    def find_cliques(self):
+        p = set(self.graph.keys())
+        r = set()
+        x = set()
+        cliques = []
+        for v in self.degeneracy_ordering():
+            neighs = self.graph[v]
+            self.find_cliques_pivot(r.union([v]), p.intersection(neighs), x.intersection(neighs), cliques)
             p.remove(v)
             x.add(v)
+        return sorted(cliques, key=lambda x: len(x))
 
-
-def degeneracy_ordering(graph):
-    ordering = []
-    ordering_set = set()
-    degrees = defaultdict(lambda: 0)
-    degen = defaultdict(list)
-    max_deg = -1
-    for v in graph:
-        deg = len(graph[v])
-        degen[deg].append(v)
-        degrees[v] = deg
-        if deg > max_deg:
-            max_deg = deg
-
-    while True:
-        i = 0
-        while i <= max_deg:
-            if len(degen[i]) != 0:
-                break
-            i += 1
+    def find_cliques_pivot(self, r, p, x, cliques):
+        if len(p) == 0 and len(x) == 0:
+            cliques.append(r)
         else:
-            break
-        v = degen[i].pop()
-        ordering.append(v)
-        ordering_set.add(v)
-        for w in graph[v]:
-            if w not in ordering_set:
-                deg = degrees[w]
-                degen[deg].remove(w)
-                if deg > 0:
-                    degrees[w] -= 1
-                    degen[deg - 1].append(w)
+            u = iter(p.union(x)).__next__()
+            for v in p.difference(self.graph[u]):
+                neighs = self.graph[v]
+                self.find_cliques_pivot(r.union([v]), p.intersection(neighs), x.intersection(neighs), cliques)
+                p.remove(v)
+                x.add(v)
 
-    ordering.reverse()
-    return ordering
+    def degeneracy_ordering(self):
+        ordering = []
+        ordering_set = set()
+        degrees = defaultdict(lambda: 0)
+        degen = defaultdict(list)
+        max_deg = -1
+        for v in self.graph:
+            deg = len(self.graph[v])
+            degen[deg].append(v)
+            degrees[v] = deg
+            if deg > max_deg:
+                max_deg = deg
+
+        while True:
+            i = 0
+            while i <= max_deg:
+                if len(degen[i]) != 0:
+                    break
+                i += 1
+            else:
+                break
+            v = degen[i].pop()
+            ordering.append(v)
+            ordering_set.add(v)
+            for w in self.graph[v]:
+                if w not in ordering_set:
+                    deg = degrees[w]
+                    degen[deg].remove(w)
+                    if deg > 0:
+                        degrees[w] -= 1
+                        degen[deg - 1].append(w)
+
+        ordering.reverse()
+        return ordering
 
 
-graph = {
-    1: [2, 5],
-    2: [1, 3, 5],
-    3: [2, 4],
-    4: [3, 5, 6],
-    5: [1, 2, 4],
-    6: [4]
-}
-graph.keys()
-print(find_cliques(graph))
+bk = BronKerbosch()
+print(bk.find_cliques())
