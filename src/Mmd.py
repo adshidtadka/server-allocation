@@ -81,7 +81,27 @@ class Mmd:
         return Constant.INF
 
     def multiple_server_general(self, param):
-        return True
+        # step 2: consider multiple server case
+
+        # initialize the bipartite graph
+        added_server = param.SERVER_NUM
+        for k, v in enumerate(param.m_s):
+            for j in range(param.USER_NUM):
+                delay = param.d_us[j][k]
+                for i in range(added_server, added_server + v - 1):
+                    self.edges = np.vstack((self.edges, np.array([j, i, delay])))
+                added_server += v - 1
+        param.COPY_SERVER_NUM = added_server
+
+        # search matching
+        for i in range(1, param.DELAY_USER_MAX):
+            hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
+            for j in np.where(self.edges[:, -1] <= i)[0]:
+                hc.add_edge(self.edges[j][0], self.edges[j][1])
+            if hc.flow() == param.USER_NUM:
+                return i
+
+        return Constant.INF
 
     def print_result(self):
         if self.status:
