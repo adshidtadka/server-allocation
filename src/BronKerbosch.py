@@ -15,7 +15,7 @@ def find_cliques(graph):
         find_cliques_pivot(graph, r.union([v]), p.intersection(neighs), x.intersection(neighs), cliques)
         p.remove(v)
         x.add(v)
-    return sorted(cliques, lambda x: len(x))
+    return sorted(cliques, key=lambda x: len(x))
 
 
 def find_cliques_pivot(graph, r, p, x, cliques):
@@ -70,8 +70,8 @@ graph = {
     1: [2, 5],
     2: [1, 3, 5],
     3: [2, 4],
-    4: [3, 5],
-    5: [1, 2, 5],
+    4: [3, 5, 6],
+    5: [1, 2, 4],
     6: [4]
 }
 graph.keys()
