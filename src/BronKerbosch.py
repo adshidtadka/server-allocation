@@ -10,16 +10,16 @@ class BronKerbosch():
     def __init__(self, server_num):
         self.graph = self.create_vertexes(server_num)
         print(self.graph)
-        # self.graph = {
-        #     0: [1, 4],
-        #     1: [0, 2, 4],
-        #     2: [1, 3],
-        #     3: [2, 4, 5],
-        #     4: [0, 1, 3],
-        #     5: [3]
-        # }
+        self.graph = {
+            0: [1, 4],
+            1: [0, 2, 4],
+            2: [1, 3],
+            3: [2, 4, 5],
+            4: [0, 1, 3],
+            5: [3]
+        }
 
-    def create_vertexes(self, server_num):
+    def create_nodes(self, server_num):
         return {i: [] for i in range(server_num)}
 
     def find_cliques(self):
@@ -81,5 +81,6 @@ class BronKerbosch():
         return ordering
 
 
-# bk = BronKerbosch()
-# print(bk.find_cliques())
+bk = BronKerbosch(5)
+print(bk.find_cliques())
+print(bk.find_cliques())
