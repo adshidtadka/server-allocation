@@ -8,7 +8,7 @@ from collections import defaultdict
 class BronKerbosch():
 
     def __init__(self, server_num):
-        self.graph = self.create_vertexes(server_num)
+        self.graph = self.create_nodes(server_num)
         print(self.graph)
         self.graph = {
             0: [1, 4],
