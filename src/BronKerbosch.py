@@ -10,17 +10,21 @@ class BronKerbosch():
     def __init__(self, server_num):
         self.graph = self.create_nodes(server_num)
         print(self.graph)
-        self.graph = {
-            0: [1, 4],
-            1: [0, 2, 4],
-            2: [1, 3],
-            3: [2, 4, 5],
-            4: [0, 1, 3],
-            5: [3]
-        }
+        # self.graph = {
+        #     0: [1, 4],
+        #     1: [0, 2, 4],
+        #     2: [1, 3],
+        #     3: [2, 4, 5],
+        #     4: [0, 1, 3],
+        #     5: [3]
+        # }
 
     def create_nodes(self, server_num):
         return {i: [] for i in range(server_num)}
+
+    def add_edge(self, fr, to):
+        self.graph[fr].append(to)
+        self.graph[to].append(fr)
 
     def find_cliques(self):
         p = set(self.graph.keys())
@@ -84,3 +88,8 @@ class BronKerbosch():
 # bk = BronKerbosch(5)
 # print(bk.find_cliques())
 # print(bk.find_cliques())
+
+bk = BronKerbosch(5)
+bk.add_edge(1, 2)
+bk.add_edge(1, 3)
+print(bk.graph)
