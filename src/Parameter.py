@@ -14,12 +14,12 @@ class Parameter:
 
     def __init__(self, seed):
         np.random.seed(seed)
-        self.USER_NUM = 10
-        self.SERVER_NUM = 3
-        self.DELAY_USER_MAX = 5
+        self.USER_NUM = 500
+        self.SERVER_NUM = 10
+        self.DELAY_USER_MAX = 10
         self.DELAY_SERVER = 1
-        self.DELAY_SERVER_MAX = 3
-        self.CAPACITY = 5
+        self.DELAY_SERVER_MAX = 10
+        self.CAPACITY = 50
 
     def create_input(self):
         # inputs
