@@ -9,7 +9,6 @@ class BronKerbosch():
 
     def __init__(self, server_num):
         self.graph = self.create_nodes(server_num)
-        print(self.graph)
         # self.graph = {
         #     0: [1, 4],
         #     1: [0, 2, 4],
@@ -85,11 +84,11 @@ class BronKerbosch():
         return ordering
 
 
-# bk = BronKerbosch(5)
-# print(bk.find_cliques())
-# print(bk.find_cliques())
-
 bk = BronKerbosch(5)
-bk.add_edge(1, 2)
-bk.add_edge(1, 3)
-print(bk.graph)
+print(bk.find_cliques())
+print(bk.find_cliques())
+
+# bk = BronKerbosch(5)
+# bk.add_edge(1, 2)
+# bk.add_edge(1, 3)
+# print(bk.graph)

@@ -27,6 +27,7 @@ class Mmd:
         for i, j in param.e_s:
             for v in param.d_st:
                 edges_server = np.vstack((edges_server, np.array([i, j, v])))
+        edges_server = np.delete(edges_server, 0, 0)
         self.edges_server = edges_server
 
     def start_general(self, param):
@@ -98,7 +99,9 @@ class Mmd:
         bk = BronKerbosch(param.SERVER_NUM)
         for i in range(1, param.DELAY_SERVER_MAX):
             for j in np.where(self.edges_server[:, -1] == i)[0]:
-                print(j)
+                bk.add_edge(self.edges_server[j][0], self.edges_server[j][1])
+            print(bk.graph)
+            print(bk.find_cliques())
 
     def print_result(self):
         if self.status:
