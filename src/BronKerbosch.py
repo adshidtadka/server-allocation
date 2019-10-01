@@ -84,11 +84,16 @@ class BronKerbosch():
         return ordering
 
 
-bk = BronKerbosch(5)
-print(bk.find_cliques())
-print(bk.find_cliques())
+def main():
+    bk = BronKerbosch(5)
+    print(bk.find_cliques())
+    print(bk.find_cliques())
 
-# bk = BronKerbosch(5)
-# bk.add_edge(1, 2)
-# bk.add_edge(1, 3)
-# print(bk.graph)
+    bk = BronKerbosch(5)
+    bk.add_edge(1, 2)
+    bk.add_edge(1, 3)
+    print(bk.graph)
+
+
+if __name__ == '__main__':
+    main()
