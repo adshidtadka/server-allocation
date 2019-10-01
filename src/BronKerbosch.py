@@ -81,6 +81,6 @@ class BronKerbosch():
         return ordering
 
 
-bk = BronKerbosch(5)
-print(bk.find_cliques())
-print(bk.find_cliques())
+# bk = BronKerbosch(5)
+# print(bk.find_cliques())
+# print(bk.find_cliques())
