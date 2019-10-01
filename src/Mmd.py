@@ -43,7 +43,7 @@ class Mmd:
 
     def start_special(self, param):
         L_1 = self.one_server(param)
-        L_2 = self.multiple_server(param)
+        L_2 = self.multiple_server_special(param)
         D_u = min([L_1, L_2])
 
         if D_u > param.DELAY_USER_MAX:
@@ -68,7 +68,7 @@ class Mmd:
         else:
             return Constant.INF
 
-    def multiple_server(self, param):
+    def multiple_server_special(self, param):
         # step 2: consider multiple server case
 
         # initialize the bipartite graph
