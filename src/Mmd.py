@@ -14,15 +14,14 @@ class Mmd:
 
     def set_input(self, param):
         # edges_user list
-        # fixme: 不要な行が入っている
         edges_user = np.empty(3, dtype=int)
         for k, v in enumerate(param.d_us):
             for i, j in enumerate(v):
                 edges_user = np.vstack((edges_user, np.array([k, i, j])))
+        edges_user = np.delete(edges_user, 0, 0)
         self.edges_user = edges_user
 
         # edges_server list
-        # fixme: 不要な行が入っている
         edges_server = np.empty(3, dtype=int)
         for i, j in param.e_s:
             for v in param.d_st:
