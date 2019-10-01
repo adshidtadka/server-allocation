@@ -28,7 +28,6 @@ class Mmd:
             for v in param.d_st:
                 edges_server = np.vstack((edges_server, np.array([i, j, v])))
         self.edges_server = edges_server
-        print(self.edges_server)
 
     def start_general(self, param):
         L_1 = self.one_server(param)
@@ -95,8 +94,8 @@ class Mmd:
     def multiple_server_general(self, param):
         # step 2: consider multiple server case
 
-        # initialize the graph
-        graph = dict()
+        # search clique
+        bk = BronKerbosch(param.SERVER_NUM)
         for i in range(1, param.DELAY_SERVER_MAX):
             for j in np.where(self.edges_server[:, -1] == i)[0]:
                 print(j)
@@ -119,7 +118,7 @@ def main():
 
     # start algorithm
     t_0 = time.perf_counter()
-    mmd.start_special(param)
+    mmd.start_general(param)
     t_1 = time.perf_counter()
     mmd.cpu_time = t_1 - t_0
 
