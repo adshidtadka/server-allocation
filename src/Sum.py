@@ -21,7 +21,7 @@ class Sum:
         self.edges_user = edges_user
 
     def start_algo(self, param):
-        L_1 = self.one_server(param)
+        L_1 = Sum.one_server(param)
         L_2 = self.multiple_server(param)
         D_u = min([L_1, L_2])
 
@@ -31,7 +31,7 @@ class Sum:
             self.status = True
             self.objective_function = D_u * 2 + param.DELAY_SERVER
 
-    def one_server(self, param):
+    def one_server(param):
         # step 1: consider one server case
 
         # allocate all user and get L_1
@@ -52,14 +52,14 @@ class Sum:
         return self.search_matching(param)
 
     def copy_servers(self, param):
-        added_server = param.SERVER_NUM
+        copy_server_num = param.SERVER_NUM
         for k, v in enumerate(param.m_s):
             for j in range(param.USER_NUM):
                 delay = param.d_us[j][k]
-                for i in range(added_server, added_server + v - 1):
+                for i in range(copy_server_num, copy_server_num + v - 1):
                     self.edges_user = np.vstack((self.edges_user, np.array([j, i, delay])))
-                added_server += v - 1
-        param.COPY_SERVER_NUM = added_server
+                copy_server_num += v - 1
+        param.COPY_SERVER_NUM = copy_server_num
 
     def search_matching(self, param):
         for i in range(1, param.DELAY_USER_MAX):
