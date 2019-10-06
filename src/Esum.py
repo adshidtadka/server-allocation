@@ -4,6 +4,7 @@ import time
 import Constant
 from Parameter import Parameter
 from HopcroftKarp import HopcroftKarp
+from BronKerbosch import BronKerbosch
 
 
 class Sum:
@@ -20,9 +21,27 @@ class Sum:
         edges_user = np.delete(edges_user, 0, 0)
         self.edges_user = edges_user
 
-    def start_algo(self, param):
+        # edges_server list
+        edges_server = np.empty(3, dtype=int)
+        for k, v in enumerate(param.d_st):
+            edges_server = np.vstack((edges_server, np.array([param.e_s[k][0], param.e_s[k][1], v])))
+        edges_server = np.delete(edges_server, 0, 0)
+        self.edges_server = edges_server
+
+    def start_general(self, param):
         L_1 = self.one_server(param)
-        L_2 = self.multiple_server(param)
+        L_2 = self.multiple_server_general(param)
+        D_u = min([L_1, L_2])
+
+        if D_u > param.DELAY_USER_MAX:
+            self.status = False
+        else:
+            self.status = True
+            self.objective_function = D_u * 2 + param.DELAY_SERVER
+
+    def start_special(self, param):
+        L_1 = self.one_server(param)
+        L_2 = self.multiple_server_special(param)
         D_u = min([L_1, L_2])
 
         if D_u > param.DELAY_USER_MAX:
@@ -47,11 +66,14 @@ class Sum:
         else:
             return Constant.INF
 
-    def multiple_server(self, param):
-        self.copy_servers(param)
-        return self.search_matching(param)
+    def multiple_server_special(self, param):
+        # step 2: consider multiple server case
+        self.create_copy_servers(param)
+        self.search_matching(param)
 
-    def copy_servers(self, param):
+        return Constant.INF
+
+    def create_copy_servers(self, param):
         added_server = param.SERVER_NUM
         for k, v in enumerate(param.m_s):
             for j in range(param.USER_NUM):
@@ -69,7 +91,24 @@ class Sum:
                 hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
             if hc.flow() == param.USER_NUM:
                 return i
-        return Constant.INF
+
+    def multiple_server_general(self, param):
+        # step 2: consider multiple server case
+
+        # search clique
+        bk = BronKerbosch(param.SERVER_NUM)
+        record = []
+        for i in range(1, param.DELAY_SERVER_MAX):
+            for j in np.where(self.edges_server[:, -1] == i)[0]:
+                bk.add_edge(self.edges_server[j][0], self.edges_server[j][1])
+            print(bk.find_cliques())
+            for clique in bk.find_cliques():
+                if clique in record:
+                    continue
+                else:
+                    record.append(clique)
+                if len(clique) < param.USER_NUM:
+                    continue
 
     def print_result(self):
         if self.status:
@@ -89,7 +128,7 @@ def main():
 
     # start algorithm
     t_0 = time.perf_counter()
-    sum_obj.start_algo(param)
+    sum_obj.start_general(param)
     t_1 = time.perf_counter()
     sum_obj.cpu_time = t_1 - t_0
 
