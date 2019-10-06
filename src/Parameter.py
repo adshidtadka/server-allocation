@@ -8,18 +8,18 @@ import Constant
 
 class Parameter:
 
-    USER_NUM_CONST = 10
-    SERVER_NUM_CONST = 3
-    CAPACITY_CONST = 10
+    USER_NUM_CONST = 3
+    SERVER_NUM_CONST = 2
+    CAPACITY_CONST = 3
 
     def __init__(self, seed):
         np.random.seed(seed)
-        self.USER_NUM = 10
-        self.SERVER_NUM = 3
+        self.USER_NUM = 3
+        self.SERVER_NUM = 2
         self.DELAY_USER_MAX = 20
         self.DELAY_SERVER = 1
         self.DELAY_SERVER_MAX = 10
-        self.CAPACITY = 10
+        self.CAPACITY = 3
 
     def create_input(self):
         # inputs
@@ -27,6 +27,7 @@ class Parameter:
         self.e_s = list(itertools.combinations(list(range(0, self.SERVER_NUM)), 2))
         self.d_us = np.random.randint(1, self.DELAY_USER_MAX, (self.USER_NUM, self.SERVER_NUM))
         self.d_st = np.random.randint(1, self.DELAY_SERVER_MAX, len(list(itertools.combinations(list(range(0, self.SERVER_NUM)), 2))))
+        # self.d_st = self.DELAY_SERVER
         self.m_s = np.full(self.SERVER_NUM, self.CAPACITY)
 
     def set_param(self, var_name, consts, var):
