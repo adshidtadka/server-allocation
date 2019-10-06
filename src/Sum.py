@@ -7,7 +7,7 @@ from HopcroftKarp import HopcroftKarp
 from BronKerbosch import BronKerbosch
 
 
-class Mmd:
+class Sum:
 
     def __init__(self, param):
         self.set_input(param)
@@ -124,16 +124,16 @@ def main():
     param.create_input()
 
     # set input to algorithm
-    mmd = Mmd(param)
+    sum_obj = Sum(param)
 
     # start algorithm
     t_0 = time.perf_counter()
-    mmd.start_general(param)
+    sum_obj.start_general(param)
     t_1 = time.perf_counter()
-    mmd.cpu_time = t_1 - t_0
+    sum_obj.cpu_time = t_1 - t_0
 
     # print result
-    mmd.print_result()
+    sum_obj.print_result()
 
 
 if __name__ == '__main__':

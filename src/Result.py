@@ -6,7 +6,7 @@ import configparser
 
 import Constant
 from Parameter import Parameter
-from Mmd import Mmd
+from Sum import Sum
 from Ilp import Ilp
 
 
@@ -84,8 +84,8 @@ class Result:
 
     def get_average(self, var):
         iterated_result_ilp = []
-        iterated_result_mmds = []
-        iterated_result_mmdg = []
+        iterated_result_sum = []
+        iterated_result_esum = []
         for i in range(self.iter_num):
             # create param
             param = Parameter(Constant.SEED + i)
@@ -97,20 +97,15 @@ class Result:
             # cpu_time_ilp = ilp.solve_by_ilp(self.is_cplex)
             # iterated_result_ilp.append(cpu_time_ilp)
 
-            # solve by algorithm for special
-            # mmd = Mmd(param)
-            # cpu_time_mmds = mmd.start_special(param)
-            # iterated_result_mmds.append(cpu_time_mmds)
-
             # solve by algorithm for general
-            mmd = Mmd(param)
-            cpu_time_mmdg = mmd.start_general(param)
-            iterated_result_mmdg.append(cpu_time_mmdg)
+            esum = Sum(param)
+            cpu_time_esum = esum.start_general(param)
+            iterated_result_esum.append(cpu_time_esum)
         result = []
         # result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
-        # result.append(sum(iterated_result_mmds) / len(iterated_result_mmds))
-        print(iterated_result_mmdg)
-        result.append(sum(iterated_result_mmdg) / len(iterated_result_mmdg))
+        # result.append(sum(iterated_result_sum) / len(iterated_result_sum))
+        print(iterated_result_esum)
+        result.append(sum(iterated_result_esum) / len(iterated_result_esum))
         return ",".join(map(str, result))
 
     def post_to_slack(text):
