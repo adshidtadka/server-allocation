@@ -64,7 +64,6 @@ class Sum:
     def search_matching(self, param):
         for i in range(1, param.DELAY_USER_MAX):
             hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
-            # fixme: hcのオブジェクトをいちいち初期化しなくてもいいかも
             for j in np.where(self.edges_user[:, -1] <= i)[0]:
                 hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
             if hc.flow() == param.USER_NUM:
