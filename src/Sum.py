@@ -21,9 +21,9 @@ class Sum:
         self.edges_user = edges_user
 
     def start_algo(self, param):
-        L_1 = Sum.one_server(param)
-        L_2 = self.multiple_server(param)
-        D_u = min([L_1, L_2])
+        D_u_1 = self.one_server(param)
+        D_u_2 = self.multiple_server(param)
+        D_u = min([D_u_1, D_u_2])
 
         if D_u > param.DELAY_USER_MAX:
             self.status = False
@@ -31,7 +31,7 @@ class Sum:
             self.status = True
             self.objective_function = D_u * 2 + param.DELAY_SERVER
 
-    def one_server(param):
+    def one_server(self, param):
         # step 1: consider one server case
 
         # allocate all user and get L_1
