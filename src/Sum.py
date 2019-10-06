@@ -48,18 +48,20 @@ class Sum:
             return Constant.INF
 
     def multiple_server(self, param):
+        print("before copied edges_user = \n", self.edges_user)
         self.copy_servers(param)
-        return self.search_matching(param)
+        print("after copied edges_user = \n", self.edges_user)
+        D_u = self.search_matching(param)
+        print("D_u = ", D_u)
+        return D_u
 
     def copy_servers(self, param):
-        copy_server_num = param.SERVER_NUM
-        for k, v in enumerate(param.m_s):
-            for j in range(param.USER_NUM):
-                delay = param.d_us[j][k]
-                for i in range(copy_server_num, copy_server_num + v - 1):
-                    self.edges_user = np.vstack((self.edges_user, np.array([j, i, delay])))
-                copy_server_num += v - 1
-        param.COPY_SERVER_NUM = copy_server_num
+        for edge in self.edges_user:
+            for i in range(1, param.CAPACITY):
+                new_edge = edge.copy()
+                new_edge[1] += param.SERVER_NUM * i
+                self.edges_user = np.vstack((self.edges_user, new_edge))
+        param.COPY_SERVER_NUM = len(self.edges_user*param.CAPACITY)
 
     def search_matching(self, param):
         for i in range(1, param.DELAY_USER_MAX):
