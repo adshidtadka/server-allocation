@@ -31,6 +31,9 @@ class Esum(Sum):
         L_2 = self.multiple_server(param)
         L = min([L_1, L_2])
 
+        print("L_1 = ", L_1)
+        print("L_2 = ", L_2)
+
         if L > param.DELAY_USER_MAX*2 + param.DELAY_SERVER_MAX:
             self.status = False
         else:
@@ -47,17 +50,22 @@ class Esum(Sum):
         for D_s in range(1, param.DELAY_SERVER_MAX):
             for j in np.where(self.edges_server[:, -1] == D_s)[0]:
                 bk.add_edge(self.edges_server[j][0], self.edges_server[j][1])
+            print("D_s = ", D_s)
+            print(bk.find_cliques())
             for clique in bk.find_cliques():
                 if clique in record:
                     continue
                 else:
                     record.append(clique)
-                # get an allocation according to sum
+
+                # set edges_user
                 edges_user = np.empty(3, dtype=int)
                 for node in clique:
                     edges_user = np.vstack((edges_user, self.edges_user_all[np.where((self.edges_user_all[:, 1] == node))]))
                 self.edges_user = np.delete(edges_user, 0, 0)
-                L = min(L, Sum.multiple_server(self, param) * 2 + D_s)
+
+                D_u = Sum.multiple_server(self, param)
+                L = min(L, D_u * 2 + D_s)
         return L
 
     def print_result(self):
