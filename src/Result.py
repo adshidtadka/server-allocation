@@ -35,11 +35,12 @@ class Result:
 
     def select_solver(self):
         print("Which solver do you use? [1:GLPK, 2:SCIP, 3:CPLEX]", end=' > ')
-        if input() == '1':
+        solver = input()
+        if solver == '1':
             return 1
-        elif input() == '2':
+        elif solver == '2':
             return 2
-        elif input() == '3':
+        elif solver == '3':
             return 3
         else:
             return False
