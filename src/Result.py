@@ -2,23 +2,29 @@ import time
 import csv
 import os
 import slackweb
+import configparser
 
 import Constant
 from Parameter import Parameter
-from Mmd import Mmd
+from Sum import Sum
+from Esum import Esum
 from Ilp import Ilp
 
 
 class Result:
 
     def __init__(self, var_name):
+        print()
         self.var_name = var_name
         self.const_names = ['user', 'server', 'capacity']
-        self.is_execute = self.is_execute()
-        if self.is_execute:
+        self.execute = self.is_execute()
+        if self.execute:
             self.var_range = Result.get_range(Constant.get_range(var_name))
             self.consts = self.get_consts()
             self.iter_num = self.get_iteration_num()
+            self.ilp = self.execute_ilp()
+            if self.ilp:
+                self.solver = self.select_solver()
 
     def is_execute(self):
         print("Do you execute " + self.var_name + " simulator? [y/N]", end=' > ')
@@ -27,8 +33,19 @@ class Result:
         else:
             return False
 
-    def is_cplex(self):
-        print("Do you use cplex? [y/N]", end=' > ')
+    def select_solver(self):
+        print("Which solver do you use? [1:GLPK, 2:SCIP, 3:CPLEX]", end=' > ')
+        if input() == '1':
+            return 1
+        elif input() == '2':
+            return 2
+        elif input() == '3':
+            return 3
+        else:
+            return False
+
+    def execute_ilp(self):
+        print("Do you execute ilp? [y/N]", end=' > ')
         if input() == 'y':
             return True
         else:
@@ -61,6 +78,7 @@ class Result:
         try:
             return int(input())
         except:
+            print(str(Constant.ITERATION_NUM) + ' set.')
             return Constant.ITERATION_NUM
 
     def rotate_file_name(file_name):
@@ -82,8 +100,9 @@ class Result:
             f.close()
 
     def get_average(self, var):
-        iterated_result_mmd = []
         iterated_result_ilp = []
+        iterated_result_sum = []
+        iterated_result_esum = []
         for i in range(self.iter_num):
             # create param
             param = Parameter(Constant.SEED + i)
@@ -91,22 +110,27 @@ class Result:
             param.create_input()
 
             # solve by ilp
-            ilp = Ilp(param)
-            cpu_time_ilp = ilp.solve_by_ilp(self.is_cplex)
-            iterated_result_ilp.append(cpu_time_ilp)
+            if self.ilp:
+                ilp = Ilp(param)
+                cpu_time_ilp = ilp.solve_by_ilp(self.solver)
+                iterated_result_ilp.append(cpu_time_ilp)
 
-            # solve by algorithm
-            mmd = Mmd(param)
-            cpu_time_mmd = mmd.start_algorithm(param)
-            iterated_result_mmd.append(cpu_time_mmd)
+            # solve by esum
+            esum = Esum(param)
+            cpu_time_esum = esum.start_algo(param)
+            iterated_result_esum.append(cpu_time_esum)
         result = []
-        result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
-        result.append(sum(iterated_result_mmd) / len(iterated_result_mmd))
+        if self.ilp:
+            result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
+        result.append(sum(iterated_result_esum) / len(iterated_result_esum))
         return ",".join(map(str, result))
 
     def post_to_slack(text):
         print(text)
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+
+        config = configparser.ConfigParser()
+        config.read("../config.ini")
+        slack = slackweb.Slack(url=config.get("general", "slack_webhook"))
         slack.notify(text=text)
 
 
@@ -114,14 +138,14 @@ if not os.path.exists('../result'):
     os.mkdir('../result')
 
 result_user = Result('user')
-result_server = Result('server')
-result_capacity = Result('capacity')
+# result_server = Result('server')
+# result_capacity = Result('capacity')
 
-if result_user.is_execute:
+if result_user.execute:
     result_user.get_result()
 
-if result_server.is_execute:
-    result_server.get_result()
+# if result_server.execute:
+#     result_server.get_result()
 
-if result_capacity.is_execute:
-    result_capacity.get_result()
+# if result_capacity.execute:
+#     result_capacity.get_result()

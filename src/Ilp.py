@@ -17,9 +17,9 @@ class Ilp:
         problem = LpProblem()
 
         # decision variables
-        self.df_e_u['variable'] = [LpVariable('x_us%d' % i, cat=LpBinary) for i in self.df_e_u.index]
-        self.df_e_s['variable'] = [LpVariable('x_st%d' % i, cat=LpBinary) for i in self.df_e_s.index]
-        self.df_v_s['variable'] = [LpVariable('y%d' % i, cat=LpBinary) for i in self.df_v_s.index]
+        self.df_e_u['variable'] = [LpVariable('x_us_%d' % i, cat=LpBinary) for i in self.df_e_u.index]
+        self.df_e_s['variable'] = [LpVariable('x_st_%d' % i, cat=LpBinary) for i in self.df_e_s.index]
+        self.df_v_s['variable'] = [LpVariable('y_%d' % i, cat=LpBinary) for i in self.df_v_s.index]
         self.D_u = LpVariable('D_u', cat=LpInteger)
         self.D_s = LpVariable('D_s', cat=LpInteger)
 
@@ -36,8 +36,7 @@ class Ilp:
 
         # dataframe for E_S
         df_e_s = pd.DataFrame([(i, j) for i, j in param.e_s], columns=['server_1', 'server_2'])
-        df_e_s['delay'] = param.d_st.flatten()
-        # df_e_s['delay'] = param.DELAY_SERVER
+        df_e_s['delay'] = param.d_st
         self.df_e_s = df_e_s
 
         # dataframe for V_S
@@ -51,10 +50,15 @@ class Ilp:
         try:
             # constraints
             self.problem = self.create_constraints(self.problem)
-            self.problem.solve(pulp.SCIP(msg=0))
+            if solver == 2:
+                self.problem.solve(pulp.SCIP(msg=0))
+            elif solver == 3:
+                self.problem.solve(pulp.CPLEX_CMD(msg=0))
+            else:
+                self.problem.solve(pulp.GLPK_CMD(msg=0))
 
         except PulpSolverError:
-            print(CPLEX_CMD().path, 'is not installed')
+            print('Solver is not installed')
 
         t_1 = time.perf_counter()
         return t_1 - t_0
@@ -85,14 +89,12 @@ class Ilp:
             m += v.variable * v.delay <= self.D_s
 
         # (1f)
-        for k, v in self.df_e_u.groupby('user'):
-            for l, w in self.df_v_s.iterrows():
-                m += w.variable >= v.variable
+        for k, v in self.df_e_u.iterrows():
+            m += self.df_v_s.at[v.server, "variable"] >= v.variable
 
         # (1g)
         for k, v in self.df_e_s.iterrows():
-            m += self.df_v_s.iloc[v.server_1].variable + \
-                self.df_v_s.iloc[v.server_2].variable - 1 <= v.variable
+            m += self.df_v_s.iloc[v.server_1].variable + self.df_v_s.iloc[v.server_2].variable - 1 <= v.variable
 
         # (1h)
         for k, v in self.df_e_s.iterrows():

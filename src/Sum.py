@@ -6,24 +6,25 @@ from Parameter import Parameter
 from HopcroftKarp import HopcroftKarp
 
 
-class Mmd:
+class Sum:
 
     def __init__(self, param):
         self.set_input(param)
 
     def set_input(self, param):
-        # edges list
-        edges = np.empty(3, dtype=int)
+        # edges_user list
+        edges_user = np.empty(3, dtype=int)
         for k, v in enumerate(param.d_us):
             for i, j in enumerate(v):
-                edges = np.vstack((edges, np.array([k, i, j])))
-        self.edges = edges
+                edges_user = np.vstack((edges_user, np.array([k, i, j])))
+        edges_user = np.delete(edges_user, 0, 0)
+        self.edges_user = edges_user
 
-    def start_algorithm(self, param):
+    def start_algo(self, param):
         t_0 = time.perf_counter()
-        L_1 = self.one_server_case(param)
-        L_2 = self.multiple_server_case(param)
-        D_u = min([L_1, L_2])
+        D_u_1 = self.one_server(param)
+        D_u_2 = self.multiple_server(param)
+        D_u = min([D_u_1, D_u_2])
 
         if D_u > param.DELAY_USER_MAX:
             self.status = False
@@ -33,7 +34,7 @@ class Mmd:
         t_1 = time.perf_counter()
         return t_1 - t_0
 
-    def one_server_case(self, param):
+    def one_server(self, param):
         # step 1: consider one server case
 
         # allocate all user and get L_1
@@ -49,27 +50,26 @@ class Mmd:
         else:
             return Constant.INF
 
-    def multiple_server_case(self, param):
-        # step 2: consider multiple server case
+    def multiple_server(self, param):
+        self.copy_servers(param)
+        D_u = self.search_matching(param)
+        return D_u
 
-        # initialize the bipartite graph
-        added_server = param.SERVER_NUM
-        for k, v in enumerate(param.m_s):
-            for j in range(param.USER_NUM):
-                delay = param.d_us[j][k]
-                for i in range(added_server, added_server + v - 1):
-                    self.edges = np.vstack((self.edges, np.array([j, i, delay])))
-                added_server += v - 1
-        param.COPY_SERVER_NUM = added_server
+    def copy_servers(self, param):
+        for edge in self.edges_user:
+            for i in range(1, param.CAPACITY):
+                new_edge = edge.copy()
+                new_edge[1] += param.SERVER_NUM * i
+                self.edges_user = np.vstack((self.edges_user, new_edge))
+        param.COPY_SERVER_NUM = len(self.edges_user*param.CAPACITY)
 
-        # search matching
+    def search_matching(self, param):
         for i in range(1, param.DELAY_USER_MAX):
             hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
-            for j in np.where(self.edges[:, -1] <= i)[0]:
-                hc.add_edge(self.edges[j][0], self.edges[j][1])
+            for j in np.where(self.edges_user[:, -1] <= i)[0]:
+                hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
             if hc.flow() == param.USER_NUM:
                 return i
-
         return Constant.INF
 
     def print_result(self):
@@ -86,16 +86,16 @@ def main():
     param.create_input()
 
     # set input to algorithm
-    mmd = Mmd(param)
+    sum_obj = Sum(param)
 
     # start algorithm
     t_0 = time.perf_counter()
-    mmd.start_algorithm(param)
+    sum_obj.start_algo(param)
     t_1 = time.perf_counter()
-    mmd.cpu_time = t_1 - t_0
+    sum_obj.cpu_time = t_1 - t_0
 
     # print result
-    mmd.print_result()
+    sum_obj.print_result()
 
 
 if __name__ == '__main__':

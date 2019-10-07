@@ -8,18 +8,18 @@ import Constant
 
 class Parameter:
 
-    USER_NUM_CONST = 500
+    USER_NUM_CONST = 50
     SERVER_NUM_CONST = 10
-    CAPACITY_CONST = 50
+    CAPACITY_CONST = 5
 
     def __init__(self, seed):
         np.random.seed(seed)
-        self.USER_NUM = 500
-        self.SERVER_NUM = 10
+        self.USER_NUM = Parameter.USER_NUM_CONST
+        self.SERVER_NUM = Parameter.SERVER_NUM_CONST
         self.DELAY_USER_MAX = 10
         self.DELAY_SERVER = 1
         self.DELAY_SERVER_MAX = 10
-        self.CAPACITY = 50
+        self.CAPACITY = Parameter.CAPACITY_CONST
 
     def create_input(self):
         # inputs

@@ -8,11 +8,11 @@ class Constant:
 
     def get_range(self, variable):
         if variable == 'user':
-            return range(100, 500, 50)
+            return range(10, 50, 5)
         elif variable == 'server':
             return range(10, 20, 1)
         elif variable == 'capacity':
-            return range(50, 100, 10)
+            return range(10, 20, 1)
 
 
 sys.modules[__name__] = Constant()
