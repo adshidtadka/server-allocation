@@ -50,10 +50,15 @@ class Ilp:
         try:
             # constraints
             self.problem = self.create_constraints(self.problem)
-            self.problem.solve(pulp.GLPK_CMD(msg=0))
+            if solver == 2:
+                self.problem.solve(pulp.SCIP(msg=0))
+            elif solver == 3:
+                self.problem.solve(pulp.CPLEX_CMD(msg=0))
+            else:
+                self.problem.solve(pulp.GLPK_CMD(msg=0))
 
         except PulpSolverError:
-            print(CPLEX_CMD().path, 'is not installed')
+            print('Solver is not installed')
 
         t_1 = time.perf_counter()
         return t_1 - t_0

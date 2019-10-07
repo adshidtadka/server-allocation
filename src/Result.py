@@ -7,12 +7,14 @@ import configparser
 import Constant
 from Parameter import Parameter
 from Sum import Sum
+from Esum import Esum
 from Ilp import Ilp
 
 
 class Result:
 
     def __init__(self, var_name):
+        print()
         self.var_name = var_name
         self.const_names = ['user', 'server', 'capacity']
         self.execute = self.is_execute()
@@ -20,6 +22,9 @@ class Result:
             self.var_range = Result.get_range(Constant.get_range(var_name))
             self.consts = self.get_consts()
             self.iter_num = self.get_iteration_num()
+            self.ilp = self.execute_ilp()
+            if self.ilp:
+                self.solver = self.select_solver()
 
     def is_execute(self):
         print("Do you execute " + self.var_name + " simulator? [y/N]", end=' > ')
@@ -28,8 +33,19 @@ class Result:
         else:
             return False
 
-    def is_cplex(self):
-        print("Do you use cplex? [y/N]", end=' > ')
+    def select_solver(self):
+        print("Which solver do you use? [1:GLPK, 2:SCIP, 3:CPLEX]", end=' > ')
+        if input() == '1':
+            return 1
+        elif input() == '2':
+            return 2
+        elif input() == '3':
+            return 3
+        else:
+            return False
+
+    def execute_ilp(self):
+        print("Do you execute ilp? [y/N]", end=' > ')
         if input() == 'y':
             return True
         else:
@@ -62,6 +78,7 @@ class Result:
         try:
             return int(input())
         except:
+            print(str(Constant.ITERATION_NUM) + ' set.')
             return Constant.ITERATION_NUM
 
     def rotate_file_name(file_name):
@@ -93,18 +110,18 @@ class Result:
             param.create_input()
 
             # solve by ilp
-            # ilp = Ilp(param)
-            # cpu_time_ilp = ilp.solve_by_ilp(self.is_cplex)
-            # iterated_result_ilp.append(cpu_time_ilp)
+            if self.ilp:
+                ilp = Ilp(param)
+                cpu_time_ilp = ilp.solve_by_ilp(self.solver)
+                iterated_result_ilp.append(cpu_time_ilp)
 
-            # solve by algorithm for general
-            esum = Sum(param)
-            cpu_time_esum = esum.start_general(param)
+            # solve by esum
+            esum = Esum(param)
+            cpu_time_esum = esum.start_algo(param)
             iterated_result_esum.append(cpu_time_esum)
         result = []
-        # result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
-        # result.append(sum(iterated_result_sum) / len(iterated_result_sum))
-        print(iterated_result_esum)
+        if self.ilp:
+            result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
         result.append(sum(iterated_result_esum) / len(iterated_result_esum))
         return ",".join(map(str, result))
 
@@ -121,14 +138,14 @@ if not os.path.exists('../result'):
     os.mkdir('../result')
 
 result_user = Result('user')
-result_server = Result('server')
-result_capacity = Result('capacity')
+# result_server = Result('server')
+# result_capacity = Result('capacity')
 
 if result_user.execute:
     result_user.get_result()
 
-if result_server.execute:
-    result_server.get_result()
+# if result_server.execute:
+#     result_server.get_result()
 
-if result_capacity.execute:
-    result_capacity.get_result()
+# if result_capacity.execute:
+#     result_capacity.get_result()
