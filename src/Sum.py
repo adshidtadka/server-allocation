@@ -48,11 +48,8 @@ class Sum:
             return Constant.INF
 
     def multiple_server(self, param):
-        print("before copied edges_user = \n", self.edges_user)
         self.copy_servers(param)
-        print("after copied edges_user = \n", self.edges_user)
         D_u = self.search_matching(param)
-        print("D_u = ", D_u)
         return D_u
 
     def copy_servers(self, param):

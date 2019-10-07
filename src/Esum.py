@@ -31,9 +31,6 @@ class Esum(Sum):
         L_2 = self.multiple_server(param)
         L = min([L_1, L_2])
 
-        print("L_1 = ", L_1)
-        print("L_2 = ", L_2)
-
         if L > param.DELAY_USER_MAX*2 + param.DELAY_SERVER_MAX:
             self.status = False
         else:
@@ -50,8 +47,6 @@ class Esum(Sum):
         for D_s in range(1, param.DELAY_SERVER_MAX):
             for j in np.where(self.edges_server[:, -1] == D_s)[0]:
                 bk.add_edge(self.edges_server[j][0], self.edges_server[j][1])
-            print("D_s = ", D_s)
-            print(bk.find_cliques())
             for clique in bk.find_cliques():
                 if clique in record:
                     continue
