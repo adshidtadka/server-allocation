@@ -15,8 +15,8 @@ class Result:
     def __init__(self, var_name):
         self.var_name = var_name
         self.const_names = ['user', 'server', 'capacity']
-        self.is_execute = self.is_execute()
-        if self.is_execute:
+        self.execute = self.is_execute()
+        if self.execute:
             self.var_range = Result.get_range(Constant.get_range(var_name))
             self.consts = self.get_consts()
             self.iter_num = self.get_iteration_num()
@@ -124,11 +124,11 @@ result_user = Result('user')
 result_server = Result('server')
 result_capacity = Result('capacity')
 
-if result_user.is_execute:
+if result_user.execute:
     result_user.get_result()
 
-if result_server.is_execute:
+if result_server.execute:
     result_server.get_result()
 
-if result_capacity.is_execute:
+if result_capacity.execute:
     result_capacity.get_result()
