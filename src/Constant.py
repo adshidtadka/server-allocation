@@ -12,7 +12,7 @@ class Constant:
         elif variable == 'server':
             return range(10, 20, 1)
         elif variable == 'capacity':
-            return range(10, 20, 1)
+            return range(5, 15, 1)
 
 
 sys.modules[__name__] = Constant()

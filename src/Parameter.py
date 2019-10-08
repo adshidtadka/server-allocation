@@ -8,8 +8,8 @@ import Constant
 
 class Parameter:
 
-    USER_NUM_CONST = 50
-    SERVER_NUM_CONST = 10
+    USER_NUM_CONST = 25
+    SERVER_NUM_CONST = 5
     CAPACITY_CONST = 5
 
     def __init__(self, seed):

@@ -138,15 +138,15 @@ class Result:
 if not os.path.exists('../result'):
     os.mkdir('../result')
 
-result_user = Result('user')
+# result_user = Result('user')
 # result_server = Result('server')
-# result_capacity = Result('capacity')
+result_capacity = Result('capacity')
 
-if result_user.execute:
-    result_user.get_result()
+# if result_user.execute:
+#     result_user.get_result()
 
 # if result_server.execute:
 #     result_server.get_result()
 
-# if result_capacity.execute:
-#     result_capacity.get_result()
+if result_capacity.execute:
+    result_capacity.get_result()
