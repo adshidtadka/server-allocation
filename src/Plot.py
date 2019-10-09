@@ -36,8 +36,8 @@ ctes = 'Computation time with ESUM'
 ctc = 'Computation time with CPLEX'
 ctg = 'Computation time with GLPK'
 ctsc = 'Computation time with SCIP'
-un = 'User number'
-sn = 'Server number'
+un = 'Number of users'
+sn = 'Number of servers'
 cp = 'Capacity'
 
 # %%
@@ -55,9 +55,9 @@ cp = 'Capacity'
 # df_user_s_10_glpk = pd.read_csv("result/user_server_10_capacity_50_glpk.csv", names=(un, ctg, ctes))
 
 # %%
-# df_user_scip = pd.read_csv("result/user_scip.csv", names=(un, ctsc, ctes))
-# df_user_cplex = pd.read_csv("result/user_cplex.csv", names=(un, ctc, ctes))
-# df_user_glpk = pd.read_csv("result/user_glpk.csv", names=(un, ctg, ctes))
+df_user_scip = pd.read_csv("result/user_scip.csv", names=(un, ctsc, ctes))
+df_user_cplex = pd.read_csv("result/user_cplex.csv", names=(un, ctc, ctes))
+df_user_glpk = pd.read_csv("result/user_glpk.csv", names=(un, ctg, ctes))
 
 # %%
 df_capacity_scip = pd.read_csv("result/capacity_scip.csv", names=(cp, ctsc, ctes))
@@ -105,20 +105,20 @@ Graph.initialize_rcparams()
 # plt.show()
 # plt.close()
 
-# # %%
-# plt.plot(df_user_scip[un], df_user_scip[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
-# plt.plot(df_user_glpk[un], df_user_glpk[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
-# plt.plot(df_user_scip[un], df_user_scip[ctsc], label=('SCIP'), color='k', marker='^', linestyle='--')
-# plt.plot(df_user_cplex[un], df_user_cplex[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
+# %%
+plt.plot(df_user_scip[un], df_user_scip[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_user_glpk[un], df_user_glpk[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
+plt.plot(df_user_scip[un], df_user_scip[ctsc], label=('SCIP'), color='k', marker='^', linestyle='--')
+plt.plot(df_user_cplex[un], df_user_cplex[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
 
-# plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
-# plt.ylabel(ct + ' [s]')
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(ct + ' [s]')
 
-# plt.legend(loc="upper left")
+plt.legend(loc="upper left")
 
-# plt.savefig('graph/user_solver.pdf')
-# plt.show()
-# plt.close()
+plt.savefig('graph/user_solver.pdf')
+plt.show()
+plt.close()
 
 # %%
 plt.plot(df_capacity_scip[cp], df_capacity_scip[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
@@ -136,4 +136,4 @@ plt.show()
 plt.close()
 
 
-#%%
+# %%
