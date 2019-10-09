@@ -61,11 +61,10 @@ class Sum:
                 new_edge = edge.copy()
                 new_edge[1] += param.SERVER_NUM * i
                 self.edges_user = np.vstack((self.edges_user, new_edge))
-        param.COPY_SERVER_NUM = len(self.edges_user*param.CAPACITY)
 
     def search_matching(self, param):
         for i in range(1, param.DELAY_USER_MAX):
-            hc = HopcroftKarp(param.USER_NUM, param.COPY_SERVER_NUM)
+            hc = HopcroftKarp(param.USER_NUM, param.SERVER_NUM * param.CAPACITY)
             for j in np.where(self.edges_user[:, -1] <= i)[0]:
                 hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
             if hc.flow() == param.USER_NUM:
