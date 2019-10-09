@@ -119,9 +119,9 @@ class Result:
                     iterated_result_ilp[k].append(0)
 
         result = []
-        result.append(sum(iterated_result_algo) / len(iterated_result_algo))
+        result.append(round(sum(iterated_result_algo) / len(iterated_result_algo), 4))
         for k, v in enumerate(self.solvers):
-            result.append(sum(iterated_result_ilp[k]) / len(iterated_result_ilp[k]))
+            result.append(round(sum(iterated_result_ilp[k]) / len(iterated_result_ilp[k]), 4))
         return ",".join(map(str, result))
 
     def post_to_slack(text):
