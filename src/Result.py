@@ -127,11 +127,14 @@ class Result:
         config = configparser.ConfigParser()
         config.read("config.ini")
         slack = slackweb.Slack(url=config.get("general", "slack_webhook"))
-        slack.notify(text=text)
+        slack.notify(text=Constant.MESSAGE + text)
 
 
 if not os.path.exists('../result'):
     os.mkdir('../result')
+
+print("Put a message for this simulation.", end=" > ")
+Constant.MESSAGE = "[" + input() + "] "
 
 result_user = Result('user')
 # result_server = Result('server')
