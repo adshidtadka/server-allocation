@@ -83,7 +83,10 @@ class Result:
     def get_result(self):
         message = '\nGet result for {' + self.var_name + ': ' + str(self.var_range) + '} with ' + str(self.consts)
         Result.post_to_slack(message)
-        file_name = Result.rotate_file_name('../result/' + self.var_name + str(self.consts))
+        consts = ""
+        for k, v in self.consts.items():
+            consts += "_" + str(k) + "_" + str(v)
+        file_name = Result.rotate_file_name('../result/' + self.var_name + consts)
 
         for var in self.var_range:
             average_result_str = self.get_average(var)
