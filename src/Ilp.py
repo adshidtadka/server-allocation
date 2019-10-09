@@ -58,7 +58,7 @@ class Ilp:
                 self.problem.solve(pulp.GLPK_CMD(msg=0))
 
         except PulpSolverError:
-            print('Solver is not installed')
+            print('Solver is not installed or there is no feasible solution.')
             return 0
 
         t_1 = time.perf_counter()
