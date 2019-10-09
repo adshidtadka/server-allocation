@@ -22,35 +22,27 @@ class Result:
             self.var_range = Result.get_range(Constant.get_range(var_name))
             self.consts = self.get_consts()
             self.iter_num = self.get_iteration_num()
-            self.ilp = self.execute_ilp()
-            if self.ilp:
-                self.solver = self.select_solver()
+            self.solvers = self.select_solvers()
+
+    def is_y(self, input_str):
+        if input_str == 'y':
+            return True
+        else:
+            return False
 
     def is_execute(self):
         print("Do you execute " + self.var_name + " simulator? [y/N]", end=' > ')
-        if input() == 'y':
-            return True
-        else:
-            return False
+        return self.is_y(input())
 
-    def select_solver(self):
-        print("Which solver do you use? [1:GLPK, 2:SCIP, 3:CPLEX]", end=' > ')
-        solver = input()
-        if solver == '1':
-            return 1
-        elif solver == '2':
-            return 2
-        elif solver == '3':
-            return 3
-        else:
-            return False
-
-    def execute_ilp(self):
-        print("Do you execute ilp? [y/N]", end=' > ')
-        if input() == 'y':
-            return True
-        else:
-            return False
+    def select_solvers(self):
+        ilp = []
+        print("Do you execute GLPK? [y/N]", end=' > ')
+        ilp.append(self.is_y(input()))
+        print("Do you execute SCIP? [y/N]", end=' > ')
+        ilp.append(self.is_y(input()))
+        print("Do you execute CPLEX? [y/N]", end=' > ')
+        ilp.append(self.is_y(input()))
+        return ilp
 
     def get_range(var_range_def):
         print("Please set range [start stop step]", end=' > ')
@@ -101,36 +93,39 @@ class Result:
             f.close()
 
     def get_average(self, var):
-        iterated_result_ilp = []
-        iterated_result_sum = []
-        iterated_result_esum = []
+        iterated_result_algo = []
+        iterated_result_ilp = [[] for i in range(len(self.solvers))]
         for i in range(self.iter_num):
             # create param
             param = Parameter(Constant.SEED + i)
             param.set_param(self.var_name, self.consts, var)
             param.create_input()
 
-            # solve by ilp
-            if self.ilp:
-                ilp = Ilp(param)
-                cpu_time_ilp = ilp.solve_by_ilp(self.solver)
-                iterated_result_ilp.append(cpu_time_ilp)
-
             # solve by esum
             esum = Esum(param)
             cpu_time_esum = esum.start_algo(param)
-            iterated_result_esum.append(cpu_time_esum)
+            iterated_result_algo.append(cpu_time_esum)
+
+            # solve by ilp
+            for k, v in enumerate(self.solvers):
+                if v:
+                    ilp = Ilp(param)
+                    cpu_time_ilp = ilp.solve_by_ilp(k)
+                    iterated_result_ilp[k].append(cpu_time_ilp)
+                else:
+                    iterated_result_ilp[k].append(0)
+
         result = []
-        if self.ilp:
-            result.append(sum(iterated_result_ilp) / len(iterated_result_ilp))
-        result.append(sum(iterated_result_esum) / len(iterated_result_esum))
+        result.append(sum(iterated_result_algo) / len(iterated_result_algo))
+        for k, v in enumerate(self.solvers):
+            result.append(sum(iterated_result_ilp[k]) / len(iterated_result_ilp[k]))
         return ",".join(map(str, result))
 
     def post_to_slack(text):
         print(text)
 
         config = configparser.ConfigParser()
-        config.read("../config.ini")
+        config.read("config.ini")
         slack = slackweb.Slack(url=config.get("general", "slack_webhook"))
         slack.notify(text=text)
 
