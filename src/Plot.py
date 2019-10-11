@@ -42,11 +42,11 @@ cp = 'Capacity'
 
 # %%
 df_user_server_10_capacity_5 = pd.read_csv("result/user_server_10_capacity_5.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_user_server_5_capacity_10 = pd.read_csv("result/user_server_5_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc))
-df_user_server_20_capacity_5 = pd.read_csv("result/user_server_20_capacity_5.csv", names=(un, ctes, ctg, ctsc, ctc))
-df_user_server_20_capacity_10 = pd.read_csv("result/user_server_20_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc))
-df_user_server_10_capacity_10 = pd.read_csv("result/user_server_10_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc))
-df_capacity_user_25_server_5 = pd.read_csv("result/capacity_user_25_server_5.csv", names=(cp, ctes, ctg, ctsc, ctc))
+df_user_server_5_capacity_10 = pd.read_csv("result/user_server_5_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_user_server_20_capacity_5 = pd.read_csv("result/user_server_20_capacity_5.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_user_server_20_capacity_10 = pd.read_csv("result/user_server_20_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_user_server_10_capacity_10 = pd.read_csv("result/user_server_10_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_capacity_user_25_server_5 = pd.read_csv("result/capacity_user_25_server_5.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 
 # %%
 Graph.initialize_rcparams()
