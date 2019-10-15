@@ -35,7 +35,6 @@ class Sum:
         self.D_u = D_u
         self.D_s_max = max(param.d_st)
         self.D_s_min = min(param.d_st)
-        return t_1 - t_0
 
     def one_server(self, param):
         # step 1: consider one server case
