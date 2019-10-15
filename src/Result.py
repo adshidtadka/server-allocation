@@ -9,6 +9,7 @@ from Parameter import Parameter
 from Sum import Sum
 from Esum import Esum
 from Ilp import Ilp
+from Method import Method
 
 
 class Result:
@@ -36,10 +37,10 @@ class Result:
 
     def is_execute_methods(self):
         methods = dict()
-        print("Do you execute ESUM? [y/N]", end=' > ')
-        methods["esum"] = {"is_execute": self.is_y(input()), "is_algo": True}
         print("Do you execute SUM? [y/N]", end=' > ')
         methods["sum"] = {"is_execute": self.is_y(input()), "is_algo": True}
+        print("Do you execute ESUM? [y/N]", end=' > ')
+        methods["esum"] = {"is_execute": self.is_y(input()), "is_algo": True}
         print("Do you execute GLPK? [y/N]", end=' > ')
         methods["glpk"] = {"is_execute": self.is_y(input()), "is_algo": False}
         print("Do you execute SCIP? [y/N]", end=' > ')
@@ -107,7 +108,7 @@ class Result:
         # create lists
         iterated_result_cpu_time = dict()
         iterated_result_objective = dict()
-        for k, v in enumerate(self.methods):
+        for k, v in self.methods.items():
             iterated_result_cpu_time[k] = []
             if v["is_algo"]:
                 iterated_result_objective[k] = []
@@ -119,23 +120,26 @@ class Result:
             param.set_param(self.var_name, self.consts, var)
             param.create_input()
 
-            # solve by ilp
-            for k, v in enumerate(self.is_execute_methods):
-                if k == "esum":
-                    esum = Esum(param)
-            cpu_time_esum = esum.start_algo(param)
-            iterated_result_algo.append(cpu_time_esum)
-                if v:
-                    ilp = Ilp(param)
-                    cpu_time_ilp = ilp.solve_by_ilp(k)
-                    iterated_result_ilp[k].append(cpu_time_ilp)
-                else:
-                    iterated_result_ilp[k].append(0)
+            # solve
+            for k, v in self.methods.items():
+                method = Method()
+                if v["is_algo"] & v["is_execute"]:
+                    if k == "sum":
+                        method = Sum(param)
+                    elif k == "esum":
+                        method = Esum(param)
+                    method.start_algo(param)
+                    iterated_result_objective[k].append(method.objective)
+                elif v["is_execute"]:
+                    method = Ilp(param)
+                    method.solve_by_ilp(k)
+                iterated_result_cpu_time[k].append(method.cpu_time)
 
         result = []
-        result.append(round(sum(iterated_result_algo) / len(iterated_result_algo), 4))
-        for k, v in enumerate(self.is_execute_methods):
-            result.append(round(sum(iterated_result_ilp[k]) / len(iterated_result_ilp[k]), 4))
+        for k, v in self.methods.items():
+            result.append(round(sum(iterated_result_cpu_time[k]) / len(iterated_result_cpu_time[k])))
+            if v["is_algo"]:
+                result.append(round(sum(iterated_result_objective[k]) / len(iterated_result_objective[k])))
         return ",".join(map(str, result))
 
     def post_to_slack(text):
