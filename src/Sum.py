@@ -33,8 +33,8 @@ class Sum(Method):
             self.status = True
         t_1 = time.perf_counter()
         self.cpu_time = t_1 - t_0
-        self.D_u_max = 2*D_u + max(param.d_st)
-        self.D_u_min = 2*D_u + min(param.d_st)
+        self.L_max = 2*D_u + max(param.d_st)
+        self.L_min = 2*D_u + min(param.d_st)
 
     def one_server(self, param):
         # step 1: consider one server case
@@ -75,8 +75,8 @@ class Sum(Method):
 
     def print_result(self):
         if self.status:
-            print('D_u_max is ', str(self.D_u_max))
-            print('D_u_min is ', str(self.D_u_min))
+            print('L_max is ', str(self.L_max))
+            print('L_min is ', str(self.L_min))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
