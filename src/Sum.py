@@ -30,8 +30,11 @@ class Sum:
             self.status = False
         else:
             self.status = True
-            self.objective_function = D_u * 2 + param.DELAY_SERVER
         t_1 = time.perf_counter()
+        self.cpu_time = t_1 - t_0
+        self.D_u = D_u
+        self.D_s_max = max(param.d_st)
+        self.D_s_min = min(param.d_st)
         return t_1 - t_0
 
     def one_server(self, param):
@@ -73,7 +76,9 @@ class Sum:
 
     def print_result(self):
         if self.status:
-            print('objective function is ', str(self.objective_function))
+            print('D_u is ', str(self.D_u))
+            print('D_s_max is ', str(self.D_s_max))
+            print('D_s_min is ', str(self.D_s_min))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
@@ -88,10 +93,7 @@ def main():
     sum_obj = Sum(param)
 
     # start algorithm
-    t_0 = time.perf_counter()
     sum_obj.start_algo(param)
-    t_1 = time.perf_counter()
-    sum_obj.cpu_time = t_1 - t_0
 
     # print result
     sum_obj.print_result()
