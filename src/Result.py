@@ -23,6 +23,7 @@ class Result:
             self.consts = self.get_consts()
             self.iter_num = self.get_iteration_num()
             self.solvers = self.select_solvers()
+            self.is_execute_sum = self.is_execute_sum()
 
     def is_y(self, input_str):
         if input_str == 'y':
@@ -43,6 +44,10 @@ class Result:
         print("Do you execute CPLEX? [y/N]", end=' > ')
         ilp.append(self.is_y(input()))
         return ilp
+
+    def is_execute_sum(self):
+        print("Do you execute sum? [y/N]", end=" > ")
+        return self.is_y(input())
 
     def get_range(var_range_def):
         print("Please set range [start stop step]", end=' > ')
