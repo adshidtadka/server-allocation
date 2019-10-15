@@ -5,9 +5,10 @@ from pulp import *
 
 import Constant
 from Parameter import Parameter
+from Method import Method
 
 
-class Ilp:
+class Ilp(Method):
     def __init__(self, param):
         self.create_dataframe(param)
         self.set_input()

@@ -4,9 +4,10 @@ import time
 import Constant
 from Parameter import Parameter
 from HopcroftKarp import HopcroftKarp
+from Method import Method
 
 
-class Sum:
+class Sum(Method):
 
     def __init__(self, param):
         self.set_input(param)
