@@ -140,14 +140,14 @@ print("Put a message for this simulation.", end=" > ")
 Constant.MESSAGE = "[" + input() + "] "
 
 result_user = Result('user')
-# result_server = Result('server')
+result_server = Result('server')
 result_capacity = Result('capacity')
 
 if result_user.execute:
     result_user.get_result()
 
-# if result_server.execute:
-#     result_server.get_result()
+if result_server.execute:
+    result_server.get_result()
 
 if result_capacity.execute:
     result_capacity.get_result()

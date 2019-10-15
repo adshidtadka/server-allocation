@@ -10,7 +10,7 @@ class Constant:
         if variable == 'user':
             return range(10, 50, 5)
         elif variable == 'server':
-            return range(10, 20, 1)
+            return range(5, 25, 2)
         elif variable == 'capacity':
             return range(5, 15, 1)
 
