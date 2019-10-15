@@ -50,9 +50,9 @@ class Ilp:
         try:
             # constraints
             self.problem = self.create_constraints(self.problem)
-            if solver == 1:
+            if solver == "scip":
                 self.problem.solve(pulp.SCIP(msg=0))
-            elif solver == 2:
+            elif solver == "cplex":
                 self.problem.solve(pulp.CPLEX_CMD(msg=0))
             else:
                 self.problem.solve(pulp.GLPK_CMD(msg=0))
