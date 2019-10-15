@@ -36,9 +36,9 @@ class Esum(Sum):
             self.status = False
         else:
             self.status = True
-            self.objective_function = L
+            self.objective = L
         t_1 = time.perf_counter()
-        return t_1 - t_0
+        self.cpu_time = t_1 - t_0
 
     def multiple_server(self, param):
         # step 2: consider multiple server case
@@ -68,7 +68,7 @@ class Esum(Sum):
 
     def print_result(self):
         if self.status:
-            print('objective function is ', str(self.objective_function))
+            print('objective function is ', str(self.objective))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
@@ -83,10 +83,7 @@ def main():
     esum = Esum(param)
 
     # start algorithm
-    t_0 = time.perf_counter()
     esum.start_algo(param)
-    t_1 = time.perf_counter()
-    esum.cpu_time = t_1 - t_0
 
     # print result
     esum.print_result()
