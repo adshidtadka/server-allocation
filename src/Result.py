@@ -3,6 +3,7 @@ import csv
 import os
 import slackweb
 import configparser
+import collections
 
 import Constant
 from Parameter import Parameter
@@ -36,7 +37,7 @@ class Result:
         return self.is_y(input())
 
     def is_execute_methods(self):
-        methods = dict()
+        methods = collections.OrderedDict()
         print("Do you execute SUM? [y/N]", end=' > ')
         methods["sum"] = {"is_execute": self.is_y(input()), "is_algo": True}
         print("Do you execute ESUM? [y/N]", end=' > ')
@@ -64,7 +65,7 @@ class Result:
 
     def get_consts(self):
         self.const_names.remove(self.var_name)
-        consts = dict()
+        consts = collections.OrderedDict()
         for const_name in self.const_names:
             print("Please set " + const_name + ".", end=' > ')
             try:
@@ -106,12 +107,15 @@ class Result:
 
     def get_average(self, var):
         # create lists
-        iterated_result_cpu_time = dict()
-        iterated_result_objective = dict()
+        iter_result = collections.OrderedDict()
         for k, v in self.methods.items():
-            iterated_result_cpu_time[k] = []
-            if v["is_algo"]:
-                iterated_result_objective[k] = []
+            iter_result[k] = collections.OrderedDict()
+            iter_result[k]["cpu_time"] = []
+            if k == "sum":
+                iter_result[k]["l_min"] = []
+                iter_result[k]["l_max"] = []
+            elif k == "esum":
+                iter_result[k]["l"] = []
 
         # append results
         for i in range(self.iter_num):
@@ -126,20 +130,26 @@ class Result:
                 if v["is_algo"] & v["is_execute"]:
                     if k == "sum":
                         method = Sum(param)
+                        method.start_algo(param)
+                        iter_result[k]["l_min"].append(method.L_min)
+                        iter_result[k]["l_max"].append(method.L_max)
                     elif k == "esum":
                         method = Esum(param)
-                    method.start_algo(param)
-                    iterated_result_objective[k].append(method.objective)
+                        method.start_algo(param)
+                        iter_result[k]["l"].append(method.objective)
                 elif v["is_execute"]:
                     method = Ilp(param)
                     method.solve_by_ilp(k)
-                iterated_result_cpu_time[k].append(method.cpu_time)
+                iter_result[k]["cpu_time"].append(method.cpu_time)
 
         result = []
         for k, v in self.methods.items():
-            result.append(round(sum(iterated_result_cpu_time[k]) / len(iterated_result_cpu_time[k])))
-            if v["is_algo"]:
-                result.append(round(sum(iterated_result_objective[k]) / len(iterated_result_objective[k])))
+            if k == "sum":
+                result.append(round(sum(iter_result[k]["l_min"]) / len(iter_result[k]["l_min"])))
+                result.append(round(sum(iter_result[k]["l_max"]) / len(iter_result[k]["l_max"])))
+            elif k == "esum":
+                result.append(round(sum(iter_result[k]["l"]) / len(iter_result[k]["l"])))
+            result.append(round(sum(iter_result[k]["cpu_time"]) / len(iter_result[k]["cpu_time"]), 4))
         return ",".join(map(str, result))
 
     def post_to_slack(text):
