@@ -62,7 +62,7 @@ class Ilp:
             return 0
 
         t_1 = time.perf_counter()
-        return t_1 - t_0
+        self.cpu_time = t_1 - t_0
 
     def print_result(self):
         if self.problem.status == 1:
@@ -117,10 +117,7 @@ def main():
     ilp = Ilp(param)
 
     # solve by ilp
-    t_0 = time.perf_counter()
     ilp.solve_by_ilp()
-    t_1 = time.perf_counter()
-    ilp.cpu_time = t_1 - t_0
 
     # print result
     ilp.print_result()

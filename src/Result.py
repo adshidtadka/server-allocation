@@ -17,13 +17,12 @@ class Result:
         print()
         self.var_name = var_name
         self.const_names = ['user', 'server', 'capacity']
-        self.execute = self.is_execute()
-        if self.execute:
+        self.is_execute_simulator = self.is_execute_simulator()
+        if self.is_execute_simulator:
             self.var_range = Result.get_range(Constant.get_range(var_name))
             self.consts = self.get_consts()
             self.iter_num = self.get_iteration_num()
-            self.solvers = self.select_solvers()
-            self.is_execute_sum = self.is_execute_sum()
+            self.methods = self.is_execute_methods()
 
     def is_y(self, input_str):
         if input_str == 'y':
@@ -31,19 +30,23 @@ class Result:
         else:
             return False
 
-    def is_execute(self):
+    def is_execute_simulator(self):
         print("Do you execute " + self.var_name + " simulator? [y/N]", end=' > ')
         return self.is_y(input())
 
-    def select_solvers(self):
-        ilp = []
+    def is_execute_methods(self):
+        methods = dict()
+        print("Do you execute ESUM? [y/N]", end=' > ')
+        methods["esum"] = {"is_execute": self.is_y(input()), "is_algo": True}
+        print("Do you execute SUM? [y/N]", end=' > ')
+        methods["sum"] = {"is_execute": self.is_y(input()), "is_algo": True}
         print("Do you execute GLPK? [y/N]", end=' > ')
-        ilp.append(self.is_y(input()))
+        methods["glpk"] = {"is_execute": self.is_y(input()), "is_algo": False}
         print("Do you execute SCIP? [y/N]", end=' > ')
-        ilp.append(self.is_y(input()))
+        methods["scip"] = {"is_execute": self.is_y(input()), "is_algo": False}
         print("Do you execute CPLEX? [y/N]", end=' > ')
-        ilp.append(self.is_y(input()))
-        return ilp
+        methods["cplex"] = {"is_execute": self.is_y(input()), "is_algo": False}
+        return methods
 
     def is_execute_sum(self):
         print("Do you execute sum? [y/N]", end=" > ")
@@ -101,21 +104,27 @@ class Result:
             f.close()
 
     def get_average(self, var):
-        iterated_result_algo = []
-        iterated_result_ilp = [[] for i in range(len(self.solvers))]
+        # create lists
+        iterated_result_cpu_time = dict()
+        iterated_result_objective = dict()
+        for k, v in enumerate(self.methods):
+            iterated_result_cpu_time[k] = []
+            if v["is_algo"]:
+                iterated_result_objective[k] = []
+
+        # append results
         for i in range(self.iter_num):
             # create param
             param = Parameter(Constant.SEED + i)
             param.set_param(self.var_name, self.consts, var)
             param.create_input()
 
-            # solve by esum
-            esum = Esum(param)
+            # solve by ilp
+            for k, v in enumerate(self.is_execute_methods):
+                if k == "esum":
+                    esum = Esum(param)
             cpu_time_esum = esum.start_algo(param)
             iterated_result_algo.append(cpu_time_esum)
-
-            # solve by ilp
-            for k, v in enumerate(self.solvers):
                 if v:
                     ilp = Ilp(param)
                     cpu_time_ilp = ilp.solve_by_ilp(k)
@@ -125,7 +134,7 @@ class Result:
 
         result = []
         result.append(round(sum(iterated_result_algo) / len(iterated_result_algo), 4))
-        for k, v in enumerate(self.solvers):
+        for k, v in enumerate(self.is_execute_methods):
             result.append(round(sum(iterated_result_ilp[k]) / len(iterated_result_ilp[k]), 4))
         return ",".join(map(str, result))
 
@@ -148,11 +157,11 @@ result_user = Result('user')
 result_server = Result('server')
 result_capacity = Result('capacity')
 
-if result_user.execute:
+if result_user.is_execute_simulator:
     result_user.get_result()
 
-if result_server.execute:
+if result_server.is_execute_simulator:
     result_server.get_result()
 
-if result_capacity.execute:
+if result_capacity.is_execute_simulator:
     result_capacity.get_result()
