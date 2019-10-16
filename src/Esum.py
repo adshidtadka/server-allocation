@@ -28,7 +28,7 @@ class Esum(Sum):
 
     def start_algo(self, param):
         t_0 = time.perf_counter()
-        L_1 = self.one_server(param)*2
+        L_1 = self.one_server(param)["d_u"]*2
         L_2 = self.multiple_server(param)
         L = min([L_1, L_2])
 
@@ -62,7 +62,7 @@ class Esum(Sum):
                     edges_user = np.vstack((edges_user, self.edges_user_all[np.where((self.edges_user_all[:, 1] == node))]))
                 self.edges_user = np.delete(edges_user, 0, 0)
 
-                D_u = Sum.multiple_server(self, param)
+                D_u = Sum.multiple_server(self, param)["d_u"]
                 L = min(L, D_u * 2 + D_s)
         return L
 

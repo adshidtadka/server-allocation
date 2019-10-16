@@ -61,7 +61,7 @@ class Sum(Method):
             matching[server] = 1
             return {"d_u": d_u, "matching": matching}
         else:
-            return {"d_u": Constant.INF}
+            return {"d_u": Constant.INF, "matching": None}
 
     def multiple_server(self, param):
         self.copy_servers(param)
@@ -82,7 +82,7 @@ class Sum(Method):
                 hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
             if hc.flow() == param.USER_NUM:
                 return {"d_u": i, "matching": hc.matching()}
-        return {"d_u": Constant.INF}
+        return {"d_u": Constant.INF, "matching": None}
 
     def print_result(self):
         if self.status:
