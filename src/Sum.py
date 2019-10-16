@@ -36,6 +36,9 @@ class Sum(Method):
 
         server_delays = []
         edges_server = list(itertools.combinations(solution["used_server"], 2))
+        if len(edges_server) == 0:
+            # one server case
+            server_delays = [0]
         for edge_k, edge_v in enumerate(edges_server):
             if edge_v in param.e_s:
                 server_delays.append(param.d_st[edge_k])
