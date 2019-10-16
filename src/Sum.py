@@ -23,39 +23,50 @@ class Sum(Method):
 
     def start_algo(self, param):
         t_0 = time.perf_counter()
-        D_u_1 = self.one_server(param)
-        D_u_2 = self.multiple_server(param)
-        D_u = min([D_u_1, D_u_2])
+        matching_1 = self.one_server(param)
+        matching_2 = self.multiple_server(param)
+        matching = min([matching_1, matching_2], key=lambda x: x["d_u"])
 
-        if D_u > param.DELAY_USER_MAX:
+        if matching["d_u"] > param.DELAY_USER_MAX:
             self.status = False
         else:
             self.status = True
         t_1 = time.perf_counter()
+
+        server_delays = []
+        for server_key, is_used in enumerate(matching["matching"]):
+            if is_used == 1:
+                for edge_key, edge in enumerate(param.e_s):
+                    if server_key in edge:
+                        server_delays.append(param.d_st[edge_key])
+
         self.cpu_time = t_1 - t_0
-        self.L_max = 2*D_u + max(param.d_st)
-        self.L_min = 2*D_u + min(param.d_st)
+        self.L_max = 2*matching["d_u"] + max(server_delays)
+        self.L_min = 2*matching["d_u"] + min(server_delays)
 
     def one_server(self, param):
         # step 1: consider one server case
 
         # allocate all user and get L_1
-        dic_l = dict()
+        d_u_dict = dict()
         for k, v in enumerate(param.m_s):
             if v >= param.USER_NUM:
-                D_u = param.d_us[:, k].max()
-                dic_l[k] = D_u
+                d_u = param.d_us[:, k].max()
+                d_u_dict[k] = d_u
 
-        # search minimum D_u
-        if bool(dic_l):
-            return min(dic_l.values())
+        # search minimum d_u
+        if bool(d_u_dict):
+            d_u, server = min(d_u_dict.items(), key=lambda x: x[1])
+            matching = [0 for i in range(param.SERVER_NUM)]
+            matching[server] = 1
+            return {"d_u": d_u, "matching": matching}
         else:
-            return Constant.INF
+            return {"d_u": Constant.INF}
 
     def multiple_server(self, param):
         self.copy_servers(param)
-        D_u = self.search_matching(param)
-        return D_u
+        matching = self.search_matching(param)
+        return {"d_u": matching["d_u"], "matching": matching["matching"]}
 
     def copy_servers(self, param):
         for edge in self.edges_user:
@@ -70,8 +81,8 @@ class Sum(Method):
             for j in np.where(self.edges_user[:, -1] <= i)[0]:
                 hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
             if hc.flow() == param.USER_NUM:
-                return i
-        return Constant.INF
+                return {"d_u": i, "matching": hc.matching()}
+        return {"d_u": Constant.INF}
 
     def print_result(self):
         if self.status:
