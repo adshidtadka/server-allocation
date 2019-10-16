@@ -1,5 +1,6 @@
 import numpy as np
 import time
+import itertools
 
 import Constant
 from Parameter import Parameter
@@ -23,26 +24,25 @@ class Sum(Method):
 
     def start_algo(self, param):
         t_0 = time.perf_counter()
-        matching_1 = self.one_server(param)
-        matching_2 = self.multiple_server(param)
-        matching = min([matching_1, matching_2], key=lambda x: x["d_u"])
+        solution_1 = self.one_server(param)
+        solution_2 = self.multiple_server(param)
+        solution = min([solution_1, solution_2], key=lambda x: x["d_u"])
 
-        if matching["d_u"] > param.DELAY_USER_MAX:
+        if solution["d_u"] > param.DELAY_USER_MAX:
             self.status = False
         else:
             self.status = True
         t_1 = time.perf_counter()
 
         server_delays = []
-        for server_key, is_used in enumerate(matching["matching"]):
-            if is_used == 1:
-                for edge_key, edge in enumerate(param.e_s):
-                    if server_key in edge:
-                        server_delays.append(param.d_st[edge_key])
+        edges_server = list(itertools.combinations(solution["used_server"], 2))
+        for edge_k, edge_v in enumerate(edges_server):
+            if edge_v in param.e_s:
+                server_delays.append(param.d_st[edge_k])
 
         self.cpu_time = t_1 - t_0
-        self.L_max = 2*matching["d_u"] + max(server_delays)
-        self.L_min = 2*matching["d_u"] + min(server_delays)
+        self.L_max = 2*solution["d_u"] + max(server_delays)
+        self.L_min = 2*solution["d_u"] + min(server_delays)
 
     def one_server(self, param):
         # step 1: consider one server case
@@ -56,17 +56,20 @@ class Sum(Method):
 
         # search minimum d_u
         if bool(d_u_dict):
-            d_u, server = min(d_u_dict.items(), key=lambda x: x[1])
-            matching = [0 for i in range(param.SERVER_NUM)]
-            matching[server] = 1
-            return {"d_u": d_u, "matching": matching}
+            d_u = min(d_u_dict.values())
+            server = min([key for key in d_u_dict if d_u_dict[key] == d_u])
+            return {"d_u": d_u, "used_server": [server]}
         else:
-            return {"d_u": Constant.INF, "matching": None}
+            return {"d_u": Constant.INF, "used_server": None}
 
     def multiple_server(self, param):
         self.copy_servers(param)
-        matching = self.search_matching(param)
-        return {"d_u": matching["d_u"], "matching": matching["matching"]}
+        solution = self.search_matching(param)
+        used_server = []
+        for k, v in enumerate(solution["matching"]):
+            if (v == 1) & (k < param.SERVER_NUM):
+                used_server.append(k)
+        return {"d_u": solution["d_u"], "used_server": used_server}
 
     def copy_servers(self, param):
         for edge in self.edges_user:
