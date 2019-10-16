@@ -36,17 +36,20 @@ ctes = 'Computation time with ESUM'
 ctc = 'Computation time with CPLEX'
 ctg = 'Computation time with GLPK'
 ctsc = 'Computation time with SCIP'
+tds = 'Total Delay with SUM'
+tdes = 'Total Delay with SUM'
 un = 'Number of users'
 sn = 'Number of servers'
 cp = 'Capacity'
 
 # %%
-df_user_server_10_capacity_5 = pd.read_csv("result/user_server_10_capacity_5.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_user_server_5_capacity_10 = pd.read_csv("result/user_server_5_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_user_server_20_capacity_5 = pd.read_csv("result/user_server_20_capacity_5.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_user_server_20_capacity_10 = pd.read_csv("result/user_server_20_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_user_server_10_capacity_10 = pd.read_csv("result/user_server_10_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_capacity_user_25_server_5 = pd.read_csv("result/capacity_user_25_server_5.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_user_server_10_capacity_5 = pd.read_csv("result/user_server_10_capacity_5.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_user_server_5_capacity_10 = pd.read_csv("result/user_server_5_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_user_server_20_capacity_5 = pd.read_csv("result/user_server_20_capacity_5.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_user_server_20_capacity_10 = pd.read_csv("result/user_server_20_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_user_server_10_capacity_10 = pd.read_csv("result/user_server_10_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_capacity_user_25_server_5 = pd.read_csv("result/capacity_user_25_server_5.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_capacity_user_25_server_10 = pd.read_csv("result/capacity_user_25_server_10.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 
 # %%
 Graph.initialize_rcparams()
@@ -150,6 +153,22 @@ plt.ylabel(ct + ' [s]')
 plt.legend(loc="upper left")
 
 plt.savefig('graph/capacity_user_25_server_5.pdf')
+plt.show()
+plt.close()
+
+
+# %%
+plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+# plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
+plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctsc], label=('SCIP'), color='k', marker='^', linestyle='--')
+plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
+
+plt.xlabel(cp + ', ' + r'$M_s$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('graph/capacity_user_25_server_10.pdf')
 plt.show()
 plt.close()
 

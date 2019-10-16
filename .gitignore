@@ -1,6 +1,6 @@
 *.log
 src/__pycache__/*
-result/*
+result
 graph/*
 
 Skip to content
