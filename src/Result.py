@@ -23,6 +23,7 @@ class Result:
         if self.is_execute_simulator:
             self.var_range = Result.get_range(Constant.get_range(var_name))
             self.consts = self.get_consts()
+            self.delay_params = self.get_delay_params()
             self.iter_num = self.get_iteration_num()
             self.methods = self.is_execute_methods()
 
@@ -84,6 +85,22 @@ class Result:
             print(str(Constant.ITERATION_NUM) + ' set.')
             return Constant.ITERATION_NUM
 
+    def get_delay_params(self):
+        delay_params = dict()
+        print("Please set maximum user delay", end=" > ")
+        try:
+            delay_params["user_max"] = int(input())
+        except:
+            print(str(Parameter.DELAY_USER_MAX_CONST) + ' set.')
+            delay_params["user_max"] = Parameter.DELAY_USER_MAX_CONST
+        print("Please set maximum server delay", end=" > ")
+        try:
+            delay_params["server_max"] = int(input())
+        except:
+            print(str(Parameter.DELAY_SERVER_MAX_CONST) + ' set.')
+            delay_params["server_max"] = Parameter.DELAY_SERVER_MAX_CONST
+        return delay_params
+
     def rotate_file_name(file_name):
         file_index = 1
         while os.path.exists(file_name + '_' + str(file_index) + '.csv'):
@@ -121,7 +138,7 @@ class Result:
         for i in range(self.iter_num):
             # create param
             param = Parameter(Constant.SEED + i)
-            param.set_param(self.var_name, self.consts, var)
+            param.set_param(self.var_name, self.consts, var, self.delay_params)
             param.create_input()
 
             # solve
