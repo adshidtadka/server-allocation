@@ -45,7 +45,7 @@ class Sum(Method):
 
         self.cpu_time = t_1 - t_0
         self.L_max = 2*solution["d_u"] + max(server_delays)
-        self.L_min = 2*solution["d_u"] + min(server_delays)
+        self.L_min = 2*solution["d_u"] + min(param.d_st)
 
     def one_server(self, param):
         # step 1: consider one server case
