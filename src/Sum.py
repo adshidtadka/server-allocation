@@ -69,10 +69,13 @@ class Sum(Method):
         self.copy_servers(param)
         solution = self.search_matching(param)
         used_server = []
-        for k, v in enumerate(solution["matching"]):
-            if (v == 1) & (k < param.SERVER_NUM):
-                used_server.append(k)
-        return {"d_u": solution["d_u"], "used_server": used_server}
+        if solution["d_u"] == Constant.INF:
+            return {"d_u": solution["d_u"], "used_server": used_server}
+        else:
+            for k, v in enumerate(solution["matching"]):
+                if (v == 1) & (k < param.SERVER_NUM):
+                    used_server.append(k)
+            return {"d_u": solution["d_u"], "used_server": used_server}
 
     def copy_servers(self, param):
         for edge in self.edges_user:
