@@ -32,12 +32,15 @@ class Graph:
 
 # %%
 ct = 'Computation time'
+cts = 'Computation time with SUM'
 ctes = 'Computation time with ESUM'
 ctc = 'Computation time with CPLEX'
 ctg = 'Computation time with GLPK'
 ctsc = 'Computation time with SCIP'
-tds = 'Total Delay with SUM'
-tdes = 'Total Delay with SUM'
+td = 'Total delay'
+tds_max = 'Total maximum delay with SUM'
+tds_min = 'Total minimum delay with SUM'
+tdes = 'Total delay with SUM'
 un = 'Number of users'
 sn = 'Number of servers'
 cp = 'Capacity'
@@ -49,7 +52,8 @@ cp = 'Capacity'
 # df_user_server_20_capacity_10 = pd.read_csv("result/user_server_20_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_user_server_10_capacity_10 = pd.read_csv("result/user_server_10_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_capacity_user_25_server_5 = pd.read_csv("result/capacity_user_25_server_5.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_capacity_user_25_server_10 = pd.read_csv("result/capacity_user_25_server_10.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_capacity_user_25_server_10 = pd.read_csv("result/capacity_user_25_server_10.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_compare_user_server_20_capacity_10 = pd.read_csv("result/compare_user_server_20_capacity_10.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 
 # %%
 Graph.initialize_rcparams()
@@ -158,13 +162,19 @@ plt.close()
 
 
 # %%
+
+# 1点おかしいので排除
+df_capacity_user_25_server_10.at[1, ctg] = np.nan
+
 plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
-# plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
+plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
 plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctsc], label=('SCIP'), color='k', marker='^', linestyle='--')
 plt.plot(df_capacity_user_25_server_10[cp], df_capacity_user_25_server_10[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
 
 plt.xlabel(cp + ', ' + r'$M_s$')
 plt.ylabel(ct + ' [s]')
+
+plt.ylim(0, 2)
 
 plt.legend(loc="upper left")
 
@@ -174,3 +184,37 @@ plt.close()
 
 
 # %%
+df_capacity_user_25_server_10
+
+# %%
+
+plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[tdes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[tds_max], label=('SUM'), color='k', marker='o', linestyle='--')
+plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[tds_min], color='k', marker='o', linestyle='--')
+
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(td)
+
+plt.legend(["ESUM", "SUM"], loc="upper left")
+
+plt.savefig('graph/time_d_us_200_d_st_100.pdf')
+plt.show()
+plt.close()
+
+
+# %%
+
+plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[cts], label=('SUM'), color='k', marker='o', linestyle='--')
+
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('graph/delay_d_us_200_d_st_100.pdf')
+plt.show()
+plt.close()
+
+
+#%%
