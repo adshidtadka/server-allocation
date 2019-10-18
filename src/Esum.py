@@ -36,7 +36,7 @@ class Esum(Sum):
             self.status = False
         else:
             self.status = True
-            self.objective = L
+            self.L = L
         t_1 = time.perf_counter()
         self.cpu_time = t_1 - t_0
 
@@ -68,7 +68,7 @@ class Esum(Sum):
 
     def print_result(self):
         if self.status:
-            print('objective function is ', str(self.objective))
+            print('objective function is ', str(self.L))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')

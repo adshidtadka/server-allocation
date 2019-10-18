@@ -8,4 +8,6 @@ class Method:
 
     def set_input(self):
         self.cpu_time = 0
-        self.objective = 0
+        self.L = 0
+        self.L_min = 0
+        self.L_max = 0

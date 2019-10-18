@@ -153,7 +153,7 @@ class Result:
                     elif k == "esum":
                         method = Esum(param)
                         method.start_algo(param)
-                        iter_result[k]["l"].append(method.objective)
+                        iter_result[k]["l"].append(method.L)
                 elif v["is_execute"]:
                     method = Ilp(param)
                     method.solve_by_ilp(k)
