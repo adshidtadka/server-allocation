@@ -53,7 +53,8 @@ cp = 'Capacity'
 # df_user_server_10_capacity_10 = pd.read_csv("result/user_server_10_capacity_10.csv", names=(un, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_capacity_user_25_server_5 = pd.read_csv("result/capacity_user_25_server_5.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_capacity_user_25_server_10 = pd.read_csv("result/capacity_user_25_server_10.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_compare_user_server_20_capacity_10 = pd.read_csv("result/compare_user_server_20_capacity_10.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_delay_user_d_us_200_d_st_100 = pd.read_csv("result/delay_user_d_us_200_d_st_100.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_delay_user_d_us_200_d_st_200 = pd.read_csv("result/delay_user_d_us_200_d_st_200.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 
 # %%
 Graph.initialize_rcparams()
@@ -188,31 +189,61 @@ df_capacity_user_25_server_10
 
 # %%
 
-plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[tdes], label=('ESUM'), color='k', marker='x', linestyle='-')
-plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[tds_max], label=('SUM'), color='k', marker='o', linestyle='--')
-plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[tds_min], color='k', marker='o', linestyle='--')
+plt.plot(df_delay_user_d_us_200_d_st_100[un], df_delay_user_d_us_200_d_st_100[tdes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_delay_user_d_us_200_d_st_100[un], df_delay_user_d_us_200_d_st_100[tds_max], label=('SUM'), color='k', marker='o', linestyle='--')
+plt.plot(df_delay_user_d_us_200_d_st_100[un], df_delay_user_d_us_200_d_st_100[tds_min], color='k', marker='o', linestyle='--')
 
 plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
 plt.ylabel(td)
 
 plt.legend(["ESUM", "SUM"], loc="upper left")
 
-plt.savefig('graph/time_d_us_200_d_st_100.pdf')
+plt.savefig('graph/delay_d_us_200_d_st_100.pdf')
 plt.show()
 plt.close()
 
 
 # %%
 
-plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
-plt.plot(df_compare_user_server_20_capacity_10[un], df_compare_user_server_20_capacity_10[cts], label=('SUM'), color='k', marker='o', linestyle='--')
+plt.plot(df_delay_user_d_us_200_d_st_100[un], df_delay_user_d_us_200_d_st_100[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_delay_user_d_us_200_d_st_100[un], df_delay_user_d_us_200_d_st_100[cts], label=('SUM'), color='k', marker='o', linestyle='--')
 
 plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
 plt.ylabel(ct + ' [s]')
 
 plt.legend(loc="upper left")
 
-plt.savefig('graph/delay_d_us_200_d_st_100.pdf')
+plt.savefig('graph/time_d_us_200_d_st_100.pdf')
+plt.show()
+plt.close()
+
+
+#%%
+plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[tdes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[tds_max], label=('SUM'), color='k', marker='o', linestyle='--')
+plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[tds_min], color='k', marker='o', linestyle='--')
+
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(td)
+
+plt.legend(["ESUM", "SUM"], loc="upper left")
+
+plt.savefig('graph/delay_d_us_200_d_st_200.pdf')
+plt.show()
+plt.close()
+
+
+# %%
+
+plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[cts], label=('SUM'), color='k', marker='o', linestyle='--')
+
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('graph/time_d_us_200_d_st_200.pdf')
 plt.show()
 plt.close()
 
