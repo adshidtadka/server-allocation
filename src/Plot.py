@@ -55,6 +55,8 @@ cp = 'Capacity'
 # df_capacity_user_25_server_10 = pd.read_csv("result/capacity_user_25_server_10.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 df_delay_user_d_us_200_d_st_100 = pd.read_csv("result/delay_user_d_us_200_d_st_100.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 df_delay_user_d_us_200_d_st_200 = pd.read_csv("result/delay_user_d_us_200_d_st_200.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_server_user_25_capacity_5 = pd.read_csv("result/server_user_25_capacity_5.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_server_user_25_capacity_10 = pd.read_csv("result/server_user_25_capacity_10.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 
 # %%
 Graph.initialize_rcparams()
@@ -184,8 +186,6 @@ plt.show()
 plt.close()
 
 
-# %%
-df_capacity_user_25_server_10
 
 # %%
 
@@ -218,7 +218,7 @@ plt.show()
 plt.close()
 
 
-#%%
+# %%
 plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[tdes], label=('ESUM'), color='k', marker='x', linestyle='-')
 plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[tds_max], label=('SUM'), color='k', marker='o', linestyle='--')
 plt.plot(df_delay_user_d_us_200_d_st_200[un], df_delay_user_d_us_200_d_st_200[tds_min], color='k', marker='o', linestyle='--')
@@ -244,6 +244,41 @@ plt.ylabel(ct + ' [s]')
 plt.legend(loc="upper left")
 
 plt.savefig('graph/time_d_us_200_d_st_200.pdf')
+plt.show()
+plt.close()
+
+
+# %%
+
+df_server_user_25_capacity_5.at[2, ctg] = np.nan
+
+plt.plot(df_server_user_25_capacity_5[sn], df_server_user_25_capacity_5[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_server_user_25_capacity_5[sn], df_server_user_25_capacity_5[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
+plt.plot(df_server_user_25_capacity_5[sn], df_server_user_25_capacity_5[ctsc], label=('SCIP'), color='k', marker='^', linestyle='--')
+plt.plot(df_server_user_25_capacity_5[sn], df_server_user_25_capacity_5[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
+
+plt.xlabel(sn + ', ' + r'$|{V_{\rm S}}|$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('graph/server_user_25_capacity_5.pdf')
+plt.show()
+plt.close()
+
+#%%
+
+plt.plot(df_server_user_25_capacity_10[sn], df_server_user_25_capacity_10[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_server_user_25_capacity_10[sn], df_server_user_25_capacity_10[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
+plt.plot(df_server_user_25_capacity_10[sn], df_server_user_25_capacity_10[ctsc], label=('SCIP'), color='k', marker='^', linestyle='--')
+plt.plot(df_server_user_25_capacity_10[sn], df_server_user_25_capacity_10[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
+
+plt.xlabel(sn + ', ' + r'$|{V_{\rm S}}|$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('graph/server_user_25_capacity_10.pdf')
 plt.show()
 plt.close()
 
