@@ -141,6 +141,7 @@ class Result:
 
             # solve
             for k, v in self.methods.items():
+                method = Method()
                 if v["is_algo"] & v["is_execute"]:
                     if k == "sum":
                         method = Sum(param)
