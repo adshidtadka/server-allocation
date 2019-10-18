@@ -148,15 +148,15 @@ class Result:
                     if k == "sum":
                         method = Sum(param)
                         method.start_algo(param)
-                        iter_result[k]["l_min"].append(method.L_min)
-                        iter_result[k]["l_max"].append(method.L_max)
                     elif k == "esum":
                         method = Esum(param)
                         method.start_algo(param)
-                        iter_result[k]["l"].append(method.L)
                 elif v["is_execute"]:
                     method = Ilp(param)
                     method.solve_by_ilp(k)
+                iter_result[k]["l_min"].append(method.L_min)
+                iter_result[k]["l_max"].append(method.L_max)
+                iter_result[k]["l"].append(method.L)
                 iter_result[k]["cpu_time"].append(method.cpu_time)
 
         result = []
