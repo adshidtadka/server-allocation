@@ -141,7 +141,6 @@ class Result:
 
             # solve
             for k, v in self.methods.items():
-                method = Method()
                 if v["is_algo"] & v["is_execute"]:
                     if k == "sum":
                         method = Sum(param)
@@ -152,6 +151,8 @@ class Result:
                 elif v["is_execute"]:
                     method = Ilp(param)
                     method.solve_by_ilp(k)
+                else:
+                    method = Method()
                 iter_result[k]["l_min"].append(method.L_min)
                 iter_result[k]["l_max"].append(method.L_max)
                 iter_result[k]["l"].append(method.L)
