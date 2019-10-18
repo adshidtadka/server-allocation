@@ -128,11 +128,9 @@ class Result:
         for k, v in self.methods.items():
             iter_result[k] = collections.OrderedDict()
             iter_result[k]["cpu_time"] = []
-            if k == "sum":
-                iter_result[k]["l_min"] = []
-                iter_result[k]["l_max"] = []
-            elif k == "esum":
-                iter_result[k]["l"] = []
+            iter_result[k]["l_min"] = []
+            iter_result[k]["l_max"] = []
+            iter_result[k]["l"] = []
 
         # append results
         for i in range(self.iter_num):
