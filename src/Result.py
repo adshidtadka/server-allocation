@@ -173,7 +173,7 @@ class Result:
         print(text)
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read("../config.ini")
         slack = slackweb.Slack(url=config.get("general", "slack_webhook"))
         slack.notify(text=Constant.MESSAGE + text)
 
