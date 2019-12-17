@@ -9,8 +9,8 @@ import Constant
 
 class Parameter:
 
-    USER_NUM_CONST = 25
-    SERVER_NUM_CONST = 10
+    USER_NUM_CONST = 8
+    SERVER_NUM_CONST = 8
     CAPACITY_CONST = 5
     DELAY_USER_MAX_CONST = 10
     DELAY_SERVER_MAX_CONST = 10
@@ -23,36 +23,32 @@ class Parameter:
         self.DELAY_USER_MAX = Parameter.DELAY_USER_MAX_CONST
         self.DELAY_SERVER_MAX = Parameter.DELAY_SERVER_MAX_CONST
 
-    def create_input(self):
+    def create_input(self, is_real):
         self.e_u = list(itertools.product(range(self.USER_NUM), range(self.SERVER_NUM)))
         self.e_s = list(itertools.combinations(list(range(0, self.SERVER_NUM)), 2))
-        self.d_us = np.random.randint(1, self.DELAY_USER_MAX, (self.USER_NUM, self.SERVER_NUM))
-        self.d_st = np.random.randint(1, self.DELAY_SERVER_MAX, len(self.e_s))
         self.m_s = np.full(self.SERVER_NUM, self.CAPACITY)
 
-    def kanto_input(self):
-        df_kanto = pd.read_csv("../network/kanto.csv")
-        self.SERVER_NUM_KANTO = len(df_kanto)
-        self.e_u = list(itertools.product(range(self.USER_NUM), range(self.SERVER_NUM_KANTO)))
-        self.e_s = list(itertools.combinations(list(range(0, self.SERVER_NUM_KANTO)), 2))
-        self.m_s = np.full(self.SERVER_NUM_KANTO, self.CAPACITY)
+        if is_real == True:
+            df_server = pd.read_csv("../network/kanto.csv")
+            self.d_st = self.get_d_st(df_server)
+            self.d_us = self.get_d_us(df_server)
+        else:
+            self.d_us = np.random.randint(1, self.DELAY_USER_MAX, (self.USER_NUM, self.SERVER_NUM))
+            self.d_st = np.random.randint(1, self.DELAY_SERVER_MAX, len(self.e_s))
 
-        # 2点間の距離
-        def get_distance(x_1, y_1, x_2, y_2): return math.sqrt((x_2 - x_1) ** 2 + (y_2 - y_1) ** 2)
-
-        # d_stを作成
+    def get_d_st(self, df):
         d_st = []
         for link in self.e_s:
             city_1, city_2 = link[0], link[1]
-            x_1, y_1 = df_kanto.iloc[city_1]["latitude"], df_kanto.iloc[city_1]["longitude"]
-            x_2, y_2 = df_kanto.iloc[city_2]["latitude"], df_kanto.iloc[city_2]["longitude"]
-            d_st.append(get_distance(x_1, y_1, x_2, y_2))
-        self.d_st = np.array(d_st)
+            x_1, y_1 = df.iloc[city_1]["latitude"], df.iloc[city_1]["longitude"]
+            x_2, y_2 = df.iloc[city_2]["latitude"], df.iloc[city_2]["longitude"]
+            d_st.append(Parameter.get_distance(x_1, y_1, x_2, y_2))
+        return np.array(d_st)
 
-        # d_usを作成
+    def get_d_us(self, df_server):
         # 範囲
-        lati_lower, lati_upper = df_kanto["latitude"].min() - 0.3, df_kanto["latitude"].max() + 0.3
-        longi_lower, longi_upper = df_kanto["longitude"].min() - 0.3, df_kanto["longitude"].max() + 0.3
+        lati_lower, lati_upper = df_server["latitude"].min() - 0.3, df_server["latitude"].max() + 0.3
+        longi_lower, longi_upper = df_server["longitude"].min() - 0.3, df_server["longitude"].max() + 0.3
 
         # userの座標情報の作成
         lati_array = (lati_upper - lati_lower) * np.random.rand(self.USER_NUM) + lati_lower
@@ -63,11 +59,11 @@ class Parameter:
         for link in self.e_u:
             index_1, index_2 = link[0], link[1]
             x_1, y_1 = df_user.iloc[index_1]["latitude"], df_user.iloc[index_1]["longitude"]
-            x_2, y_2 = df_kanto.iloc[index_2]["latitude"], df_kanto.iloc[index_2]["longitude"]
-            d_us.append(get_distance(x_1, y_1, x_2, y_2))
-        self.d_us = np.array(d_us)
+            x_2, y_2 = df_server.iloc[index_2]["latitude"], df_server.iloc[index_2]["longitude"]
+            d_us.append(Parameter.get_distance(x_1, y_1, x_2, y_2))
+        return np.array(d_us)
 
-    def set_param(self, var_name, consts, var, delay_params):
+    def set_param(self, var_name, consts, var, delay_params, is_real):
         if var_name == 'user':
             self.USER_NUM = var
             self.SERVER_NUM = consts['server']
@@ -83,6 +79,10 @@ class Parameter:
         else:
             sys.exit('invalid var_name = ' + str(var_name))
 
+        if is_real == True:
+            df_server = pd.read_csv("../network/kanto.csv")
+            self.SERVER_NUM = len(df_server)
+
         self.DELAY_USER_MAX = delay_params["user_max"]
         self.DELAY_SERVER_MAX = delay_params["server_max"]
 
@@ -96,10 +96,12 @@ class Parameter:
         else:
             sys.exit('invalid var_name = ' + str(var_name))
 
+    def get_distance(x_1, y_1, x_2, y_2): return math.sqrt((x_2 - x_1) ** 2 + (y_2 - y_1) ** 2)
+
 
 def main():
     param = Parameter(1)
-    param.kanto_input()
+    param.create_input(True)
 
 
 if __name__ == '__main__':
