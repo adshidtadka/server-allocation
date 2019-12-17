@@ -48,7 +48,24 @@ class Parameter:
             x_2, y_2 = df_kanto.iloc[city_2]["latitude"], df_kanto.iloc[city_2]["longitude"]
             d_st.append(get_distance(x_1, y_1, x_2, y_2))
         self.d_st = np.array(d_st)
-        print(self.d_st)
+
+        # d_usを作成
+        # 範囲
+        lati_lower, lati_upper = df_kanto["latitude"].min() - 0.3, df_kanto["latitude"].max() + 0.3
+        longi_lower, longi_upper = df_kanto["longitude"].min() - 0.3, df_kanto["longitude"].max() + 0.3
+
+        # userの座標情報の作成
+        lati_array = (lati_upper - lati_lower) * np.random.rand(self.USER_NUM) + lati_lower
+        longi_array = (longi_upper - longi_lower) * np.random.rand(self.USER_NUM) + longi_lower
+        df_user = pd.DataFrame({"latitude": lati_array, "longitude": longi_array})
+
+        d_us = []
+        for link in self.e_u:
+            index_1, index_2 = link[0], link[1]
+            x_1, y_1 = df_user.iloc[index_1]["latitude"], df_user.iloc[index_1]["longitude"]
+            x_2, y_2 = df_kanto.iloc[index_2]["latitude"], df_kanto.iloc[index_2]["longitude"]
+            d_us.append(get_distance(x_1, y_1, x_2, y_2))
+        self.d_us = np.array(d_us)
 
     def set_param(self, var_name, consts, var, delay_params):
         if var_name == 'user':
