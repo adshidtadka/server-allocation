@@ -26,6 +26,8 @@ class Sum(Method):
         t_0 = time.perf_counter()
         solution_1 = self.one_server(param)
         solution_2 = self.multiple_server(param)
+        print(solution_1)
+        print(solution_2)
         solution = min([solution_1, solution_2], key=lambda x: x["d_u"])
 
         if solution["d_u"] > param.DELAY_USER_MAX:
@@ -70,7 +72,7 @@ class Sum(Method):
         solution = self.search_matching(param)
         used_server = []
         if solution["d_u"] == Constant.INF:
-            return {"d_u": solution["d_u"], "used_server": used_server}
+            return {"d_u": Constant.INF, "used_server": used_server}
         else:
             for k, v in enumerate(solution["matching"]):
                 if (v == 1) & (k < param.SERVER_NUM):
