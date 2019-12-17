@@ -21,11 +21,16 @@ class Result:
         self.const_names = ['user', 'server', 'capacity']
         self.is_execute_simulator = self.is_execute_simulator()
         if self.is_execute_simulator:
+            self.is_real = self.is_real()
             self.var_range = Result.get_range(Constant.get_range(var_name))
             self.consts = self.get_consts()
             self.delay_params = self.get_delay_params()
             self.iter_num = self.get_iteration_num()
             self.methods = self.is_execute_methods()
+
+    def is_real(self):
+        print("Do you use kanto data set? [y/N]", end=" > ")
+        return self.is_y(input())
 
     def is_y(self, input_str):
         if input_str == 'y':
@@ -136,8 +141,8 @@ class Result:
         for i in range(self.iter_num):
             # create param
             param = Parameter(Constant.SEED + i)
-            param.set_param(self.var_name, self.consts, var, self.delay_params)
-            param.create_input()
+            param.set_param(self.var_name, self.consts, var, self.delay_params, self.is_real)
+            param.create_input(self.is_real)
 
             # solve
             for k, v in self.methods.items():
@@ -173,7 +178,7 @@ class Result:
         print(text)
 
         config = configparser.ConfigParser()
-        config.read("config.ini")
+        config.read("../config.ini")
         slack = slackweb.Slack(url=config.get("general", "slack_webhook"))
         slack.notify(text=Constant.MESSAGE + text)
 

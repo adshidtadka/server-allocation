@@ -70,7 +70,7 @@ class Sum(Method):
         solution = self.search_matching(param)
         used_server = []
         if solution["d_u"] == Constant.INF:
-            return {"d_u": solution["d_u"], "used_server": used_server}
+            return {"d_u": Constant.INF, "used_server": used_server}
         else:
             for k, v in enumerate(solution["matching"]):
                 if (v == 1) & (k < param.SERVER_NUM):
