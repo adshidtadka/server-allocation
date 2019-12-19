@@ -54,11 +54,13 @@ cp = 'Capacity'
 # df_capacity_user_25_server_5 = pd.read_csv("result/capacity_user_25_server_5.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_capacity_user_25_server_10 = pd.read_csv("result/capacity_user_25_server_10.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_capacity_user_50_server_10 = pd.read_csv("result/capacity_user_50_server_10.csv", names=(cp, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_delay_user_d_us_200_d_st_100 = pd.read_csv("result/delay_user_d_us_200_d_st_100.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_delay_user_d_us_200_d_st_100 = pd.read_csv("result/delay_user_d_us_200_d_st_100.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_delay_user_d_us_200_d_st_200 = pd.read_csv("result/delay_user_d_us_200_d_st_200.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_server_user_25_capacity_5 = pd.read_csv("result/server_user_25_capacity_5.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_server_user_25_capacity_10 = pd.read_csv("result/server_user_25_capacity_10.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_server_user_50_capacity_10 = pd.read_csv("result/server_user_50_capacity_10.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_kanto_user_server_8_capacity_5 = pd.read_csv("result/kanto_user_server_8_capacity_5.csv", names=(untds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_kanto_user_server_8_capacity_10 = pd.read_csv("result/kanto_user_server_8_capacity_10.csv", names=(untds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 
 # %%
 Graph.initialize_rcparams()
@@ -324,6 +326,22 @@ plt.close()
 # plt.savefig('/Users/takaaki/Dropbox/oki_lab/m2/paper/ieice_server/workspace/fig/server_user_50_capacity_10.pdf')
 # plt.show()
 # plt.close()
+
+
+# %%
+plt.plot(df_kanto_user_server_8_capacity_5[un], df_kanto_user_server_8_capacity_5[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+# plt.plot(df_kanto_user_server_8_capacity_5[un], df_kanto_user_server_8_capacity_5[ctg], label=('GLPK'), color='k', marker='s', linestyle='-.')
+plt.plot(df_kanto_user_server_8_capacity_5[un], df_kanto_user_server_8_capacity_5[ctsc], label=('SCIP'), color='k', marker='^', linestyle='--')
+plt.plot(df_kanto_user_server_8_capacity_5[un], df_kanto_user_server_8_capacity_5[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
+
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('/Users/takaaki/Dropbox/oki_lab/m2/paper/ieice_server/workspace/fig/kanto_user_server_5_capacity_10.pdf')
+plt.show()
+plt.close()
 
 
 # %%
