@@ -30,9 +30,16 @@ class Sum(Method):
         with open(path, mode="w") as f:
             edge_num = param.USER_NUM * param.SERVER_NUM
             f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(edge_num) + " " + str(param.DELAY_USER_MAX) + "\n")
+
             for i in param.m_s:
                 f.write(str(i) + " ")
             f.write("\n")
+
+            for delay in param.d_us:
+                for i in delay:
+                    f.write(str(i) + " ")
+                f.write("\n")
+
             for edge in self.edges_user:
                 for i in edge:
                     f.write(str(i) + " ")
@@ -72,6 +79,7 @@ class Sum(Method):
             if v >= param.USER_NUM:
                 d_u = param.d_us[:, k].max()
                 d_u_dict[k] = d_u
+        print(d_u_dict)
 
         # search minimum d_u
         if bool(d_u_dict):
@@ -128,8 +136,11 @@ def main():
 
     sum_obj.write_input(param)
 
+    print(param.d_us)
+    print(sum_obj.edges_user)
+
     # start algorithm
-    # sum_obj.start_algo(param)
+    sum_obj.start_algo(param)
 
     # print result
     # sum_obj.print_result()
