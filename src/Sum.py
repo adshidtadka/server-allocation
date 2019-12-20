@@ -1,6 +1,7 @@
 import numpy as np
 import time
 import itertools
+import os
 
 import Constant
 from Parameter import Parameter
