@@ -1,27 +1,7 @@
 *.log
 src/__pycache__/*
-result
 result_alias
 graph/*
-
-Skip to content
-
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
-
-@adshidtadka
-2,822
-86,205 42,441 github/gitignore
- Code  Pull requests 95  Projects 0  Security  Insights
-gitignore/Python.gitignore
-@captainpete captainpete Add db.sqlite3-journal to Python.gitignore (#3063)
-c1faae4 on 26 May
-@arcresu @shiftkey @Lucretiel @Harrison-G @jwg4 @GabrielC101 @Metallicow @misaelnieto @pmsosa @svkampen @vltr @matheussl @hugovk @ghisvail @EvandroLG @DSIW @amigcamel @toanant @2Cubed @brettcannon @weinihou @Visgean @nvie @skuschel @sigo @sethmlarson
-125 lines (101 sloc)  1.67 KB
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -145,27 +125,6 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# Pyre type checker
-.pyre/
-© 2019 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-
-# vscode
-.vscode
-
-# config
-config.ini
-
 # Prerequisites
 *.d
 
@@ -198,3 +157,9 @@ config.ini
 *.exe
 *.out
 *.app
+
+# custom
+.vscode
+config.ini
+tmp/
+result/
