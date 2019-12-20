@@ -22,6 +22,21 @@ class Sum(Method):
         edges_user = np.delete(edges_user, 0, 0)
         self.edges_user = edges_user
 
+    def write_input(self, param):
+        if not os.path.exists('../tmp'):
+            os.mkdir('../tmp')
+        path = "../tmp/input.txt"
+        with open(path, mode="w") as f:
+            edge_num = param.USER_NUM * param.SERVER_NUM
+            f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(edge_num) + " " + str(param.DELAY_USER_MAX) + "\n")
+            for i in param.m_s:
+                f.write(str(i) + " ")
+            f.write("\n")
+            for edge in self.edges_user:
+                for i in edge:
+                    f.write(str(i) + " ")
+                f.write("\n")
+
     def start_algo(self, param):
         t_0 = time.perf_counter()
         solution_1 = self.one_server(param)
@@ -110,11 +125,13 @@ def main():
     # set input to algorithm
     sum_obj = Sum(param)
 
+    sum_obj.write_input(param)
+
     # start algorithm
-    sum_obj.start_algo(param)
+    # sum_obj.start_algo(param)
 
     # print result
-    sum_obj.print_result()
+    # sum_obj.print_result()
 
 
 if __name__ == '__main__':
