@@ -1,5 +1,8 @@
+#include <chrono>
 #include <fstream>
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
 class Sum {
@@ -37,10 +40,22 @@ void Sum::readInput() {
     }
 }
 
-void Sum::startAlgo() {}
+void Sum::startAlgo() {
+    const int N = 1000 * 1000;
+    std::vector<int> v;
+    auto start = chrono::system_clock::now();
+    for (int i = 0; i < N; i++) {
+        v.push_back(i);
+    }
+    auto end = chrono::system_clock::now();
+    auto dif_ms =
+        chrono::duration_cast<chrono::milliseconds>(end - start).count();
+    cout << dif_ms << " [ms]\n";
+}
 
 int main() {
     Sum sum;
     sum.readInput();
+    sum.startAlgo();
     return 0;
 }
