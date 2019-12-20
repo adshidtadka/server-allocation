@@ -79,7 +79,6 @@ class Sum(Method):
             if v >= param.USER_NUM:
                 d_u = param.d_us[:, k].max()
                 d_u_dict[k] = d_u
-        print(d_u_dict)
 
         # search minimum d_u
         if bool(d_u_dict):
@@ -135,10 +134,6 @@ def main():
     sum_obj = Sum(param)
 
     sum_obj.write_input(param)
-
-    print(param.d_us)
-    print(sum_obj.edges_user)
-
     # start algorithm
     sum_obj.start_algo(param)
 
