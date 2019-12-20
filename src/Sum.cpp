@@ -7,10 +7,11 @@ class Sum {
     int *caps, **edges;
 
 public:
-    void read_input();
+    void readInput();
+    void startAlgo();
 };
 
-void Sum::read_input() {
+void Sum::readInput() {
     ifstream fin;
     fin.open("../tmp/input.txt");
     if (!fin) {
@@ -36,8 +37,10 @@ void Sum::read_input() {
     }
 }
 
+void Sum::startAlgo() {}
+
 int main() {
     Sum sum;
-    sum.read_input();
+    sum.readInput();
     return 0;
 }
