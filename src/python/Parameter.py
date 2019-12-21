@@ -29,7 +29,7 @@ class Parameter:
         self.m_s = np.full(self.SERVER_NUM, self.CAPACITY)
 
         if is_real == True:
-            df_server = pd.read_csv("../network/kanto.csv")
+            df_server = pd.read_csv("../../network/kanto.csv")
             self.d_st = self.get_d_st(df_server)
             self.d_us = self.get_d_us(df_server)
         else:
@@ -85,7 +85,7 @@ class Parameter:
             sys.exit('invalid var_name = ' + str(var_name))
 
         if is_real == True:
-            df_server = pd.read_csv("../network/kanto.csv")
+            df_server = pd.read_csv("../../network/kanto.csv")
             self.SERVER_NUM = len(df_server)
             lati_lower, lati_upper = Parameter.get_lower_and_upper(df_server, "latitude")
             longi_lower, longi_upper = Parameter.get_lower_and_upper(df_server, "longitude")

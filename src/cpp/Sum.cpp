@@ -23,9 +23,9 @@ public:
 
 void Sum::readInput() {
     ifstream fin;
-    fin.open("../tmp/input.txt");
+    fin.open("../../tmp/input.txt");
     if (!fin) {
-        cout << "../tmp/input.txt does not exist" << endl;
+        cout << "../../tmp/input.txt does not exist" << endl;
     }
     fin >> user_num >> serv_num >> cap >> delay_max;
 

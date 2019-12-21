@@ -24,9 +24,9 @@ class Sum(Method):
         self.edges_user = edges_user
 
     def write_input(self, param):
-        if not os.path.exists('../tmp'):
-            os.mkdir('../tmp')
-        path = "../tmp/input.txt"
+        if not os.path.exists('../../tmp'):
+            os.mkdir('../../tmp')
+        path = "../../tmp/input.txt"
         with open(path, mode="w") as f:
             f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(param.CAPACITY) + " " + str(param.DELAY_USER_MAX) + "\n")
 
