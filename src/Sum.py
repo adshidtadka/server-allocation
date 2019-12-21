@@ -28,12 +28,7 @@ class Sum(Method):
             os.mkdir('../tmp')
         path = "../tmp/input.txt"
         with open(path, mode="w") as f:
-            edge_num = param.USER_NUM * param.SERVER_NUM
-            f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(edge_num) + " " + str(param.DELAY_USER_MAX) + "\n")
-
-            for i in param.m_s:
-                f.write(str(i) + " ")
-            f.write("\n")
+            f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(param.CAPACITY) + " " + str(param.DELAY_USER_MAX) + "\n")
 
             for delay in param.d_us:
                 for i in delay:

@@ -8,8 +8,8 @@
 using namespace std;
 
 class Sum {
-    int user_num, server_num, edges_num, delay_max;
-    int *caps, **delays, **edges;
+    int user_num, serv_num, cap, delay_max;
+    int **delays, **edges, **edges_copy;
     int used_server_one;
     vector<int> used_server_mul;
 
@@ -17,6 +17,8 @@ public:
     void readInput();
     void startAlgo();
     int oneServer();
+    int mulServer();
+    void copyServer();
 };
 
 void Sum::readInput() {
@@ -25,27 +27,20 @@ void Sum::readInput() {
     if (!fin) {
         cout << "../tmp/input.txt does not exist" << endl;
     }
-    fin >> user_num >> server_num >> edges_num >> delay_max;
-
-    caps = new int[server_num + 1];
-    for (int i = 0; i < server_num; i++) {
-        int cap;
-        fin >> cap;
-        caps[i] = cap;
-    }
+    fin >> user_num >> serv_num >> cap >> delay_max;
 
     delays = new int *[user_num + 1];
     for (int i = 0; i < user_num; i++) {
-        delays[i] = new int[server_num + 1];
-        for (int j = 0; j < server_num; j++) {
+        delays[i] = new int[serv_num + 1];
+        for (int j = 0; j < serv_num; j++) {
             int delay;
             fin >> delay;
             delays[i][j] = delay;
         }
     }
 
-    edges = new int *[edges_num + 1];
-    for (int i = 0; i < edges_num; i++) {
+    edges = new int *[user_num * serv_num + 1];
+    for (int i = 0; i < user_num * serv_num; i++) {
         edges[i] = new int[4];
         int u, s, d;
         fin >> u >> s >> d;
@@ -58,6 +53,7 @@ void Sum::readInput() {
 void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
     int sol_one_server = oneServer();
+    int mul_server = mulServer();
     chrono::system_clock::time_point end = chrono::system_clock::now();
     int dif_ms =
         chrono::duration_cast<chrono::milliseconds>(end - start).count();
@@ -66,9 +62,9 @@ void Sum::startAlgo() {
 
 int Sum::oneServer() {
     // allocate all user and get max d_u for each server
-    int delay_maxs[server_num + 1];
-    for (int i = 0; i < server_num; i++) {
-        if (caps[i] >= user_num) {
+    int delay_maxs[serv_num + 1];
+    for (int i = 0; i < serv_num; i++) {
+        if (cap >= user_num) {
             int delay_max = 0;
             for (int j = 0; j < user_num; j++) {
                 delay_max = delays[j][i] > delay_max ? delays[j][i] : delay_max;
@@ -81,13 +77,32 @@ int Sum::oneServer() {
 
     // search minimum d_u
     int delay_min = INF;
-    for (int i = 0; i < server_num; i++) {
+    for (int i = 0; i < serv_num; i++) {
         if (delay_maxs[i] < delay_min) {
             delay_min = delay_maxs[i];
             used_server_one = i;
         }
     }
     return delay_min;
+}
+
+int Sum::mulServer() {
+    copyServer();
+
+    return 0;
+}
+
+void Sum::copyServer() {
+    // add edges depending on capacity
+    edges_copy = new int *[user_num * serv_num * cap + 1];
+    for (int i = 0; i < user_num * serv_num; i++) {
+        for (int j = 1; j <= cap; j++) {
+            edges_copy[i * j] = new int[4];
+            edges_copy[i * j][0] = edges[i][0];
+            edges_copy[i * j][1] = edges[i][1];
+            edges_copy[i * j][2] = edges[i][2];
+        }
+    }
 }
 
 int main() {
