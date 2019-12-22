@@ -1,7 +1,6 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
-#include <vector>
 
 #include "sum.hpp"
 
@@ -91,11 +90,4 @@ void Sum::copyServer() {
             edgesCopy[i * j][2] = edges[i][2];
         }
     }
-}
-
-int main() {
-    Sum sum;
-    sum.readInput();
-    sum.startAlgo();
-    return 0;
 }
