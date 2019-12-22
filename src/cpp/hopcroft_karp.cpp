@@ -133,20 +133,3 @@ HopcroftKarp::HopcroftKarp(int leftNum, int rightNum) {
 void HopcroftKarp::addEdge(int u, int v) {
     adjacent[u + 1].push_back(v + 1);  // Add v to u’s list.
 }
-
-int main() {
-    int leftNum, rightNum, edgeNum;
-    std::cin >> leftNum >> rightNum >> edgeNum;
-    // vertices of left side, right side and edges
-    HopcroftKarp hc(leftNum, rightNum);
-    int u, v;
-    for (int i = 0; i < edgeNum; ++i) {
-        std::cin >> u >> v;
-        hc.addEdge(u, v);
-    }
-
-    int res = hc.matching();
-    std::cout << "Maximum matching is " << res << "\n";
-
-    return 0;
-}

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "hopcroft_karp.hpp"
 #include "sum.hpp"
 
 using namespace std;
@@ -75,6 +76,10 @@ int Sum::oneServer() {
 
 int Sum::mulServer() {
     copyServer();
+
+    for (int i = 0; i < capacity; i++) {
+        HopcroftKarp hc(userNum, serverNum * capacity);
+    }
 
     return 0;
 }
