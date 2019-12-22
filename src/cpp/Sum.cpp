@@ -3,23 +3,11 @@
 #include <iostream>
 #include <vector>
 
+#include "sum.hpp"
+
 using namespace std;
 
 const int INF = 99999999;
-
-class Sum {
-    int user_num, serv_num, cap, delay_max;
-    int **delays, **edges, **edges_copy;
-    int used_server_one;
-    vector<int> used_server_mul;
-
-public:
-    void readInput();
-    void startAlgo();
-    int oneServer();
-    int mulServer();
-    void copyServer();
-};
 
 void Sum::readInput() {
     ifstream fin;
