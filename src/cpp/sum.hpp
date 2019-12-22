@@ -2,10 +2,10 @@
 #include <vector>
 
 class Sum {
-    int user_num, serv_num, cap, delay_max;
-    int **delays, **edges, **edges_copy;
-    int used_server_one;
-    std::vector<int> used_server_mul;
+    int userNum, serverNum, capacity, delayMax;
+    int **delays, **edges, **edgesCopy;
+    int usedServerOne;
+    std::vector<int> usedServerMultiple;
 
 public:
     void readInput();
