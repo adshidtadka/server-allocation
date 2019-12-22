@@ -39,8 +39,8 @@ void Sum::readInput() {
 
 void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
-    int solutionOne = oneServer();
-    int solutionMultiple = mulServer();
+    oneServer();
+    mulServer();
     chrono::system_clock::time_point end = chrono::system_clock::now();
     int diffMs =
         chrono::duration_cast<chrono::milliseconds>(end - start).count();
