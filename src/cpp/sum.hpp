@@ -12,6 +12,6 @@ public:
     void readInput();
     void startAlgo();
     int oneServer();
-    int mulServer();
+    int multipleServer();
     void copyServer();
 };

@@ -41,7 +41,7 @@ void Sum::readInput() {
 void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
     oneServer();
-    mulServer();
+    multipleServer();
     chrono::system_clock::time_point end = chrono::system_clock::now();
     int diffMs =
         chrono::duration_cast<chrono::milliseconds>(end - start).count();
@@ -74,25 +74,34 @@ int Sum::oneServer() {
     return delayMin;
 }
 
-int Sum::mulServer() {
+int Sum::multipleServer() {
     copyServer();
 
-    for (int i = 0; i < capacity; i++) {
+    // search matching
+    for (int i = 1; i <= delayMax; i++) {
         HopcroftKarp hc(userNum, serverNum * capacity);
+        for (int j = 0; j < userNum * serverNum * capacity; j++) {
+            if (edgesCopy[j][2] <= i) {
+                hc.addEdge(edgesCopy[j][0], edgesCopy[j][1]);
+            }
+        }
+        if (hc.matching() == userNum) {
+            return i;
+        }
     }
-
-    return 0;
+    return INF;
 }
 
 void Sum::copyServer() {
     // add edges depending on capacity
     edgesCopy = new int *[userNum * serverNum * capacity + 1];
-    for (int i = 0; i < userNum * serverNum; i++) {
-        for (int j = 1; j <= capacity; j++) {
-            edgesCopy[i * j] = new int[4];
-            edgesCopy[i * j][0] = edges[i][0];
-            edgesCopy[i * j][1] = edges[i][1];
-            edgesCopy[i * j][2] = edges[i][2];
-        }
+    for (int i = 0; i < userNum * serverNum * capacity; i++) {
+        edgesCopy[i] = new int[4];
+        int serverNumCopied = serverNum * capacity;
+        int u = i / serverNumCopied;
+        int s = i % serverNumCopied;
+        edgesCopy[i][0] = u;
+        edgesCopy[i][1] = s;
+        edgesCopy[i][2] = edges[u][s % serverNum];
     }
 }
