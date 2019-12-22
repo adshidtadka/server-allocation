@@ -18,8 +18,9 @@ class HopcroftKarp {
     int *uPair, *vPair, *distance;
 
 public:
-    HopcroftKarp(int leftNum, int rightNum);  // Constructor
-    void addEdge(int u, int v);               // To add edge
+    HopcroftKarp(int leftNum, int rightNum);
+    ~HopcroftKarp();
+    void addEdge(int u, int v);
 
     // Returns true if there is an augmenting path
     bool bfs();

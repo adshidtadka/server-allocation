@@ -129,6 +129,14 @@ HopcroftKarp::HopcroftKarp(int leftNum, int rightNum) {
     adjacent = new std::list<int>[leftNum + 1];
 }
 
+// Destructor
+HopcroftKarp::~HopcroftKarp() {
+    adjacent.~list<int>();
+    delete[] uPair;
+    delete[] vPair;
+    delete[] distance;
+}
+
 // function to add edge from u to v
 void HopcroftKarp::addEdge(int u, int v) {
     adjacent[u + 1].push_back(v + 1);  // Add v to u’s list.
