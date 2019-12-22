@@ -3,9 +3,9 @@
 #include <iostream>
 #include <vector>
 
-#define INF 99999999
-
 using namespace std;
+
+const int INF = 99999999;
 
 class Sum {
     int user_num, serv_num, cap, delay_max;
