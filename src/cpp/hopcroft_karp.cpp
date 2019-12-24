@@ -45,7 +45,6 @@ int HopcroftKarp::matching() {
 }
 
 int *HopcroftKarp::getMatched(int *matched) {
-    matched = new int[leftNum];
     memcpy(matched, uPair, sizeof(int) * leftNum);
     return matched;
 }
