@@ -80,7 +80,6 @@ void Sum::startAlgo() {
 
     chrono::system_clock::time_point end = chrono::system_clock::now();
     cpuTime = chrono::duration_cast<chrono::microseconds>(end - start).count();
-    // cout << cpuTime << " [μs]\n";
 }
 
 int Sum::oneServer() {

@@ -67,10 +67,7 @@ class Sum(Method):
     def start_algo_with_cpp(self, param):
         self.write_input(param)
         command = "../cpp/run_sum.out"
-        t_0 = time.process_time()
         subprocess.call(command)
-        t_1 = time.process_time()
-        print("cpu_time from python", t_1 - t_0)
         self.status = True
         self.read_output()
 
