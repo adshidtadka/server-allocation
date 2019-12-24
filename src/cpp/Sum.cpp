@@ -56,20 +56,19 @@ void Sum::startAlgo() {
 
     if (userDelayMul < userDelayOne) {
         solMin = userDelayMul * 2 + serverDelayMin;
-        solMax = INF;
-        // for (int i = 0; i < userNum; i++) {
-        //     for (int j = 0; j < userNum; j++) {
-        //         int serverX = matchedServers[i] % serverNum;
-        //         int serverY = matchedServers[j] % serverNum;
-        //         // if (serverX != serverY && ed)
-        //         // {
-        //         //     /* code */
-        //         // }
-        //     }
-        // }
-
+        int serverDelayMax = 0;
+        for (int i = 0; i < userNum; i++) {
+            for (int j = 0; j < userNum; j++) {
+                int s = matchedServers[i];
+                int t = matchedServers[j];
+                serverDelayMax = serverDelays[s][t] > serverDelayMax
+                                     ? serverDelays[s][t]
+                                     : serverDelayMax;
+            }
+        }
+        solMax = userDelayMul * 2 + serverDelayMax;
     } else {
-        solMin, solMax = userDelayOne * 2;
+        solMin = solMax = userDelayOne * 2;
     }
 
     chrono::system_clock::time_point end = chrono::system_clock::now();
