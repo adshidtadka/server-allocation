@@ -112,13 +112,13 @@ class Ilp(Method):
 def main():
     # create param
     param = Parameter(Constant.SEED)
-    param.create_input()
+    param.create_input(True)
 
     # set input to problem
     ilp = Ilp(param)
 
     # solve by ilp
-    ilp.solve_by_ilp()
+    ilp.solve_by_ilp("cplex")
 
     # print result
     ilp.print_result()
