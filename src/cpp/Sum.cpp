@@ -54,7 +54,9 @@ void Sum::startAlgo() {
     int userDelayOne = oneServer();
     int userDelayMul = multipleServer();
 
-    if (userDelayMul < userDelayOne) {
+    if (userDelayOne <= userDelayMul) {
+        solMin = solMax = userDelayOne * 2;
+    } else {
         solMin = userDelayMul * 2 + servDelayMin;
         int servDelayMax = 0;
         for (int i = 0; i < userNum; i++) {
@@ -67,12 +69,9 @@ void Sum::startAlgo() {
             }
         }
         solMax = userDelayMul * 2 + servDelayMax;
-    } else {
-        solMin = solMax = userDelayOne * 2;
     }
 
     chrono::system_clock::time_point end = chrono::system_clock::now();
-
     cpuTime = chrono::duration_cast<chrono::microseconds>(end - start).count();
     cout << cpuTime << " [μs]\n";
 }
