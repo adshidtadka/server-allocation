@@ -15,7 +15,7 @@ void Sum::readInput() {
     if (!fin) {
         cout << "../../tmp/input.txt does not exist" << endl;
     }
-    fin >> userNum >> serverNum >> capacity >> delayMax;
+    fin >> userNum >> serverNum >> capacity >> userDelayMax >> serverDelayMin;
 
     userDelays = new int *[userNum + 1];
     for (int i = 0; i < userNum; i++) {
@@ -95,7 +95,7 @@ int Sum::multipleServer() {
     copyServer();
 
     // search matching
-    for (int i = 1; i <= delayMax; i++) {
+    for (int i = 1; i <= userDelayMax; i++) {
         HopcroftKarp hc(userNum, serverNum * capacity);
         for (int j = 0; j < userNum * serverNum * capacity; j++) {
             if (userEdgesCopy[j][2] <= i) {
