@@ -52,17 +52,19 @@ void Sum::readInput() {
 void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
-    int solOne = oneServer();
-    int solMul = multipleServer();
+    int userDelayOne = oneServer();
+    int userDelayMul = multipleServer();
 
-    if (solMul < solOne) {
+    if (userDelayMul < userDelayOne) {
+        solMin = userDelayMul * 2 + serverDelayMin;
     } else {
-        solMin, solMax = 2 * solOne;
+        solMin, solMax = userDelayOne * 2;
     }
+
     chrono::system_clock::time_point end = chrono::system_clock::now();
 
-    cpuTime = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-    cout << cpuTime << " [ms]\n";
+    cpuTime = chrono::duration_cast<chrono::microseconds>(end - start).count();
+    cout << cpuTime << " [μs]\n";
 }
 
 int Sum::oneServer() {
