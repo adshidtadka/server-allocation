@@ -15,30 +15,30 @@ void Sum::readInput() {
     if (!fin) {
         cout << "../../tmp/input.txt does not exist" << endl;
     }
-    fin >> userNum >> serverNum >> capacity >> userDelayMax >> serverDelayMin;
+    fin >> userNum >> servNum >> capacity >> userDelayMax >> servDelayMin;
 
     userDelays = new int *[userNum + 1];
     for (int i = 0; i < userNum; i++) {
-        userDelays[i] = new int[serverNum + 1];
-        for (int j = 0; j < serverNum; j++) {
+        userDelays[i] = new int[servNum + 1];
+        for (int j = 0; j < servNum; j++) {
             int delay;
             fin >> delay;
             userDelays[i][j] = delay;
         }
     }
 
-    serverDelays = new int *[serverNum + 1];
-    for (int i = 0; i < serverNum; i++) {
-        serverDelays[i] = new int[serverNum + 1];
-        for (int j = 0; j < serverNum; j++) {
+    servDelays = new int *[servNum + 1];
+    for (int i = 0; i < servNum; i++) {
+        servDelays[i] = new int[servNum + 1];
+        for (int j = 0; j < servNum; j++) {
             int delay;
             fin >> delay;
-            serverDelays[i][j] = delay;
+            servDelays[i][j] = delay;
         }
     }
 
-    userEdges = new int *[userNum * serverNum + 1];
-    for (int i = 0; i < userNum * serverNum; i++) {
+    userEdges = new int *[userNum * servNum + 1];
+    for (int i = 0; i < userNum * servNum; i++) {
         userEdges[i] = new int[3];
         int u, s, d;
         fin >> u >> s >> d;
@@ -55,18 +55,18 @@ void Sum::startAlgo() {
     int userDelayMul = multipleServer();
 
     if (userDelayMul < userDelayOne) {
-        solMin = userDelayMul * 2 + serverDelayMin;
-        int serverDelayMax = 0;
+        solMin = userDelayMul * 2 + servDelayMin;
+        int servDelayMax = 0;
         for (int i = 0; i < userNum; i++) {
             for (int j = 0; j < userNum; j++) {
                 int s = matchedServers[i];
                 int t = matchedServers[j];
-                serverDelayMax = serverDelays[s][t] > serverDelayMax
-                                     ? serverDelays[s][t]
-                                     : serverDelayMax;
+                servDelayMax = servDelays[s][t] > servDelayMax
+                                   ? servDelays[s][t]
+                                   : servDelayMax;
             }
         }
-        solMax = userDelayMul * 2 + serverDelayMax;
+        solMax = userDelayMul * 2 + servDelayMax;
     } else {
         solMin = solMax = userDelayOne * 2;
     }
@@ -79,8 +79,8 @@ void Sum::startAlgo() {
 
 int Sum::oneServer() {
     // allocate all user and get max d_u for each server
-    int delayMaxs[serverNum + 1];
-    for (int i = 0; i < serverNum; i++) {
+    int delayMaxs[servNum + 1];
+    for (int i = 0; i < servNum; i++) {
         if (capacity >= userNum) {
             int delayMax = 0;
             for (int j = 0; j < userNum; j++) {
@@ -95,7 +95,7 @@ int Sum::oneServer() {
 
     // search minimum d_u
     int delayMin = INF;
-    for (int i = 0; i < serverNum; i++) {
+    for (int i = 0; i < servNum; i++) {
         if (delayMaxs[i] < delayMin) {
             delayMin = delayMaxs[i];
         }
@@ -108,8 +108,8 @@ int Sum::multipleServer() {
 
     // search matching
     for (int i = 1; i <= userDelayMax; i++) {
-        HopcroftKarp hc(userNum, serverNum * capacity);
-        for (int j = 0; j < userNum * serverNum * capacity; j++) {
+        HopcroftKarp hc(userNum, servNum * capacity);
+        for (int j = 0; j < userNum * servNum * capacity; j++) {
             if (userEdgesCopy[j][2] <= i) {
                 hc.addEdge(userEdgesCopy[j][0], userEdgesCopy[j][1]);
             }
@@ -126,14 +126,14 @@ int Sum::multipleServer() {
 
 void Sum::copyServer() {
     // add userEdges depending on capacity
-    userEdgesCopy = new int *[userNum * serverNum * capacity + 1];
-    for (int i = 0; i < userNum * serverNum * capacity; i++) {
+    userEdgesCopy = new int *[userNum * servNum * capacity + 1];
+    for (int i = 0; i < userNum * servNum * capacity; i++) {
         userEdgesCopy[i] = new int[4];
-        int serverNumCopied = serverNum * capacity;
-        int u = i / serverNumCopied;
-        int s = i % serverNumCopied;
+        int servNumCopied = servNum * capacity;
+        int u = i / servNumCopied;
+        int s = i % servNumCopied;
         userEdgesCopy[i][0] = u;
         userEdgesCopy[i][1] = s;
-        userEdgesCopy[i][2] = userEdges[u][s % serverNum];
+        userEdgesCopy[i][2] = userEdges[u][s % servNum];
     }
 }

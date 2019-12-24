@@ -3,8 +3,8 @@
 #include <vector>
 
 class Sum {
-    int userNum, serverNum, capacity, userDelayMax, serverDelayMin;
-    int **userDelays, **userEdges, **serverDelays, **userEdgesCopy;
+    int userNum, servNum, capacity, userDelayMax, servDelayMin;
+    int **userDelays, **userEdges, **servDelays, **userEdgesCopy;
     int *matchedServers;
     int cpuTime, solMax, solMin;
 
