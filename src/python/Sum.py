@@ -38,9 +38,15 @@ class Sum(Method):
                 f.write("\n")
             f.write("\n")
 
-            # write serverEdges
+            # write serverDelays
+            server_delays = np.zeros((param.SERVER_NUM, param.SERVER_NUM), dtype=np.int)
             for k, v in enumerate(param.e_s):
-                f.write(str(v[0]) + " " + str(v[1]) + " " + str(param.d_st[k]) + "\n")
+                server_delays[v[0]][v[1]] = param.d_st[k]
+                server_delays[v[1]][v[0]] = param.d_st[k]
+            for delay in server_delays:
+                for i in delay:
+                    f.write(str(i) + " ")
+                f.write("\n")
             f.write("\n")
 
             # write edges

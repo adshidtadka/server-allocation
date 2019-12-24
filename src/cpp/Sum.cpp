@@ -27,15 +27,14 @@ void Sum::readInput() {
         }
     }
 
-    int serverEdgesNum = serverNum * (serverNum - 1) / 2;
-    serverEdges = new int *[serverEdgesNum + 1];
-    for (int i = 0; i < serverEdgesNum; i++) {
-        serverEdges[i] = new int[3];
-        int s, t, d;
-        fin >> s >> t >> d;
-        serverEdges[i][0] = s;
-        serverEdges[i][1] = t;
-        serverEdges[i][2] = d;
+    serverDelays = new int *[serverNum + 1];
+    for (int i = 0; i < serverNum; i++) {
+        serverDelays[i] = new int[serverNum + 1];
+        for (int j = 0; j < serverNum; j++) {
+            int delay;
+            fin >> delay;
+            serverDelays[i][j] = delay;
+        }
     }
 
     userEdges = new int *[userNum * serverNum + 1];
@@ -57,6 +56,18 @@ void Sum::startAlgo() {
 
     if (userDelayMul < userDelayOne) {
         solMin = userDelayMul * 2 + serverDelayMin;
+        solMax = INF;
+        // for (int i = 0; i < userNum; i++) {
+        //     for (int j = 0; j < userNum; j++) {
+        //         int serverX = matchedServers[i] % serverNum;
+        //         int serverY = matchedServers[j] % serverNum;
+        //         // if (serverX != serverY && ed)
+        //         // {
+        //         //     /* code */
+        //         // }
+        //     }
+        // }
+
     } else {
         solMin, solMax = userDelayOne * 2;
     }

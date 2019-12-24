@@ -4,7 +4,7 @@
 
 class Sum {
     int userNum, serverNum, capacity, userDelayMax, serverDelayMin;
-    int **userDelays, **userEdges, **serverEdges, **userEdgesCopy;
+    int **userDelays, **userEdges, **serverDelays, **userEdgesCopy;
     int *matchedServers;
     int cpuTime, solMax, solMin;
 
