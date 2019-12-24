@@ -29,12 +29,21 @@ class Sum(Method):
         path = "../../tmp/input.txt"
         with open(path, mode="w") as f:
             f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(param.CAPACITY) + " " + str(param.DELAY_USER_MAX) + "\n")
+            f.write("\n")
 
+            # write userDelays
             for delay in param.d_us:
                 for i in delay:
                     f.write(str(i) + " ")
                 f.write("\n")
+            f.write("\n")
 
+            # write serverEdges
+            for k, v in enumerate(param.e_s):
+                f.write(str(v[0]) + " " + str(v[1]) + " " + str(param.d_st[k]) + "\n")
+            f.write("\n")
+
+            # write edges
             for edge in self.edges_user:
                 for i in edge:
                     f.write(str(i) + " ")

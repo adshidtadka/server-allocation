@@ -4,8 +4,9 @@
 
 class Sum {
     int userNum, serverNum, capacity, delayMax;
-    int **delays, **edges, **edgesCopy;
+    int **userDelays, **userEdges, **serverEdges, **userEdgesCopy;
     int *matchedServers;
+    int cpuTime, solMax, solMin;
 
 public:
     void readInput();

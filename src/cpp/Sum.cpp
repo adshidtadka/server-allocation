@@ -17,35 +17,52 @@ void Sum::readInput() {
     }
     fin >> userNum >> serverNum >> capacity >> delayMax;
 
-    delays = new int *[userNum + 1];
+    userDelays = new int *[userNum + 1];
     for (int i = 0; i < userNum; i++) {
-        delays[i] = new int[serverNum + 1];
+        userDelays[i] = new int[serverNum + 1];
         for (int j = 0; j < serverNum; j++) {
             int delay;
             fin >> delay;
-            delays[i][j] = delay;
+            userDelays[i][j] = delay;
         }
     }
 
-    edges = new int *[userNum * serverNum + 1];
+    int serverEdgesNum = serverNum * (serverNum - 1) / 2;
+    serverEdges = new int *[serverEdgesNum + 1];
+    for (int i = 0; i < serverEdgesNum; i++) {
+        serverEdges[i] = new int[3];
+        int s, t, d;
+        fin >> s >> t >> d;
+        serverEdges[i][0] = s;
+        serverEdges[i][1] = t;
+        serverEdges[i][2] = d;
+    }
+
+    userEdges = new int *[userNum * serverNum + 1];
     for (int i = 0; i < userNum * serverNum; i++) {
-        edges[i] = new int[4];
+        userEdges[i] = new int[3];
         int u, s, d;
         fin >> u >> s >> d;
-        edges[i][0] = u;
-        edges[i][1] = s;
-        edges[i][2] = d;
+        userEdges[i][0] = u;
+        userEdges[i][1] = s;
+        userEdges[i][2] = d;
     }
 }
 
 void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
-    oneServer();
-    multipleServer();
+
+    int solOne = oneServer();
+    int solMul = multipleServer();
+
+    if (solMul < solOne) {
+    } else {
+        solMin, solMax = 2 * solOne;
+    }
     chrono::system_clock::time_point end = chrono::system_clock::now();
-    int diffMs =
-        chrono::duration_cast<chrono::milliseconds>(end - start).count();
-    cout << diffMs << " [ms]\n";
+
+    cpuTime = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+    cout << cpuTime << " [ms]\n";
 }
 
 int Sum::oneServer() {
@@ -55,7 +72,8 @@ int Sum::oneServer() {
         if (capacity >= userNum) {
             int delayMax = 0;
             for (int j = 0; j < userNum; j++) {
-                delayMax = delays[j][i] > delayMax ? delays[j][i] : delayMax;
+                delayMax =
+                    userDelays[j][i] > delayMax ? userDelays[j][i] : delayMax;
             }
             delayMaxs[i] = delayMax;
         } else {
@@ -80,13 +98,13 @@ int Sum::multipleServer() {
     for (int i = 1; i <= delayMax; i++) {
         HopcroftKarp hc(userNum, serverNum * capacity);
         for (int j = 0; j < userNum * serverNum * capacity; j++) {
-            if (edgesCopy[j][2] <= i) {
-                hc.addEdge(edgesCopy[j][0], edgesCopy[j][1]);
+            if (userEdgesCopy[j][2] <= i) {
+                hc.addEdge(userEdgesCopy[j][0], userEdgesCopy[j][1]);
             }
         }
         if (hc.matching() == userNum) {
             matchedServers = new int[userNum];
-            matchedServers =  hc.getMatched(matchedServers);
+            matchedServers = hc.getMatched(matchedServers);
             return i;
         }
     }
@@ -95,15 +113,15 @@ int Sum::multipleServer() {
 }
 
 void Sum::copyServer() {
-    // add edges depending on capacity
-    edgesCopy = new int *[userNum * serverNum * capacity + 1];
+    // add userEdges depending on capacity
+    userEdgesCopy = new int *[userNum * serverNum * capacity + 1];
     for (int i = 0; i < userNum * serverNum * capacity; i++) {
-        edgesCopy[i] = new int[4];
+        userEdgesCopy[i] = new int[4];
         int serverNumCopied = serverNum * capacity;
         int u = i / serverNumCopied;
         int s = i % serverNumCopied;
-        edgesCopy[i][0] = u;
-        edgesCopy[i][1] = s;
-        edgesCopy[i][2] = edges[u][s % serverNum];
+        userEdgesCopy[i][0] = u;
+        userEdgesCopy[i][1] = s;
+        userEdgesCopy[i][2] = userEdges[u][s % serverNum];
     }
 }
