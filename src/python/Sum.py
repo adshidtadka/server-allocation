@@ -2,6 +2,7 @@ import numpy as np
 import time
 import itertools
 import os
+import subprocess
 
 import Constant
 from Parameter import Parameter
@@ -54,6 +55,24 @@ class Sum(Method):
                 for i in edge:
                     f.write(str(i) + " ")
                 f.write("\n")
+
+    def read_output(self):
+        path = "../../tmp/output.txt"
+        with open(path, mode="r") as f:
+            output = f.read().split()
+        self.cpu_time = float(output[0]) / 1000 / 1000
+        self.L_min = output[1]
+        self.L_max = output[2]
+
+    def start_algo_with_cpp(self, param):
+        self.write_input(param)
+        command = "../cpp/run_sum.out"
+        t_0 = time.process_time()
+        subprocess.call(command)
+        t_1 = time.process_time()
+        print("cpu_time from python", t_1 - t_0)
+        self.status = True
+        self.read_output()
 
     def start_algo(self, param):
         t_0 = time.process_time()
@@ -128,8 +147,8 @@ class Sum(Method):
 
     def print_result(self):
         if self.status:
-            print('L_max is ', str(self.L_max))
-            print('L_min is ', str(self.L_min))
+            # print('L_max is ', str(self.L_max))
+            # print('L_min is ', str(self.L_min))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
@@ -142,10 +161,16 @@ def main():
 
     # set input to algorithm
     sum_obj = Sum(param)
-
     sum_obj.write_input(param)
+
     # start algorithm
     sum_obj.start_algo(param)
+
+    # print result
+    sum_obj.print_result()
+
+    # start algorithm
+    sum_obj.start_algo_with_cpp(param)
 
     # print result
     sum_obj.print_result()

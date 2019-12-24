@@ -10,6 +10,7 @@ class Sum {
 
 public:
     void readInput();
+    void writeOutput();
     void startAlgo();
     int oneServer();
     int multipleServer();

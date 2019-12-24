@@ -48,6 +48,13 @@ void Sum::readInput() {
     }
 }
 
+void Sum::writeOutput() {
+    ofstream fout;
+    fout.open("../../tmp/output.txt");
+
+    fout << cpuTime << " " << solMin << " " << solMax << endl;
+}
+
 void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
@@ -73,7 +80,7 @@ void Sum::startAlgo() {
 
     chrono::system_clock::time_point end = chrono::system_clock::now();
     cpuTime = chrono::duration_cast<chrono::microseconds>(end - start).count();
-    cout << cpuTime << " [μs]\n";
+    // cout << cpuTime << " [μs]\n";
 }
 
 int Sum::oneServer() {
