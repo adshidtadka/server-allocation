@@ -5,8 +5,7 @@
 class Sum {
     int userNum, serverNum, capacity, delayMax;
     int **delays, **edges, **edgesCopy;
-    int usedServerOne;
-    std::vector<int> usedServerMultiple;
+    int *matchedServers;
 
 public:
     void readInput();

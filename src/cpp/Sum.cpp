@@ -68,7 +68,6 @@ int Sum::oneServer() {
     for (int i = 0; i < serverNum; i++) {
         if (delayMaxs[i] < delayMin) {
             delayMin = delayMaxs[i];
-            usedServerOne = i;
         }
     }
     return delayMin;
@@ -86,9 +85,12 @@ int Sum::multipleServer() {
             }
         }
         if (hc.matching() == userNum) {
+            matchedServers = new int[userNum];
+            matchedServers =  hc.getMatched(matchedServers);
             return i;
         }
     }
+
     return INF;
 }
 

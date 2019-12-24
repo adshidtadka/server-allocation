@@ -44,6 +44,12 @@ int HopcroftKarp::matching() {
     return result;
 }
 
+int *HopcroftKarp::getMatched(int *matched) {
+    matched = new int[leftNum];
+    memcpy(matched, uPair, sizeof(int) * leftNum);
+    return matched;
+}
+
 // Returns true if there is an augmenting path available, else returns false
 bool HopcroftKarp::bfs() {
     std::queue<int> q;  // an integer queue for bfs

@@ -31,4 +31,5 @@ public:
 
     // Returns size of maximum matching
     int matching();
+    int *getMatched(int *matched);
 };
