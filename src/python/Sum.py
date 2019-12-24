@@ -50,7 +50,7 @@ class Sum(Method):
                 f.write("\n")
 
     def start_algo(self, param):
-        t_0 = time.perf_counter()
+        t_0 = time.process_time()
         solution_1 = self.one_server(param)
         solution_2 = self.multiple_server(param)
         solution = min([solution_1, solution_2], key=lambda x: x["d_u"])
@@ -59,7 +59,7 @@ class Sum(Method):
             self.status = False
         else:
             self.status = True
-        t_1 = time.perf_counter()
+        t_1 = time.process_time()
 
         server_delays = []
         edges_server = list(itertools.combinations(solution["used_server"], 2))
@@ -142,7 +142,7 @@ def main():
     sum_obj.start_algo(param)
 
     # print result
-    # sum_obj.print_result()
+    sum_obj.print_result()
 
 
 if __name__ == '__main__':

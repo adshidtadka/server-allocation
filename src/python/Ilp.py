@@ -46,7 +46,7 @@ class Ilp(Method):
         self.df_v_s = df_v_s
 
     def solve_by_ilp(self, solver=None):
-        t_0 = time.perf_counter()
+        t_0 = time.process_time()
         # solve
         try:
             # constraints
@@ -62,7 +62,7 @@ class Ilp(Method):
             print('Solver is not installed or there is no feasible solution.')
             return 0
 
-        t_1 = time.perf_counter()
+        t_1 = time.process_time()
         self.cpu_time = t_1 - t_0
 
     def print_result(self):
