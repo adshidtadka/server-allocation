@@ -58,37 +58,12 @@ class Sum(Method):
         self.L_min = int(output[1])
         self.L_max = int(output[2])
 
-    def start_algo_with_cpp(self, param):
+    def start_algo(self, param):
         self.write_input(param)
         command = "../cpp/run_sum.out"
         subprocess.call(command)
         self.status = True
         self.read_output()
-
-    def start_algo(self, param):
-        t_0 = time.process_time()
-        solution_1 = self.one_server(param)
-        solution_2 = self.multiple_server(param)
-        solution = min([solution_1, solution_2], key=lambda x: x["d_u"])
-
-        if solution["d_u"] > param.DELAY_USER_MAX:
-            self.status = False
-        else:
-            self.status = True
-        t_1 = time.process_time()
-
-        server_delays = []
-        edges_server = list(itertools.combinations(solution["used_server"], 2))
-        if len(edges_server) == 0:
-            # one server case
-            server_delays = [0]
-        for edge_k, edge_v in enumerate(edges_server):
-            if edge_v in param.e_s:
-                server_delays.append(param.d_st[edge_k])
-
-        self.cpu_time = t_1 - t_0
-        self.L_min = 2*solution["d_u"] + min(param.d_st)
-        self.L_max = 2*solution["d_u"] + max(server_delays)
 
     def one_server(self, param):
         # step 1: consider one server case
@@ -156,12 +131,6 @@ def main():
 
     # start algorithm
     sum_obj.start_algo(param)
-
-    # print result
-    sum_obj.print_result()
-
-    # start algorithm
-    sum_obj.start_algo_with_cpp(param)
 
     # print result
     sum_obj.print_result()
