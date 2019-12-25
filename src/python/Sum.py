@@ -50,12 +50,6 @@ class Sum(Method):
                 f.write("\n")
             f.write("\n")
 
-            # write edges
-            for edge in self.edges_user:
-                for i in edge:
-                    f.write(str(i) + " ")
-                f.write("\n")
-
     def read_output(self):
         path = "../../tmp/output.txt"
         with open(path, mode="r") as f:
@@ -93,8 +87,8 @@ class Sum(Method):
                 server_delays.append(param.d_st[edge_k])
 
         self.cpu_time = t_1 - t_0
-        self.L_max = 2*solution["d_u"] + max(server_delays)
         self.L_min = 2*solution["d_u"] + min(param.d_st)
+        self.L_max = 2*solution["d_u"] + max(server_delays)
 
     def one_server(self, param):
         # step 1: consider one server case
@@ -144,8 +138,8 @@ class Sum(Method):
 
     def print_result(self):
         if self.status:
-            # print('L_max is ', str(self.L_max))
-            # print('L_min is ', str(self.L_min))
+            print('L_max is ', str(self.L_max))
+            print('L_min is ', str(self.L_min))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
@@ -153,7 +147,7 @@ class Sum(Method):
 
 def main():
     # create param
-    param = Parameter(Constant.SEED)
+    param = Parameter(2)
     param.create_input(True)
 
     # set input to algorithm

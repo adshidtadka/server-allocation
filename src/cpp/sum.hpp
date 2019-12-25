@@ -4,7 +4,7 @@
 
 class Sum {
     int userNum, servNum, capacity, userDelayMax, servDelayMin;
-    int **userDelays, **userEdges, **servDelays, **userEdgesCopy;
+    int **userDelays, **servDelays;
     int *matchedServers;
     int cpuTime, solMax, solMin;
 
@@ -14,5 +14,5 @@ public:
     void startAlgo();
     int oneServer();
     int multipleServer();
-    void copyServer();
+    int **copyServer();
 };

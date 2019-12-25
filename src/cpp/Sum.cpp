@@ -36,16 +36,6 @@ void Sum::readInput() {
             servDelays[i][j] = delay;
         }
     }
-
-    userEdges = new int *[userNum * servNum + 1];
-    for (int i = 0; i < userNum * servNum; i++) {
-        userEdges[i] = new int[3];
-        int u, s, d;
-        fin >> u >> s >> d;
-        userEdges[i][0] = u;
-        userEdges[i][1] = s;
-        userEdges[i][2] = d;
-    }
 }
 
 void Sum::writeOutput() {
@@ -109,14 +99,14 @@ int Sum::oneServer() {
 }
 
 int Sum::multipleServer() {
-    copyServer();
+    int **userEdges = copyServer();
 
     // search matching
     for (int i = 1; i <= userDelayMax; i++) {
         HopcroftKarp hc(userNum, servNum * capacity);
         for (int j = 0; j < userNum * servNum * capacity; j++) {
-            if (userEdgesCopy[j][2] <= i) {
-                hc.addEdge(userEdgesCopy[j][0], userEdgesCopy[j][1]);
+            if (userEdges[j][2] <= i) {
+                hc.addEdge(userEdges[j][0], userEdges[j][1]);
             }
         }
         if (hc.matching() == userNum) {
@@ -129,16 +119,17 @@ int Sum::multipleServer() {
     return INF;
 }
 
-void Sum::copyServer() {
+int **Sum::copyServer() {
     // add userEdges depending on capacity
-    userEdgesCopy = new int *[userNum * servNum * capacity + 1];
+    int **userEdges = new int *[userNum * servNum * capacity + 1];
     for (int i = 0; i < userNum * servNum * capacity; i++) {
-        userEdgesCopy[i] = new int[4];
+        userEdges[i] = new int[3];
         int servNumCopied = servNum * capacity;
         int u = i / servNumCopied;
         int s = i % servNumCopied;
-        userEdgesCopy[i][0] = u;
-        userEdgesCopy[i][1] = s;
-        userEdgesCopy[i][2] = userEdges[u][s % servNum];
+        userEdges[i][0] = u;
+        userEdges[i][1] = s;
+        userEdges[i][2] = userDelays[u][s % servNum];
     }
+    return userEdges;
 }
