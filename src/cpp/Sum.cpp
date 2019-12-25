@@ -58,8 +58,8 @@ void Sum::startAlgo() {
         int servDelayMax = 0;
         for (int i = 0; i < userNum; i++) {
             for (int j = 0; j < userNum; j++) {
-                int s = matchedServers[i];
-                int t = matchedServers[j];
+                int s = matchedServers[i] % servNum;
+                int t = matchedServers[j] % servNum;
                 servDelayMax = servDelays[s][t] > servDelayMax
                                    ? servDelays[s][t]
                                    : servDelayMax;
