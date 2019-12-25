@@ -61,8 +61,8 @@ class Sum(Method):
         with open(path, mode="r") as f:
             output = f.read().split()
         self.cpu_time = float(output[0]) / 1000 / 1000
-        self.L_min = output[1]
-        self.L_max = output[2]
+        self.L_min = int(output[1])
+        self.L_max = int(output[2])
 
     def start_algo_with_cpp(self, param):
         self.write_input(param)
