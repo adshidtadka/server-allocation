@@ -27,7 +27,7 @@ class Esum(Sum):
         self.edges_server = np.delete(edges_server, 0, 0)
 
     def start_algo(self, param):
-        t_0 = time.perf_counter()
+        t_0 = time.process_time()
         L_1 = self.one_server(param)["d_u"]*2
         L_2 = self.multiple_server(param)
         L = min([L_1, L_2])
@@ -37,7 +37,7 @@ class Esum(Sum):
         else:
             self.status = True
             self.L = L
-        t_1 = time.perf_counter()
+        t_1 = time.process_time()
         self.cpu_time = t_1 - t_0
 
     def multiple_server(self, param):

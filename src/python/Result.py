@@ -118,7 +118,7 @@ class Result:
         consts = ""
         for k, v in self.consts.items():
             consts += "_" + str(k) + "_" + str(v)
-        file_name = Result.rotate_file_name('../result/' + self.var_name + consts)
+        file_name = Result.rotate_file_name('../../result/' + self.var_name + consts)
 
         for var in self.var_range:
             average_result_str = self.get_average(var)
@@ -178,13 +178,13 @@ class Result:
         print(text)
 
         config = configparser.ConfigParser()
-        config.read("../config.ini")
+        config.read("../../config.ini")
         slack = slackweb.Slack(url=config.get("general", "slack_webhook"))
         slack.notify(text=Constant.MESSAGE + text)
 
 
-if not os.path.exists('../result'):
-    os.mkdir('../result')
+if not os.path.exists('../../result'):
+    os.mkdir('../../result')
 
 print("Put a message for this simulation.", end=" > ")
 Constant.MESSAGE = "[" + input() + "] "
