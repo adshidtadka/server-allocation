@@ -147,7 +147,7 @@ class Sum(Method):
 
 def main():
     # create param
-    param = Parameter(2)
+    param = Parameter(100)
     param.create_input(True)
 
     # set input to algorithm
