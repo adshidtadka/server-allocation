@@ -15,7 +15,8 @@ void Sum::readInput() {
     if (!fin) {
         cout << "../../tmp/input.txt does not exist" << endl;
     }
-    fin >> userNum >> servNum >> capacity >> userDelayMax >> servDelayMin >> servDelayMax;
+    fin >> userNum >> servNum >> capacity >> userDelayMax >> servDelayMin >>
+        servDelayMax;
 
     userDelays = new int *[userNum + 1];
     for (int i = 0; i < userNum; i++) {
@@ -36,6 +37,8 @@ void Sum::readInput() {
             servDelays[i][j] = delay;
         }
     }
+
+    userEdges = copyServer();
 }
 
 void Sum::writeOutput() {
@@ -49,7 +52,6 @@ void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
     int userDelayOne = oneServer();
-    userEdges = copyServer();
     int userDelayMul = multipleServer();
 
     if (userDelayOne <= userDelayMul) {
