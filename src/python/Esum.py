@@ -19,6 +19,13 @@ class Esum(Sum):
             edges_server = np.vstack((edges_server, np.array([param.e_s[k][0], param.e_s[k][1], v])))
         self.edges_server = np.delete(edges_server, 0, 0)
 
+    def start_algo_with_cpp(self, param):
+        self.write_input(param)
+        # command = "../cpp/run_esum.out"
+        # subprocess.call(command)
+        # self.status = True
+        # self.read_output()
+
     def start_algo(self, param):
         t_0 = time.process_time()
         L_1 = self.one_server(param)["d_u"]*2
@@ -76,10 +83,10 @@ def main():
     esum = Esum(param)
 
     # start algorithm
-    esum.start_algo(param)
+    esum.start_algo_with_cpp(param)
 
     # print result
-    esum.print_result()
+    # esum.print_result()
 
 
 if __name__ == '__main__':
