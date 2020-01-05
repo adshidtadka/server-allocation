@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <set>
+#include <vector>
 
 #include "bron-kerbosch_utils.hpp"
 #include "esum.hpp"
@@ -38,7 +39,7 @@ int Esum::multipleServer() {
     }
 
     // record allocation
-    set<set<int>> nodeSet;
+    set<vector<int>> nodesVecSet;
     int totalDelay = INF;
 
     // search clique
@@ -53,10 +54,10 @@ int Esum::multipleServer() {
         };
         solve<int>({{}}, G, {{}}, act);
         for (const auto &g : solution) {
-            set<int> st;
-            for (const auto &v : g) st.insert(v.id);
-            if (st.size() > 1 && nodeSet.count(st) == 0) {
-                nodeSet.insert(st);
+            vector<int> nodesVec;
+            for (const auto &v : g) nodesVec.push_back(v.id);
+            if (nodesVec.size() > 1 && nodesVecSet.count(nodesVec) == 0) {
+                nodesVecSet.insert(nodesVec);
             }
         }
     }
