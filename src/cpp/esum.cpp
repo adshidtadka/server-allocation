@@ -1,5 +1,3 @@
-#pragma once
-
 #include "esum.hpp"
 #include "bron-kerbosch.hpp"
 #include "bron-kerbosch_utils.hpp"
