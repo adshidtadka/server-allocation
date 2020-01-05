@@ -54,14 +54,17 @@ int Esum::multipleServer() {
         };
         solve<int>({{}}, G, {{}}, act);
         for (const auto &g : solution) {
-            vector<int> nodesVec;
-            for (const auto &v : g) nodesVec.push_back(v.id);
-            if (nodesVec.size() > 1 && nodesVecSet.count(nodesVec) == 0) {
-                nodesVecSet.insert(nodesVec);
+            vector<int> vec;
+            for (const auto &vert : g) vec.push_back(vert.id);
+            if (vec.size() > 1 && nodesVecSet.count(vec) == 0) {
+                nodesVecSet.insert(vec);
+                int totalDelayTmp = Sum::multipleServer(vec) * 2 + i;
+                totalDelay =
+                    totalDelayTmp < totalDelay ? totalDelayTmp : totalDelay;
             }
         }
     }
-    return INF;
+    return totalDelay;
 }
 
 int **Esum::createServerEdges() {

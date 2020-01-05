@@ -83,10 +83,10 @@ def main():
     esum = Esum(param)
 
     # start algorithm
-    esum.start_algo_with_cpp(param)
+    esum.start_algo(param)
 
     # print result
-    # esum.print_result()
+    esum.print_result()
 
 
 if __name__ == '__main__':
