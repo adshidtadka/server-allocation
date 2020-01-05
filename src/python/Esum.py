@@ -10,17 +10,10 @@ from BronKerbosch import BronKerbosch
 class Esum(Sum):
 
     def __init__(self, param):
-        super(Esum, self).__init__(param)
+        super(Esum, self).set_edges_user(param)
+        self.set_edges_server(param)
 
-    def set_input(self, param):
-        # edges_user list
-        edges_user = np.empty(3, dtype=int)
-        for k, v in enumerate(param.d_us):
-            for i, j in enumerate(v):
-                edges_user = np.vstack((edges_user, np.array([k, i, j])))
-        self.edges_user_all = np.delete(edges_user, 0, 0)
-
-        # edges_server list
+    def set_edges_server(self, param):
         edges_server = np.empty(3, dtype=int)
         for k, v in enumerate(param.d_st):
             edges_server = np.vstack((edges_server, np.array([param.e_s[k][0], param.e_s[k][1], v])))
@@ -59,7 +52,7 @@ class Esum(Sum):
                 # set edges_user
                 edges_user = np.empty(3, dtype=int)
                 for node in clique:
-                    edges_user = np.vstack((edges_user, self.edges_user_all[np.where((self.edges_user_all[:, 1] == node))]))
+                    edges_user = np.vstack((edges_user, self.edges_user[np.where((self.edges_user[:, 1] == node))]))
                 self.edges_user = np.delete(edges_user, 0, 0)
 
                 D_u = Sum.multiple_server(self, param)["d_u"]

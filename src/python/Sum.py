@@ -13,16 +13,14 @@ from Method import Method
 class Sum(Method):
 
     def __init__(self, param):
-        self.set_input(param)
+        self.set_edges_user(param)
 
-    def set_input(self, param):
-        # edges_user list
+    def set_edges_user(self, param):
         edges_user = np.empty(3, dtype=int)
         for k, v in enumerate(param.d_us):
             for i, j in enumerate(v):
                 edges_user = np.vstack((edges_user, np.array([k, i, j])))
-        edges_user = np.delete(edges_user, 0, 0)
-        self.edges_user = edges_user
+        self.edges_user = np.delete(edges_user, 0, 0)
 
     def write_input(self, param):
         if not os.path.exists('../../tmp'):
