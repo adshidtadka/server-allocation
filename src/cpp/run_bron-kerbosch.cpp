@@ -1,6 +1,4 @@
 #include <iostream>
-#include <sstream>
-#include <string>
 
 #include "bron-kerbosch.hpp"
 #include "bron-kerbosch_utils.hpp"
