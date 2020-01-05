@@ -10,7 +10,7 @@ from BronKerbosch import BronKerbosch
 class Esum(Sum):
 
     def __init__(self, param):
-        super(Esum, self).set_edges_user(param)
+        self.set_edges_user(param)
         self.set_edges_server(param)
 
     def set_edges_server(self, param):
