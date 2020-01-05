@@ -1,6 +1,6 @@
 #include <chrono>
 #include <fstream>
-#include <queue>
+#include <vector>
 
 #include <iostream>
 
@@ -49,6 +49,7 @@ void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
     int userDelayOne = oneServer();
+    userEdges = copyServer();
     int userDelayMul = multipleServer();
 
     if (userDelayOne <= userDelayMul) {
@@ -99,9 +100,6 @@ int Sum::oneServer() {
 }
 
 int Sum::multipleServer() {
-    int **userEdges = copyServer();
-
-    // search matching
     for (int i = 1; i <= userDelayMax; i++) {
         HopcroftKarp hc(userNum, servNum * capacity);
         for (int j = 0; j < userNum * servNum * capacity; j++) {
@@ -115,7 +113,6 @@ int Sum::multipleServer() {
             return i;
         }
     }
-
     return INF;
 }
 
