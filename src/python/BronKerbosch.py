@@ -77,14 +77,21 @@ class BronKerbosch():
 
 
 def main():
-    bk = BronKerbosch(5)
-    print(bk.find_cliques())
-    print(bk.find_cliques())
-
-    bk = BronKerbosch(5)
+    bk = BronKerbosch(6)
+    bk.add_edge(0, 1)
+    bk.add_edge(0, 2)
+    bk.add_edge(0, 3)
     bk.add_edge(1, 2)
     bk.add_edge(1, 3)
-    print(bk.graph)
+    bk.add_edge(1, 4)
+    bk.add_edge(1, 5)
+    bk.add_edge(2, 3)
+    bk.add_edge(2, 4)
+    bk.add_edge(2, 5)
+    bk.add_edge(3, 4)
+    bk.add_edge(3, 5)
+    bk.add_edge(4, 5)
+    print(bk.find_cliques())
 
 
 if __name__ == '__main__':
