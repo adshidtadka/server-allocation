@@ -1,5 +1,6 @@
 #include <chrono>
 #include <fstream>
+
 #include <iostream>
 
 #include "hopcroft-karp.hpp"
@@ -13,7 +14,7 @@ void Sum::readInput() {
     if (!fin) {
         cout << "../../tmp/input.txt does not exist" << endl;
     }
-    fin >> userNum >> servNum >> capacity >> userDelayMax >> servDelayMin;
+    fin >> userNum >> servNum >> capacity >> userDelayMax >> servDelayMin >> servDelayMax;
 
     userDelays = new int *[userNum + 1];
     for (int i = 0; i < userNum; i++) {

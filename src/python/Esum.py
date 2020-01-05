@@ -76,7 +76,7 @@ class Esum(Sum):
 
 def main():
     # create param
-    param = Parameter(Constant.SEED)
+    param = Parameter(100)
     param.create_input(True)
 
     # set input to algorithm
