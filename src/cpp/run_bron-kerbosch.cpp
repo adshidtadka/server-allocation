@@ -4,7 +4,7 @@
 #include "bron-kerbosch_utils.hpp"
 
 using namespace BronKerbosch;
-using namespace std::placeholders;
+
 template <typename T>
 using Solution = std::forward_list<Graph<T> >;
 
