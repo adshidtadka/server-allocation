@@ -2,8 +2,8 @@
 #include <sstream>
 #include <string>
 
-#include "bron-kerbosch.h"
-#include "bron-kerbosch_utils.h"
+#include "bron-kerbosch.hpp"
+#include "bron-kerbosch_utils.hpp"
 
 using namespace BronKerbosch;
 using namespace std::placeholders;

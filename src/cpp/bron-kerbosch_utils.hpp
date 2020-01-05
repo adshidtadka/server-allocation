@@ -1,7 +1,7 @@
 #ifndef BRON_KERBOSCH_UTILS_H
 #define BRON_KERBOSCH_UTILS_H
 
-#include "bron-kerbosch.h"
+#include "bron-kerbosch.hpp"
 
 namespace BronKerbosch {
 
