@@ -28,7 +28,7 @@ class Sum(Method):
         path = "../../tmp/input.txt"
         with open(path, mode="w") as f:
             f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(param.CAPACITY) + " " +
-                    str(param.DELAY_USER_MAX) + " " + str(min(param.d_st)) + " " + str(param.DELAY_SERVER_MAX) + "\n")
+                    str(param.DELAY_USER_MAX) + " " + str(min(param.d_st)) + " " + str(max(param.d_st)) + "\n")
             f.write("\n")
 
             # write userDelays
