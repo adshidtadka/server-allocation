@@ -38,16 +38,28 @@ int Esum::multipleServer() {
     }
 
     // record allocation
-    set<set<int>> record;
+    set<set<int>> nodeSet;
     int totalDelay = INF;
 
     // search clique
-    // for (int i = 1; i <= servDelayMax; i++) {
-    //     for (int i = 0; i < count; i++) {
-    //         /* code */
-    //     }
-    // }
-
+    for (int i = 1; i <= servDelayMax; i++) {
+        for (int j = 0; j < servNum * (servNum - 1) / 2; j++) {
+            if (serverEdges[j][2] == i)
+                edge<int>(G, serverEdges[j][0], serverEdges[j][1]);
+        }
+        std::forward_list<Graph<int>> solution;
+        const auto act = [&solution](Graph<int> R, Graph<int>, Graph<int>) {
+            solution.push_front(R);
+        };
+        solve<int>({{}}, G, {{}}, act);
+        for (const auto &g : solution) {
+            set<int> st;
+            for (const auto &v : g) st.insert(v.id);
+            if (st.size() > 1 && nodeSet.count(st) == 0) {
+                nodeSet.insert(st);
+            }
+        }
+    }
     return INF;
 }
 
