@@ -52,7 +52,11 @@ void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
     int userDelayOne = oneServer();
-    int userDelayMul = multipleServer();
+    vector<int> v;
+    for (int i = 0; i < servNum; i++) {
+        v.push_back(i);
+    }
+    int userDelayMul = multipleServer(v);
 
     if (userDelayOne <= userDelayMul) {
         solMin = solMax = userDelayOne * 2;
@@ -101,12 +105,14 @@ int Sum::oneServer() {
     return delayMin;
 }
 
-int Sum::multipleServer() {
+int Sum::multipleServer(vector<int> v) {
     for (int i = 1; i <= userDelayMax; i++) {
         HopcroftKarp hc(userNum, servNum * capacity);
         for (int j = 0; j < userNum * servNum * capacity; j++) {
-            if (userEdges[j][2] <= i) {
-                hc.addEdge(userEdges[j][0], userEdges[j][1]);
+            int servNode = userEdges[j][1];
+            if (userEdges[j][2] <= i &&
+                find(v.begin(), v.end(), servNode) != v.end()) {
+                hc.addEdge(userEdges[j][0], servNode);
             }
         }
         if (hc.matching() == userNum) {

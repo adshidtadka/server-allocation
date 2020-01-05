@@ -16,6 +16,6 @@ public:
     void writeOutput();
     void startAlgo();
     int oneServer();
-    int multipleServer();
+    int multipleServer(std::vector<int>);
     int **copyServer();
 };
