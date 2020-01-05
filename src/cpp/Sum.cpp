@@ -7,8 +7,6 @@
 
 using namespace std;
 
-const int INF = 99999999;
-
 void Sum::readInput() {
     ifstream fin;
     fin.open("../../tmp/input.txt");
