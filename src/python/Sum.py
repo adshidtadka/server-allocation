@@ -121,7 +121,7 @@ class Sum(Method):
 
 def main():
     # create param
-    param = Parameter(100)
+    param = Parameter(Constant.SEED)
     param.create_input(True)
 
     # set input to algorithm

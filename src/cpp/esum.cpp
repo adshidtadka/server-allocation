@@ -24,9 +24,6 @@ void Esum::startAlgo() {
 
     chrono::system_clock::time_point end = chrono::system_clock::now();
     cpuTime = chrono::duration_cast<chrono::microseconds>(end - start).count();
-
-    cout << "solMin = " << solMin << endl;
-    cout << "cpuTime = " << cpuTime << endl;
 }
 
 int Esum::multipleServer() {

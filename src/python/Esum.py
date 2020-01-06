@@ -1,5 +1,6 @@
 import numpy as np
 import time
+import subprocess
 
 import Constant
 from Parameter import Parameter
@@ -19,26 +20,12 @@ class Esum(Sum):
             edges_server = np.vstack((edges_server, np.array([param.e_s[k][0], param.e_s[k][1], v])))
         self.edges_server = np.delete(edges_server, 0, 0)
 
-    def start_algo_with_cpp(self, param):
-        self.write_input(param)
-        # command = "../cpp/run_esum.out"
-        # subprocess.call(command)
-        # self.status = True
-        # self.read_output()
-
     def start_algo(self, param):
-        t_0 = time.process_time()
-        L_1 = self.one_server(param)["d_u"]*2
-        L_2 = self.multiple_server(param)
-        L = min([L_1, L_2])
-
-        if L > param.DELAY_USER_MAX*2 + param.DELAY_SERVER_MAX:
-            self.status = False
-        else:
-            self.status = True
-            self.L = L
-        t_1 = time.process_time()
-        self.cpu_time = t_1 - t_0
+        self.write_input(param)
+        command = "../cpp/run_esum.out"
+        subprocess.call(command)
+        self.status = True
+        self.read_output()
 
     def multiple_server(self, param):
         # step 2: consider multiple server case
@@ -68,7 +55,7 @@ class Esum(Sum):
 
     def print_result(self):
         if self.status:
-            print('objective function is ', str(self.L))
+            print('objective function is ', str(self.L_max))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
@@ -76,7 +63,7 @@ class Esum(Sum):
 
 def main():
     # create param
-    param = Parameter(100)
+    param = Parameter(Constant.SEED)
     param.create_input(True)
 
     # set input to algorithm
