@@ -106,11 +106,11 @@ int Sum::oneServer() {
 }
 
 int Sum::multipleServer(vector<int> v) {
+    HopcroftKarp hc(userNum, servNum * capacity);
     for (int i = 1; i <= userDelayMax; i++) {
-        HopcroftKarp hc(userNum, servNum * capacity);
         for (int j = 0; j < userNum * servNum * capacity; j++) {
             int servNode = userEdges[j][1];
-            if (userEdges[j][2] <= i &&
+            if (userEdges[j][2] == i &&
                 find(v.begin(), v.end(), servNode) != v.end()) {
                 hc.addEdge(userEdges[j][0], servNode);
             }
