@@ -28,7 +28,7 @@ class Sum(Method):
         path = "../../tmp/input.txt"
         with open(path, mode="w") as f:
             f.write(str(param.USER_NUM) + " " + str(param.SERVER_NUM) + " " + str(param.CAPACITY) + " " +
-                    str(param.DELAY_USER_MAX) + " " + str(min(param.d_st)) + " " + str(max(param.d_st)) + "\n")
+                    str(param.d_us.max()) + " " + str(param.d_st.min()) + " " + str(param.d_st.max()) + "\n")
             f.write("\n")
 
             # write userDelays
@@ -102,7 +102,7 @@ class Sum(Method):
                 self.edges_user = np.vstack((self.edges_user, new_edge))
 
     def search_matching(self, param):
-        for i in range(1, param.DELAY_USER_MAX):
+        for i in range(1, param.d_us.max()):
             hc = HopcroftKarp(param.USER_NUM, param.SERVER_NUM * param.CAPACITY)
             for j in np.where(self.edges_user[:, -1] <= i)[0]:
                 hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
@@ -122,7 +122,7 @@ class Sum(Method):
 def main():
     # create param
     param = Parameter(Constant.SEED)
-    param.create_input(True)
+    param.create_input()
 
     # set input to algorithm
     sum_obj = Sum(param)

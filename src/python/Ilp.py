@@ -112,7 +112,7 @@ class Ilp(Method):
 def main():
     # create param
     param = Parameter(Constant.SEED)
-    param.create_input(True)
+    param.create_input()
 
     # set input to problem
     ilp = Ilp(param)

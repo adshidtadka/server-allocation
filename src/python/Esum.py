@@ -34,7 +34,7 @@ class Esum(Sum):
         bk = BronKerbosch(param.SERVER_NUM)
         record = []
         L = Constant.INF
-        for D_s in range(1, param.DELAY_SERVER_MAX):
+        for D_s in range(1, param.d_st.max()):
             for j in np.where(self.edges_server[:, -1] == D_s)[0]:
                 bk.add_edge(self.edges_server[j][0], self.edges_server[j][1])
             for clique in bk.find_cliques():
@@ -64,7 +64,7 @@ class Esum(Sum):
 def main():
     # create param
     param = Parameter(Constant.SEED)
-    param.create_input(True)
+    param.create_input()
 
     # set input to algorithm
     esum = Esum(param)
