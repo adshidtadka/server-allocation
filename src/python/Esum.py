@@ -14,6 +14,13 @@ class Esum(Sum):
         self.set_edges_user(param)
         self.set_edges_server(param)
 
+    def read_output(self):
+        path = "../../tmp/output.txt"
+        with open(path, mode="r") as f:
+            output = f.read().split()
+        self.cpu_time = float(output[0]) / 1000 / 1000
+        self.L = int(output[1])
+
     def set_edges_server(self, param):
         edges_server = np.empty(3, dtype=int)
         for k, v in enumerate(param.d_st):
@@ -55,7 +62,7 @@ class Esum(Sum):
 
     def print_result(self):
         if self.status:
-            print('objective function is ', str(self.L_max))
+            print('objective function is ', str(self.L))
             print('cpu time is ' + str(self.cpu_time) + ' sec')
         else:
             print('Error')
