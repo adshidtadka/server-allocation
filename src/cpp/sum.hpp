@@ -7,7 +7,7 @@ protected:
     const static int INF = 99999999;
     int userNum, servNum, capacity, userDelayMax, servDelayMin, servDelayMax;
     int **userDelays, **servDelays;
-    int **userEdges;
+    int **userEdges, **serverEdges;
     int *matchedServers;
     int cpuTime, solMax, solMin;
 
@@ -17,5 +17,5 @@ public:
     void startAlgo();
     int oneServer();
     int multipleServer(std::vector<int>);
-    int **copyServer();
+    int **createUserEdges();
 };

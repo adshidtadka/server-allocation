@@ -38,7 +38,7 @@ void Sum::readInput() {
         }
     }
 
-    userEdges = copyServer();
+    userEdges = createUserEdges();
 }
 
 void Sum::writeOutput() {
@@ -124,7 +124,7 @@ int Sum::multipleServer(vector<int> v) {
     return INF;
 }
 
-int **Sum::copyServer() {
+int **Sum::createUserEdges() {
     // add userEdges depending on capacity
     int **userEdges = new int *[userNum * servNum * capacity + 1];
     for (int i = 0; i < userNum * servNum * capacity; i++) {
