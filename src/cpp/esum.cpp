@@ -14,7 +14,6 @@ template <typename T>
 using Solution = std::forward_list<Graph<T>>;
 
 void Esum::startAlgo() {
-    serverEdges = createServerEdges();
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
     int totalDelayOne = oneServer() * 2;
@@ -28,6 +27,8 @@ void Esum::startAlgo() {
 }
 
 int Esum::multipleServer() {
+    serverEdges = createServerEdges();
+
     // initialize server nodes
     Graph<int> G;
     for (int i = 0; i < servNum; i++) {
