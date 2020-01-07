@@ -3,8 +3,11 @@
 #include <vector>
 
 class Sum {
-    int userNum, servNum, capacity, userDelayMax, servDelayMin;
+protected:
+    const static int INF = 99999999;
+    int userNum, servNum, capacity, userDelayMax, servDelayMin, servDelayMax;
     int **userDelays, **servDelays;
+    int **userEdges, **serverEdges;
     int *matchedServers;
     int cpuTime, solMax, solMin;
 
@@ -13,6 +16,6 @@ public:
     void writeOutput();
     void startAlgo();
     int oneServer();
-    int multipleServer();
-    int **copyServer();
+    int multipleServer(std::vector<int>);
+    int **createUserEdges();
 };

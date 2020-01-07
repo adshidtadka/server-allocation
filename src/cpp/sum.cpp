@@ -1,13 +1,13 @@
 #include <chrono>
 #include <fstream>
+#include <vector>
+
 #include <iostream>
 
-#include "hopcroft_karp.hpp"
+#include "hopcroft-karp.hpp"
 #include "sum.hpp"
 
 using namespace std;
-
-const int INF = 99999999;
 
 void Sum::readInput() {
     ifstream fin;
@@ -15,7 +15,8 @@ void Sum::readInput() {
     if (!fin) {
         cout << "../../tmp/input.txt does not exist" << endl;
     }
-    fin >> userNum >> servNum >> capacity >> userDelayMax >> servDelayMin;
+    fin >> userNum >> servNum >> capacity >> userDelayMax >> servDelayMin >>
+        servDelayMax;
 
     userDelays = new int *[userNum + 1];
     for (int i = 0; i < userNum; i++) {
@@ -36,6 +37,8 @@ void Sum::readInput() {
             servDelays[i][j] = delay;
         }
     }
+
+    userEdges = createUserEdges();
 }
 
 void Sum::writeOutput() {
@@ -49,7 +52,11 @@ void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
     int userDelayOne = oneServer();
-    int userDelayMul = multipleServer();
+    vector<int> v;
+    for (int i = 0; i < servNum; i++) {
+        v.push_back(i);
+    }
+    int userDelayMul = multipleServer(v);
 
     if (userDelayOne <= userDelayMul) {
         solMin = solMax = userDelayOne * 2;
@@ -98,15 +105,14 @@ int Sum::oneServer() {
     return delayMin;
 }
 
-int Sum::multipleServer() {
-    int **userEdges = copyServer();
-
-    // search matching
+int Sum::multipleServer(vector<int> v) {
+    HopcroftKarp hc(userNum, servNum * capacity);
     for (int i = 1; i <= userDelayMax; i++) {
-        HopcroftKarp hc(userNum, servNum * capacity);
         for (int j = 0; j < userNum * servNum * capacity; j++) {
-            if (userEdges[j][2] <= i) {
-                hc.addEdge(userEdges[j][0], userEdges[j][1]);
+            int servNode = userEdges[j][1];
+            if (userEdges[j][2] == i &&
+                find(v.begin(), v.end(), servNode) != v.end()) {
+                hc.addEdge(userEdges[j][0], servNode);
             }
         }
         if (hc.matching() == userNum) {
@@ -115,11 +121,10 @@ int Sum::multipleServer() {
             return i;
         }
     }
-
     return INF;
 }
 
-int **Sum::copyServer() {
+int **Sum::createUserEdges() {
     // add userEdges depending on capacity
     int **userEdges = new int *[userNum * servNum * capacity + 1];
     for (int i = 0; i < userNum * servNum * capacity; i++) {
