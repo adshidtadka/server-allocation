@@ -77,8 +77,6 @@ class Parameter:
 
         df_server = pd.read_csv("../../network/kanto.csv")
         self.SERVER_NUM = len(df_server)
-        lati_lower, lati_upper = Parameter.get_lower_and_upper(df_server, "latitude")
-        longi_lower, longi_upper = Parameter.get_lower_and_upper(df_server, "longitude")
 
     def get_const(var_name):
         if var_name == 'user':
