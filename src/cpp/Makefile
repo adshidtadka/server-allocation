@@ -1,9 +1,6 @@
-run_sum: run_sum.o sum.o hopcroft-karp.o
+run: run_sum.o run_esum.o sum.o esum.o hopcroft-karp.o
 	g++ -Wall -g  -o run_sum.out run_sum.o sum.o hopcroft-karp.o
-run_esum: run_esum.o esum.o sum.o hopcroft-karp.o
 	g++ -Wall -g  -o run_esum.out run_esum.o esum.o sum.o hopcroft-karp.o
-run_hopcroft-karp: run_hopcroft-karp.o hopcroft-karp.o
-	g++ -Wall -g  -o run_hopcroft-karp.out run_hopcroft-karp.o hopcroft-karp.o
 
 hopcroft-karp.o: hopcroft-karp.cpp
 	g++ -Wall -c -g -std=c++11 hopcroft-karp.cpp
@@ -17,4 +14,4 @@ run_esum.o: run_esum.cpp
 	g++ -Wall -c -g -std=c++11 run_esum.cpp
 
 clean:
-	rm -f *.o run_sum run_esum run_hopcroft-karp
+	rm -f *.o run_sum run_esum
