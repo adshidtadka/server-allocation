@@ -2,6 +2,7 @@
 // maximum matching
 #include <climits>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <queue>
 
@@ -45,7 +46,7 @@ int HopcroftKarp::matching() {
 }
 
 int *HopcroftKarp::getMatched(int *matched) {
-    std::memcpy(matched, uPair, sizeof(int) * leftNum);
+    memcpy(matched, uPair, sizeof(int) * leftNum);
     return matched;
 }
 
@@ -136,7 +137,7 @@ HopcroftKarp::HopcroftKarp(int leftNum, int rightNum) {
 
 // Destructor
 HopcroftKarp::~HopcroftKarp() {
-    adjacent.~list<int>();
+    delete[] adjacent;
     delete[] uPair;
     delete[] vPair;
     delete[] distance;
