@@ -111,8 +111,8 @@ int Sum::multipleServer(vector<int> v) {
     // push_back copied server
     int availServNum = v.size();
     for (int i = 0; i < availServNum; i++) {
-        for (int j = 2; j <= capacity; j++) {
-            v.push_back(v[i] * j);
+        for (int j = 1; j < capacity; j++) {
+            v.push_back(v[i] + servNum * j);
         }
     }
 
