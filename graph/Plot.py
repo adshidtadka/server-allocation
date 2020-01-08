@@ -112,3 +112,23 @@ plt.legend(loc="upper left")
 plt.savefig('/Users/takaaki/Dropbox/oki_lab/m2/paper/ieice_server/workspace/fig/cap_50_user_25.pdf')
 plt.show()
 plt.close()
+
+
+# %%
+
+# %%
+
+plt.plot(df_cap_100_user_50[cp], df_cap_100_user_50[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_cap_100_user_50[cp], df_cap_100_user_50[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
+
+plt.xlabel(cp + ', ' + r'$M_s$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('/Users/takaaki/Dropbox/oki_lab/m2/paper/ieice_server/workspace/fig/cap_100_user_50.pdf')
+plt.show()
+plt.close()
+
+
+# %%
