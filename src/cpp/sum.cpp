@@ -52,8 +52,9 @@ void Sum::startAlgo() {
     chrono::system_clock::time_point start = chrono::system_clock::now();
 
     int userDelayOne = oneServer();
+    // available all server
     vector<int> v;
-    for (int i = 0; i < servNum; i++) {
+    for (int i = 0; i < servNum * capacity; i++) {
         v.push_back(i);
     }
     int userDelayMul = multipleServer(v);
