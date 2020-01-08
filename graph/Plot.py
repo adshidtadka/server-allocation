@@ -59,11 +59,29 @@ cp = 'Capacity'
 # df_server_user_25_capacity_5 = pd.read_csv("result/server_user_25_capacity_5.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_server_user_25_capacity_10 = pd.read_csv("result/server_user_25_capacity_10.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
 # df_server_user_50_capacity_10 = pd.read_csv("result/server_user_50_capacity_10.csv", names=(sn, tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_kanto_user_server_8_capacity_5 = pd.read_csv("result/kanto_user_server_8_capacity_5.csv", names=(untds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
-df_kanto_user_server_8_capacity_10 = pd.read_csv("result/kanto_user_server_8_capacity_10.csv", names=(untds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_kanto_user_server_8_capacity_5 = pd.read_csv("result/kanto_user_server_8_capacity_5.csv", names=(tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+# df_kanto_user_server_8_capacity_10 = pd.read_csv("result/kanto_user_server_8_capacity_10.csv", names=(tds_min, tds_max, cts, tdes, ctes, ctg, ctsc, ctc)).replace(0.0, np.nan)
+df_user_50_cap_10 = pd.read_csv("../result/user_50_cap_10.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctc)).replace(0.0, np.nan)
+df_user_100_cap_15 = pd.read_csv("../result/user_100_cap_15.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctc)).replace(0.0, np.nan)
+
 
 # %%
 Graph.initialize_rcparams()
+
+# %%
+
+plt.plot(df_user_50_cap_10[un], df_user_50_cap_10[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
+plt.plot(df_user_50_cap_10[un], df_user_50_cap_10[ctc], label=('CPLEX'), color='k', marker='o', linestyle=':')
+
+plt.xlabel(un + ', ' + r'$|{V_{\rm U}}|$')
+plt.ylabel(ct + ' [s]')
+
+plt.legend(loc="upper left")
+
+plt.savefig('/Users/takaaki/Dropbox/oki_lab/m2/paper/ieice_server/workspace/fig/user_50_cap_10.pdf')
+plt.show()
+plt.close()
+
 
 # %%
 # plt.plot(df_user_server_5_capacity_10[un], df_user_server_5_capacity_10[ctes], label=('ESUM'), color='k', marker='x', linestyle='-')
