@@ -77,7 +77,7 @@ class Parameter:
         else:
             sys.exit('invalid var_name = ' + str(var_name))
 
-    def get_distance(x_1, y_1, x_2, y_2): return round(math.sqrt((x_2 - x_1) ** 2 + (y_2 - y_1) ** 2) * 10)
+    def get_distance(x_1, y_1, x_2, y_2): return round(math.sqrt((x_2 - x_1) ** 2 + (y_2 - y_1) ** 2) * 100)
 
 
 def main():
