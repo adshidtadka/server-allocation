@@ -54,7 +54,7 @@ void Sum::startAlgo() {
     int userDelayOne = oneServer();
     // available all server
     vector<int> v;
-    for (int i = 0; i < servNum * capacity; i++) {
+    for (int i = 0; i < servNum; i++) {
         v.push_back(i);
     }
     int userDelayMul = multipleServer(v);
@@ -107,6 +107,14 @@ int Sum::oneServer() {
 }
 
 int Sum::multipleServer(vector<int> v) {
+    // push_back copied server
+    int availServNum = v.size();
+    for (int i = 0; i < availServNum; i++) {
+        for (int j = 2; j <= capacity; j++) {
+            v.push_back(v[i] * j);
+        }
+    }
+
     HopcroftKarp hc(userNum, servNum * capacity);
     for (int i = 1; i <= userDelayMax; i++) {
         for (int j = 0; j < userNum * servNum * capacity; j++) {
