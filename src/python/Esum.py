@@ -34,32 +34,6 @@ class Esum(Sum):
         self.status = True
         self.read_output()
 
-    def multiple_server(self, param):
-        # step 2: consider multiple server case
-
-        # search clique
-        bk = BronKerbosch(param.SERVER_NUM)
-        record = []
-        L = Constant.INF
-        for D_s in range(1, param.d_st.max()):
-            for j in np.where(self.edges_server[:, -1] == D_s)[0]:
-                bk.add_edge(self.edges_server[j][0], self.edges_server[j][1])
-            for clique in bk.find_cliques():
-                if clique in record:
-                    continue
-                else:
-                    record.append(clique)
-
-                # set edges_user
-                edges_user = np.empty(3, dtype=int)
-                for node in clique:
-                    edges_user = np.vstack((edges_user, self.edges_user[np.where((self.edges_user[:, 1] == node))]))
-                self.edges_user = np.delete(edges_user, 0, 0)
-
-                D_u = Sum.multiple_server(self, param)["d_u"]
-                L = min(L, D_u * 2 + D_s)
-        return L
-
     def print_result(self):
         if self.status:
             print('objective function is ', str(self.L))

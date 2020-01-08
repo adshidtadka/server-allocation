@@ -64,51 +64,6 @@ class Sum(Method):
         self.status = True
         self.read_output()
 
-    def one_server(self, param):
-        # step 1: consider one server case
-
-        # allocate all user and get L_1
-        d_u_dict = dict()
-        for k, v in enumerate(param.m_s):
-            if v >= param.USER_NUM:
-                d_u = param.d_us[:, k].max()
-                d_u_dict[k] = d_u
-
-        # search minimum d_u
-        if bool(d_u_dict):
-            d_u = min(d_u_dict.values())
-            server = min([key for key in d_u_dict if d_u_dict[key] == d_u])
-            return {"d_u": d_u, "used_server": [server]}
-        else:
-            return {"d_u": Constant.INF, "used_server": None}
-
-    def multiple_server(self, param):
-        self.copy_servers(param)
-        solution = self.search_matching(param)
-        used_server = []
-        if solution["d_u"] == Constant.INF:
-            return {"d_u": Constant.INF, "used_server": used_server}
-        else:
-            for k, v in enumerate(solution["matching"]):
-                if (v == 1) & (k < param.SERVER_NUM):
-                    used_server.append(k)
-            return {"d_u": solution["d_u"], "used_server": used_server}
-
-    def copy_servers(self, param):
-        for edge in self.edges_user:
-            for i in range(1, param.CAPACITY):
-                new_edge = edge.copy()
-                new_edge[1] += param.SERVER_NUM * i
-                self.edges_user = np.vstack((self.edges_user, new_edge))
-
-    def search_matching(self, param):
-        for i in range(1, param.d_us.max()):
-            hc = HopcroftKarp(param.USER_NUM, param.SERVER_NUM * param.CAPACITY)
-            for j in np.where(self.edges_user[:, -1] <= i)[0]:
-                hc.add_edge(self.edges_user[j][0], self.edges_user[j][1])
-            if hc.flow() == param.USER_NUM:
-                return {"d_u": i, "matching": hc.matching()}
-        return {"d_u": Constant.INF, "matching": None}
 
     def print_result(self):
         if self.status:

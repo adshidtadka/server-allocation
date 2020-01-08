@@ -174,8 +174,5 @@ result_capacity = Result('capacity')
 if result_user.is_execute_simulator:
     result_user.get_result()
 
-if result_server.is_execute_simulator:
-    result_server.get_result()
-
 if result_capacity.is_execute_simulator:
     result_capacity.get_result()
