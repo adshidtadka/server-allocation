@@ -9,13 +9,15 @@ import Constant
 
 class Parameter:
 
-    USER_NUM_CONST = 4
-    CAPACITY_CONST = 20
+    USER_NUM_CONST = 40
+    CAPACITY_CONST = 10
 
     def __init__(self, seed):
         np.random.seed(seed)
         self.USER_NUM = Parameter.USER_NUM_CONST
         self.CAPACITY = Parameter.CAPACITY_CONST
+        df_server = pd.read_csv("../../network/kanto.csv")
+        self.SERVER_NUM = len(df_server)
 
     def create_input(self):
         self.e_u = list(itertools.product(range(self.USER_NUM), range(self.SERVER_NUM)))
@@ -66,9 +68,6 @@ class Parameter:
             self.CAPACITY = var
         else:
             sys.exit('invalid var_name = ' + str(var_name))
-
-        df_server = pd.read_csv("../../network/kanto.csv")
-        self.SERVER_NUM = len(df_server)
 
     def get_const(var_name):
         if var_name == 'user':
