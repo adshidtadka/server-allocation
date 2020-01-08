@@ -18,7 +18,7 @@ class Result:
     def __init__(self, var_name):
         print()
         self.var_name = var_name
-        self.const_names = ['user', 'server', 'capacity']
+        self.const_names = ['user', 'capacity']
         self.is_execute_simulator = self.is_execute_simulator()
         if self.is_execute_simulator:
             self.var_range = Result.get_range(Constant.get_range(var_name))
@@ -42,10 +42,6 @@ class Result:
         methods["sum"] = {"is_execute": self.is_y(input()), "is_algo": True}
         print("Do you execute ESUM? [y/N]", end=' > ')
         methods["esum"] = {"is_execute": self.is_y(input()), "is_algo": True}
-        print("Do you execute GLPK? [y/N]", end=' > ')
-        methods["glpk"] = {"is_execute": self.is_y(input()), "is_algo": False}
-        print("Do you execute SCIP? [y/N]", end=' > ')
-        methods["scip"] = {"is_execute": self.is_y(input()), "is_algo": False}
         print("Do you execute CPLEX? [y/N]", end=' > ')
         methods["cplex"] = {"is_execute": self.is_y(input()), "is_algo": False}
         return methods

@@ -10,13 +10,11 @@ import Constant
 class Parameter:
 
     USER_NUM_CONST = 4
-    SERVER_NUM_CONST = 8
     CAPACITY_CONST = 20
 
     def __init__(self, seed):
         np.random.seed(seed)
         self.USER_NUM = Parameter.USER_NUM_CONST
-        self.SERVER_NUM = Parameter.SERVER_NUM_CONST
         self.CAPACITY = Parameter.CAPACITY_CONST
 
     def create_input(self):
@@ -62,15 +60,9 @@ class Parameter:
     def set_param(self, var_name, consts, var):
         if var_name == 'user':
             self.USER_NUM = var
-            self.SERVER_NUM = consts['server']
-            self.CAPACITY = consts['capacity']
-        elif var_name == 'server':
-            self.USER_NUM = consts['user']
-            self.SERVER_NUM = var
             self.CAPACITY = consts['capacity']
         elif var_name == 'capacity':
             self.USER_NUM = consts['user']
-            self.SERVER_NUM = consts['server']
             self.CAPACITY = var
         else:
             sys.exit('invalid var_name = ' + str(var_name))
@@ -81,8 +73,6 @@ class Parameter:
     def get_const(var_name):
         if var_name == 'user':
             return Parameter.USER_NUM_CONST
-        elif var_name == 'server':
-            return Parameter.SERVER_NUM_CONST
         elif var_name == 'capacity':
             return Parameter.CAPACITY_CONST
         else:
