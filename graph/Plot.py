@@ -53,6 +53,9 @@ df_cap_20_user_20 = pd.read_csv("../result/cap_20_user_20.csv", names=(cp, tds_m
 df_cap_40_user_40 = pd.read_csv("../result/cap_40_user_40.csv", names=(cp, tds_min, tds_max, cts, tdes, ctes, ctc)).replace(0.0, np.nan)
 df_user_10_cap_5 = pd.read_csv("../result/user_10_cap_5.csv", names=(un, tds_min, tds_max, cts, tdes, ctes, ctc)).replace(0.0, np.nan)
 
+# %%
+rate_seriese = pd.concat([df_user_50_cap_10[ctes] / df_user_50_cap_10[ctc], df_user_100_cap_15[ctes] / df_user_100_cap_15[ctc]])
+rate_seriese.mean()
 
 # %%
 Graph.initialize_rcparams()
