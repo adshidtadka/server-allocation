@@ -46,7 +46,12 @@ void Sum::writeOutput() {
     ofstream fout;
     fout.open("../../tmp/output.txt");
 
-    fout << cpuTime << " " << solMin << " " << solMax << endl;
+    fout << cpuTime << " " << solMin << " " << solMax << endl << endl;
+
+    // return allocation
+    for (int i = 0; i < userNum; i++) {
+        fout << i << " " << matchedServers[i] % servNum << endl;
+    }
 }
 
 void Sum::startAlgo() {
